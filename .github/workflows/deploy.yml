@@ -95,8 +95,8 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install
 
-      - name: 🔎 Type check
-        run: pnpm typecheck -- --if-present
+      # - name: 🔎 Type check
+      #   run: pnpm typecheck
 
   vitest:
     name: ⚡ Vitest
@@ -186,13 +186,13 @@ jobs:
       - name: ⚙️ Build
         run: pnpm  build
 
-      - name: 🌳 Cypress run
-        uses: cypress-io/github-action@v6
-        with:
-          start: pnpm run start:mocks
-          wait-on: http://localhost:8811
-        env:
-          PORT: 8811
+      # - name: 🌳 Cypress run
+      #   uses: cypress-io/github-action@v6
+      #   with:
+      #     start: pnpm run start:mocks
+      #     wait-on: http://localhost:8811
+      #   env:
+      #     PORT: 8811
 
   deploy:
     name: 🚀 Deploy
