@@ -32,6 +32,11 @@ export async function deleteUserByEmail(email: User["email"]) {
   return prisma.user.delete({ where: { email } });
 }
 
+export async function getPasswordHash(password: string) {
+  const hash = await bcrypt.hash(password, 10);
+  return hash;
+}
+
 export async function verifyLogin(
   email: User["email"],
   password: Password["hash"],
