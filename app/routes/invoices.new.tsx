@@ -8,6 +8,7 @@ import { Label } from "~/components/ui/label";
 import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import { createInvoice } from "~/models/invoice.server";
+import { useId } from "react";
 
 const schema = z.object({
   clientName: z.string().nonempty("can't be empty"),
@@ -29,8 +30,9 @@ export async function action({ request }: ActionArgs) {
 
 export default function InvoicesNew() {
   const lastSubmission = useActionData<typeof action>();
-
+  const id = useId();
   const [form, fields] = useForm({
+    id,
     lastSubmission,
     shouldValidate: "onBlur",
     onValidate({ formData }) {

@@ -8,8 +8,12 @@ test("create invoice", async ({ page }) => {
 
   await page.getByRole("link", { name: /new invoice/i }).click();
 
+  // await expect(
+  //   page.getByRole("textbox", { name: "Client's Name" }),
+  // ).toBeVisible();
+
   await page
-    .getByRole("textbox", { name: /client's name/i })
+    .getByRole("textbox", { name: "Client's Name" })
     .fill("Test Client");
   await page.getByRole("button", { name: /save & send/i }).click();
   await expect(page.getByText(/test client/i)).toBeVisible();
