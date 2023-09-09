@@ -5,7 +5,7 @@ export const meta: V2_MetaFunction = () => [{ title: "Invoicing app" }];
 export default function Index() {
   return (
     <main>
-      <h1>Invoices</h1>
+      <h1>Main app</h1>
     </main>
   );
 }

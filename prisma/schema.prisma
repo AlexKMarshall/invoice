@@ -36,3 +36,8 @@ model Note {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
 }
+
+model Invoice {
+  id         String @id @default(cuid())
+  clientName String
+}
