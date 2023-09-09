@@ -1,4 +1,4 @@
-import type { Invoice } from "@prisma/client";
+import type { Invoice, User } from "@prisma/client";
 import { prisma } from "~/db.server";
 
 export function getInvoiceListItems() {
@@ -10,8 +10,18 @@ export function getInvoiceListItems() {
   });
 }
 
-export function createInvoice(data: Pick<Invoice, "clientName">) {
+export function createInvoice({
+  userId,
+  ...data
+}: Pick<Invoice, "clientName"> & { userId: User["id"] }) {
   return prisma.invoice.create({
-    data,
+    data: {
+      ...data,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+    },
   });
 }

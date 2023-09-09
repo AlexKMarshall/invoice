@@ -9,12 +9,15 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import { createInvoice } from "~/models/invoice.server";
 import { useId } from "react";
+import { requireUserId } from "~/session.server";
 
 const schema = z.object({
   clientName: z.string().nonempty("can't be empty"),
 });
 
 export async function action({ request }: ActionArgs) {
+  const userId = await requireUserId(request);
+
   const formData = await request.formData();
 
   const submission = parse(formData, { schema });
@@ -23,7 +26,7 @@ export async function action({ request }: ActionArgs) {
     return json(submission);
   }
 
-  await createInvoice(submission.value);
+  await createInvoice({ ...submission.value, userId });
 
   return redirect("/invoices");
 }

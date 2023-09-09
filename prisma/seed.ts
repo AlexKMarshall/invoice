@@ -45,6 +45,7 @@ async function seed() {
   await prisma.invoice.create({
     data: {
       clientName: "John Smith",
+      userId: user.id,
     },
   });
 
