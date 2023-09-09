@@ -40,6 +40,14 @@ async function seed() {
     },
   });
 
+  await prisma.invoice.deleteMany({});
+
+  await prisma.invoice.create({
+    data: {
+      clientName: "John Smith",
+    },
+  });
+
   console.log(`Database has been seeded. 🌱`);
 }
 
