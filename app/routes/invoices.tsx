@@ -1,5 +1,5 @@
 import { json } from "@remix-run/node";
-import { useLoaderData } from "@remix-run/react";
+import { Link, Outlet, useLoaderData } from "@remix-run/react";
 import { getInvoiceListItems } from "~/models/invoice.server";
 
 export async function loader() {
@@ -13,6 +13,8 @@ export default function Invoices() {
   return (
     <main>
       <h1>Invoices</h1>
+      <Link to="new">New invoice</Link>
+      <Outlet />
       {invoiceListItems.length ? (
         <ul>
           {invoiceListItems.map((invoice) => (
