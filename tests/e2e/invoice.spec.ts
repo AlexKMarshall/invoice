@@ -8,7 +8,7 @@ test("user can create invoice", async ({ page }) => {
 
   const clientName = faker.person.fullName();
 
-  await page.goto("/join");
+  await page.goto("/signup");
 
   await page
     .getByRole("textbox", { name: /email/i })
