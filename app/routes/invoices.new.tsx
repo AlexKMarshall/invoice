@@ -9,7 +9,7 @@ import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import { createInvoice } from "~/models/invoice.server";
 import { useId } from "react";
-import { requireUserId } from "~/session.server";
+import { requireUserId } from "~/utils/auth.server";
 
 const schema = z.object({
   clientName: z.string().nonempty("can't be empty"),
