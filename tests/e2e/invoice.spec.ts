@@ -1,22 +1,22 @@
 import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
-// import { loginPage } from "tests/playwright-utils";
+import { loginPage } from "tests/playwright-utils";
 
 test("user can create invoice", async ({ page }) => {
   // TODO: fix this
-  // await loginPage({ page });
+  await loginPage({ page });
 
   const clientName = faker.person.fullName();
 
-  await page.goto("/signup");
+  // await page.goto("/signup");
 
-  await page
-    .getByRole("textbox", { name: /email/i })
-    .fill(faker.internet.email());
-  await page
-    .getByRole("textbox", { name: /password/i })
-    .fill(faker.internet.password());
-  await page.getByRole("button").click();
+  // await page
+  //   .getByRole("textbox", { name: /email/i })
+  //   .fill(faker.internet.email());
+  // await page
+  //   .getByRole("textbox", { name: /password/i })
+  //   .fill(faker.internet.password());
+  // await page.getByRole("button").click();
 
   await page.goto("/invoices");
 
