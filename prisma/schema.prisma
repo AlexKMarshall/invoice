@@ -17,6 +17,7 @@ model User {
   password Password?
   notes    Note[]
   Invoice  Invoice[]
+  Session  Session[]
 }
 
 model Password {
@@ -47,4 +48,17 @@ model Invoice {
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
+}
+
+model Session {
+  id             String   @id @default(cuid())
+  expirationDate DateTime
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  userId String
+
+  @@index([userId])
 }
