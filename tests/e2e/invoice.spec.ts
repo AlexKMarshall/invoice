@@ -1,11 +1,24 @@
 import { faker } from "@faker-js/faker";
+import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
 import { loginPage } from "tests/playwright-utils";
+
+function getLatestInvoiceItem(page: Page) {
+  return page
+    .getByRole("group")
+    .filter({ has: page.getByRole("textbox", { name: /item name/i }) })
+    .last();
+}
 
 test("user can create invoice", async ({ page }) => {
   await loginPage({ page });
 
   const clientName = faker.person.fullName();
+  const quantity1 = faker.number.int({ min: 1, max: 100 });
+  const price1 = faker.number.int({ min: 1, max: 100 });
+  const quantity2 = faker.number.int({ min: 1, max: 100 });
+  const price2 = faker.number.int({ min: 1, max: 100 });
+  const expectedTotal = quantity1 * price1 + quantity2 * price2;
 
   await page.goto("/invoices");
 
@@ -58,13 +71,34 @@ test("user can create invoice", async ({ page }) => {
     .getByRole("textbox", { name: /project description/i })
     .fill(faker.lorem.sentence());
 
-  await page
+  const firstInvoiceItemFieldset = await getLatestInvoiceItem(page);
+
+  await firstInvoiceItemFieldset
     .getByRole("textbox", { name: /item name/i })
     .fill(faker.commerce.productName());
-  await page.getByRole("textbox", { name: /qty/i }).fill("1");
-  await page.getByRole("textbox", { name: /price/i }).fill("100");
+  await firstInvoiceItemFieldset
+    .getByRole("textbox", { name: /qty/i })
+    .fill(String(quantity1));
+  await firstInvoiceItemFieldset
+    .getByRole("textbox", { name: /price/i })
+    .fill(String(price1));
+
+  await page.getByRole("button", { name: /add item/i }).click();
+
+  const secondInvoiceItemFieldset = await getLatestInvoiceItem(page);
+
+  await secondInvoiceItemFieldset
+    .getByRole("textbox", { name: /item name/i })
+    .fill(faker.commerce.productName());
+  await secondInvoiceItemFieldset
+    .getByRole("textbox", { name: /qty/i })
+    .fill(String(quantity2));
+  await secondInvoiceItemFieldset
+    .getByRole("textbox", { name: /price/i })
+    .fill(String(price2));
 
   await page.getByRole("button", { name: /save & send/i }).click();
 
   await expect(page.getByText(clientName)).toBeVisible();
+  await expect(page.getByText(String(expectedTotal))).toBeVisible();
 });
