@@ -2,12 +2,29 @@ import type { Invoice, InvoiceItem, User } from "@prisma/client";
 
 import { prisma } from "~/db.server";
 
-export function getInvoiceListItems() {
-  return prisma.invoice.findMany({
+export async function getInvoiceListItems() {
+  const rawInvoices = await prisma.invoice.findMany({
     select: {
       id: true,
       clientName: true,
+      items: {
+        select: {
+          price: true,
+          quantity: true,
+        },
+      },
     },
+  });
+
+  return rawInvoices.map(({ items, ...invoice }) => {
+    const total = items.reduce(
+      (acc, item) => acc + item.price * item.quantity,
+      0,
+    );
+    return {
+      ...invoice,
+      total,
+    };
   });
 }
 

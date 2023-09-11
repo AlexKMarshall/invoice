@@ -22,6 +22,7 @@ export default function Invoices() {
             <li key={invoice.id}>
               <div>{invoice.id}</div>
               <div>{invoice.clientName}</div>
+              <div>{invoice.total}</div>
             </li>
           ))}
         </ul>
