@@ -1,5 +1,5 @@
-import { test, expect } from "@playwright/test";
 import { faker } from "@faker-js/faker";
+import { expect, test } from "@playwright/test";
 import { loginPage } from "tests/playwright-utils";
 
 test("user can create invoice", async ({ page }) => {

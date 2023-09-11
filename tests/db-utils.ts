@@ -1,6 +1,7 @@
-import { UniqueEnforcer } from "enforce-unique";
 import { faker } from "@faker-js/faker";
 import bcrypt from "bcryptjs";
+import { UniqueEnforcer } from "enforce-unique";
+
 import { prisma } from "~/db.server";
 import { getPasswordHash } from "~/models/user.server";
 

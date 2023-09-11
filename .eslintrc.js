@@ -1,6 +1,7 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
+  plugins: ["simple-import-sort"],
   extends: [
     "@remix-run/eslint-config",
     "@remix-run/eslint-config/node",
@@ -14,5 +15,9 @@ module.exports = {
     jest: {
       version: 28,
     },
+  },
+  rules: {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
   },
 };

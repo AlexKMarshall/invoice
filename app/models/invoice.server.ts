@@ -1,4 +1,5 @@
 import type { Invoice, User } from "@prisma/client";
+
 import { prisma } from "~/db.server";
 
 export function getInvoiceListItems() {

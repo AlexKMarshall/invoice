@@ -1,12 +1,14 @@
-import { sessionStorage } from "./session.server";
-import type { ProviderUser } from "./providers/provider";
-import { Authenticator } from "remix-auth";
-import { prisma } from "~/db.server";
-import { redirect } from "@remix-run/node";
-import { z } from "zod";
 import type { Password, User } from "@prisma/client";
-import { combineHeaders } from "./misc";
+import { redirect } from "@remix-run/node";
 import bcrypt from "bcryptjs";
+import { Authenticator } from "remix-auth";
+import { z } from "zod";
+
+import { prisma } from "~/db.server";
+
+import { combineHeaders } from "./misc";
+import type { ProviderUser } from "./providers/provider";
+import { sessionStorage } from "./session.server";
 
 export const SESSION_EXPIRATION_TIME = 1000 * 60 * 60 * 24 * 30;
 export const getSessionExpirationDate = () =>
