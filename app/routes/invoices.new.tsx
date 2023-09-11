@@ -74,6 +74,7 @@ export async function action({ request }: ActionArgs) {
 export default function InvoicesNew() {
   const lastSubmission = useActionData<typeof action>();
   const id = useId();
+  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const invoiceDateInputRef = useRef<HTMLInputElement>(null);
   const [invoiceDate, setInvoiceDate] = useState<Date>();
   const [form, fields] = useForm({
@@ -197,7 +198,7 @@ export default function InvoicesNew() {
             }
           }}
         />
-        <Popover>
+        <Popover open={isDatePickerOpen} onOpenChange={setIsDatePickerOpen}>
           <PopoverTrigger aria-label="open date picker">
             <CalendarIcon className="h-4 w-4" />
           </PopoverTrigger>
@@ -211,6 +212,7 @@ export default function InvoicesNew() {
                 if (date && invoiceDateInputRef.current) {
                   invoiceDateInputRef.current.value = format(date, "y-MM-dd");
                 }
+                setIsDatePickerOpen(false);
               }}
               initialFocus
             />
