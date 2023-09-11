@@ -1,17 +1,18 @@
+import { conform, useForm } from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
 import { json } from "@remix-run/node";
 import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
 import { useId } from "react";
 import { z } from "zod";
-import { prisma } from "~/db.server";
 
-import { requireAnonymous, signup } from "~/utils/auth.server";
-import { handleNewSession } from "./login";
-import { conform, useForm } from "@conform-to/react";
-import { Label } from "~/components/ui/label";
-import { Input } from "~/components/ui/input";
 import { Button } from "~/components/ui/button";
+import { Input } from "~/components/ui/input";
+import { Label } from "~/components/ui/label";
+import { prisma } from "~/db.server";
+import { requireAnonymous, signup } from "~/utils/auth.server";
+
+import { handleNewSession } from "./login";
 
 export const loader = async ({ request }: LoaderArgs) => {
   await requireAnonymous(request);

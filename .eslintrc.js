@@ -1,10 +1,11 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
+  plugins: ["simple-import-sort"],
   extends: [
     "@remix-run/eslint-config",
     "@remix-run/eslint-config/node",
-    "@remix-run/eslint-config/jest-testing-library",
+    "plugin:playwright/playwright-test",
     "prettier",
   ],
   // we're using vitest which has a very similar API to jest
@@ -14,5 +15,9 @@ module.exports = {
     jest: {
       version: 28,
     },
+  },
+  rules: {
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
   },
 };
