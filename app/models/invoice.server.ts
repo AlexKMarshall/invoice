@@ -13,7 +13,22 @@ export function getInvoiceListItems() {
 export function createInvoice({
   userId,
   ...data
-}: Pick<Invoice, "clientName"> & { userId: User["id"] }) {
+}: Pick<
+  Invoice,
+  | "billFromStreet"
+  | "billFromCity"
+  | "billFromPostCode"
+  | "billFromCountry"
+  | "clientName"
+  | "clientEmail"
+  | "billToStreet"
+  | "billToCity"
+  | "billToPostCode"
+  | "billToCountry"
+  | "invoiceDate"
+  | "paymentTerms"
+  | "projectDescription"
+> & { userId: User["id"] }) {
   return prisma.invoice.create({
     data: {
       ...data,

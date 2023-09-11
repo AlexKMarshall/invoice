@@ -40,14 +40,29 @@ model Note {
 }
 
 model Invoice {
-  id         String @id @default(cuid())
-  clientName String
-
+  id        String   @id @default(cuid())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   userId String
+
+  billFromStreet   String
+  billFromCity     String
+  billFromPostCode String
+  billFromCountry  String
+
+  clientName     String
+  clientEmail    String
+  billToStreet   String
+  billToCity     String
+  billToPostCode String
+  billToCountry  String
+
+  invoiceDate  String
+  paymentTerms String
+
+  projectDescription String
 }
 
 model Session {
