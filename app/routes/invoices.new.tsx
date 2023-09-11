@@ -1,9 +1,16 @@
-import { conform, useForm } from "@conform-to/react";
+import type { FieldConfig } from "@conform-to/react";
+import {
+  conform,
+  list,
+  useFieldList,
+  useFieldset,
+  useForm,
+} from "@conform-to/react";
 import { parse } from "@conform-to/zod";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { useId } from "react";
+import { useId, useRef } from "react";
 import { z } from "zod";
 
 import { Button } from "~/components/ui/button";
@@ -29,7 +36,16 @@ const invoiceFormSchema = z.object({
   invoiceDate: z.string().nonempty("can't be empty"),
   paymentTerms: z.string().nonempty("can't be empty"),
   projectDescription: z.string().nonempty("can't be empty"),
+  items: z.array(
+    z.object({
+      name: z.string().nonempty("can't be empty"),
+      quantity: z.string().nonempty("can't be empty"),
+      price: z.string().nonempty("can't be empty"),
+    }),
+  ),
 });
+
+type InvoiceItemFieldset = z.infer<typeof invoiceFormSchema>["items"][number];
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
@@ -57,7 +73,11 @@ export default function InvoicesNew() {
     onValidate({ formData }) {
       return parse(formData, { schema: invoiceFormSchema });
     },
+    defaultValue: {
+      items: [{ name: "", quantity: "", price: "" }],
+    },
   });
+  const items = useFieldList(form.ref, fields.items);
 
   return (
     <Form method="post" {...form.props}>
@@ -177,8 +197,54 @@ export default function InvoicesNew() {
           {fields.projectDescription.errors}
         </p>
       </div>
+      <ul>
+        {items.map((item, index) => (
+          <li key={item.id}>
+            <InvoiceItemFieldset
+              config={item}
+              name={fields.items.name}
+              index={index}
+            />
+          </li>
+        ))}
+      </ul>
+      <Button {...list.insert(fields.items.name)}>Add Item</Button>
 
       <Button type="submit">Save &amp; Send</Button>
     </Form>
+  );
+}
+
+function InvoiceItemFieldset({
+  config,
+  name: fieldsetName,
+  index,
+}: {
+  config: FieldConfig<InvoiceItemFieldset>;
+  name: string;
+  index: number;
+}) {
+  const ref = useRef<HTMLFieldSetElement>(null);
+  const { name, quantity, price } = useFieldset(ref, config);
+
+  return (
+    <fieldset ref={ref}>
+      <div>
+        <Label htmlFor={name.id}>Item Name</Label>
+        <Input {...conform.input(name)} />
+        <p id={name.errorId}>{name.errors}</p>
+      </div>
+      <div>
+        <Label htmlFor={quantity.id}>Qty</Label>
+        <Input {...conform.input(quantity)} />
+        <p id={quantity.errorId}>{quantity.errors}</p>
+      </div>
+      <div>
+        <Label htmlFor={price.id}>Price</Label>
+        <Input {...conform.input(price)} />
+        <p id={price.errorId}>{price.errors}</p>
+      </div>
+      <Button {...list.remove(fieldsetName, { index })}>remove</Button>
+    </fieldset>
   );
 }
