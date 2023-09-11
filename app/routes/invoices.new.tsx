@@ -10,12 +10,20 @@ import { parse } from "@conform-to/zod";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData } from "@remix-run/react";
-import { useId, useRef } from "react";
+import { format, isValid, parse as dateFnsParse } from "date-fns";
+import { CalendarIcon } from "lucide-react";
+import { useId, useRef, useState } from "react";
 import { z } from "zod";
 
 import { Button } from "~/components/ui/button";
+import { Calendar } from "~/components/ui/calendar";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "~/components/ui/popover";
 import { createInvoice } from "~/models/invoice.server";
 import { requireUserId } from "~/utils/auth.server";
 
@@ -67,6 +75,7 @@ export default function InvoicesNew() {
   const lastSubmission = useActionData<typeof action>();
   const id = useId();
   const invoiceDateInputRef = useRef<HTMLInputElement>(null);
+  const [invoiceDate, setInvoiceDate] = useState<Date>();
   const [form, fields] = useForm({
     id,
     lastSubmission,
@@ -175,7 +184,38 @@ export default function InvoicesNew() {
         <Input
           ref={invoiceDateInputRef}
           {...conform.input(fields.invoiceDate)}
+          onChange={(event) => {
+            const date = dateFnsParse(
+              event.target.value,
+              "y-MM-dd",
+              new Date(),
+            );
+            if (isValid(date)) {
+              setInvoiceDate(date);
+            } else {
+              setInvoiceDate(undefined);
+            }
+          }}
         />
+        <Popover>
+          <PopoverTrigger aria-label="open date picker">
+            <CalendarIcon className="h-4 w-4" />
+          </PopoverTrigger>
+          <PopoverContent className="w-auto p-0">
+            <Calendar
+              mode="single"
+              defaultMonth={invoiceDate}
+              selected={invoiceDate}
+              onSelect={(date) => {
+                setInvoiceDate(date);
+                if (date && invoiceDateInputRef.current) {
+                  invoiceDateInputRef.current.value = format(date, "y-MM-dd");
+                }
+              }}
+              initialFocus
+            />
+          </PopoverContent>
+        </Popover>
         <p id={fields.invoiceDate.errorId}>{fields.invoiceDate.errors}</p>
       </div>
       <div>
