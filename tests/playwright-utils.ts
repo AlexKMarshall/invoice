@@ -6,7 +6,7 @@ import { prisma } from "~/db.server";
 import { getSessionExpirationDate, sessionKey } from "~/utils/auth.server";
 import { sessionStorage } from "~/utils/session.server";
 
-import { insertedUsers,insertNewUser } from "./db-utils";
+import { insertedUsers, insertNewUser } from "./db-utils";
 
 export * from "./db-utils";
 
