@@ -1,6 +1,7 @@
 import { faker } from "@faker-js/faker";
 import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
+import { format } from "date-fns";
 import { loginPage } from "tests/playwright-utils";
 
 function getLatestInvoiceItem(page: Page) {
@@ -65,7 +66,7 @@ test("user can create invoice", async ({ page }) => {
     .fill(faker.location.country());
   await page
     .getByRole("textbox", { name: /invoice date/i })
-    .fill(faker.date.past().toDateString());
+    .fill(format(faker.date.past(), "y-MM-dd"));
   await page.getByRole("textbox", { name: /payment terms/i }).fill("30");
   await page
     .getByRole("textbox", { name: /project description/i })
