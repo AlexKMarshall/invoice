@@ -66,6 +66,7 @@ export async function action({ request }: ActionArgs) {
 export default function InvoicesNew() {
   const lastSubmission = useActionData<typeof action>();
   const id = useId();
+  const invoiceDateInputRef = useRef<HTMLInputElement>(null);
   const [form, fields] = useForm({
     id,
     lastSubmission,
@@ -172,27 +173,21 @@ export default function InvoicesNew() {
       <div>
         <Label htmlFor={fields.invoiceDate.id}>Invoice Date</Label>
         <Input
+          ref={invoiceDateInputRef}
           {...conform.input(fields.invoiceDate)}
-          autoComplete="country-name"
         />
         <p id={fields.invoiceDate.errorId}>{fields.invoiceDate.errors}</p>
       </div>
       <div>
         <Label htmlFor={fields.paymentTerms.id}>Payment Terms</Label>
-        <Input
-          {...conform.input(fields.paymentTerms)}
-          autoComplete="country-name"
-        />
+        <Input {...conform.input(fields.paymentTerms)} />
         <p id={fields.paymentTerms.errorId}>{fields.paymentTerms.errors}</p>
       </div>
       <div>
         <Label htmlFor={fields.projectDescription.id}>
           Project Description
         </Label>
-        <Input
-          {...conform.input(fields.projectDescription)}
-          autoComplete="country-name"
-        />
+        <Input {...conform.input(fields.projectDescription)} />
         <p id={fields.projectDescription.errorId}>
           {fields.projectDescription.errors}
         </p>

@@ -47,6 +47,14 @@ export default defineConfig({
     },
 
     {
+      name: "chromium reduced data",
+      use: {
+        ...devices["Desktop Chrome"],
+        extraHTTPHeaders: { "Save-Data": "on" },
+      },
+    },
+
+    {
       name: "firefox",
       use: { ...devices["Desktop Firefox"] },
     },
