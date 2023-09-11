@@ -61,7 +61,7 @@ async function seed() {
       projectDescription: faker.lorem.sentence(),
       items: {
         create: [
-          { name: faker.commerce.productName(), quantity: "1", price: "100" },
+          { name: faker.commerce.productName(), quantity: 1, price: 100 },
         ],
       },
     },

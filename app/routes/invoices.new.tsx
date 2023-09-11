@@ -39,8 +39,8 @@ const invoiceFormSchema = z.object({
   items: z.array(
     z.object({
       name: z.string().nonempty("can't be empty"),
-      quantity: z.string().nonempty("can't be empty"),
-      price: z.string().nonempty("can't be empty"),
+      quantity: z.coerce.number().int().positive("must be a positive number"),
+      price: z.coerce.number().int().positive("must be a positive number"),
     }),
   ),
 });
