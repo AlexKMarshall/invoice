@@ -25,6 +25,7 @@ export default function Invoices() {
               <div>{invoice.clientName}</div>
               <div>{invoice.total}</div>
               <div>{format(new Date(invoice.dueDate), "y-MM-dd")}</div>
+              <div>{invoice.status}</div>
             </li>
           ))}
         </ul>
