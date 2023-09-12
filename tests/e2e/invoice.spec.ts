@@ -1,7 +1,7 @@
 import { faker } from "@faker-js/faker";
 import type { Page } from "@playwright/test";
 import { expect, test } from "@playwright/test";
-import { format } from "date-fns";
+import { add, format } from "date-fns";
 import { loginPage } from "tests/playwright-utils";
 
 function getLatestInvoiceItem(page: Page) {
@@ -20,6 +20,8 @@ test("user can create invoice", async ({ page }) => {
   const quantity2 = faker.number.int({ min: 1, max: 100 });
   const price2 = faker.number.int({ min: 1, max: 100 });
   const expectedTotal = quantity1 * price1 + quantity2 * price2;
+  const invoiceDate = faker.date.past();
+  const expectedDueDate = format(add(invoiceDate, { days: 30 }), "y-MM-dd");
 
   await page.goto("/invoices");
 
@@ -66,7 +68,7 @@ test("user can create invoice", async ({ page }) => {
     .fill(faker.location.country());
   await page
     .getByRole("textbox", { name: /invoice date/i })
-    .fill(format(faker.date.past(), "y-MM-dd"));
+    .fill(format(invoiceDate, "y-MM-dd"));
   try {
     await page
       .getByLabel(/payment terms/i)
@@ -116,4 +118,5 @@ test("user can create invoice", async ({ page }) => {
 
   await expect(page.getByText(clientName)).toBeVisible();
   await expect(page.getByText(String(expectedTotal))).toBeVisible();
+  await expect(page.getByText(expectedDueDate)).toBeVisible();
 });

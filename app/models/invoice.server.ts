@@ -1,4 +1,5 @@
 import type { Invoice, InvoiceItem, User } from "@prisma/client";
+import { add } from "date-fns";
 
 import { prisma } from "~/db.server";
 
@@ -7,23 +8,31 @@ export async function getInvoiceListItems() {
     select: {
       id: true,
       clientName: true,
+      invoiceDate: true,
       items: {
         select: {
           price: true,
           quantity: true,
         },
       },
+      paymentTerm: {
+        select: {
+          days: true,
+        },
+      },
     },
   });
 
-  return rawInvoices.map(({ items, ...invoice }) => {
+  return rawInvoices.map(({ items, invoiceDate, paymentTerm, ...invoice }) => {
     const total = items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0,
     );
+    const dueDate = add(new Date(invoiceDate), { days: paymentTerm.days });
     return {
       ...invoice,
       total,
+      dueDate,
     };
   });
 }
