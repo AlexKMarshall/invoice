@@ -1,10 +1,9 @@
 import * as z from "zod"
-
-import type { CompleteInvoiceItem, CompletePaymentTerm, CompleteUser} from "./index";
-import { RelatedInvoiceItemModel,RelatedPaymentTermModel, RelatedUserModel } from "./index"
+import { CompleteUser, RelatedUserModel, CompletePaymentTerm, RelatedPaymentTermModel, CompleteInvoiceItem, RelatedInvoiceItemModel } from "./index"
 
 export const InvoiceModel = z.object({
   id: z.string(),
+  fid: z.string(),
   createdAt: z.date(),
   updatedAt: z.date(),
   userId: z.string(),

@@ -21,6 +21,7 @@ export default function Invoices() {
         <ul>
           {invoiceListItems.map((invoice) => (
             <li key={invoice.id}>
+              <div>#{invoice.fid}</div>
               <div>{invoice.id}</div>
               <div>{invoice.clientName}</div>
               <div>{invoice.total}</div>
