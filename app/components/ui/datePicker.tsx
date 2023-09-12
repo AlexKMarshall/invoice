@@ -14,7 +14,6 @@ const DatePicker = React.forwardRef<HTMLInputElement, DatePickerProps>(
   (props, ref) => {
     const [isDatePickerOpen, setIsDatePickerOpen] = React.useState(false);
     const [selectedDate, setSelectedDate] = React.useState<Date>();
-    console.log(selectedDate);
     const inputRef = React.useRef<HTMLInputElement>(null);
     return (
       <>

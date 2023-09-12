@@ -10,7 +10,7 @@ import { parse, refine } from "@conform-to/zod";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
-import { useEffect, useId, useRef, useState } from "react";
+import { useId, useRef } from "react";
 import { ClientOnly } from "remix-utils";
 import { z } from "zod";
 
@@ -18,6 +18,13 @@ import { Button } from "~/components/ui/button";
 import { DatePicker } from "~/components/ui/datePicker";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
 import { prisma } from "~/db.server";
 import { createInvoice, getPaymentTerms } from "~/models/invoice.server";
 import { requireUserId } from "~/utils/auth.server";
@@ -226,13 +233,21 @@ export default function InvoicesNew() {
           }
         >
           {() => (
-            <select {...conform.select(fields.paymentTermId)}>
-              {paymentTerms.map((term) => (
-                <option key={term.id} value={term.id}>
-                  {term.name}
-                </option>
-              ))}
-            </select>
+            <Select
+              {...conform.select(fields.paymentTermId)}
+              defaultValue={String(fields.paymentTermId.defaultValue)}
+            >
+              <SelectTrigger id={fields.paymentTermId.id}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {paymentTerms.map((term) => (
+                  <SelectItem key={term.id} value={term.id}>
+                    {term.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           )}
         </ClientOnly>
         {/* <Input {...conform.input(fields.paymentTermId)} /> */}
