@@ -10,7 +10,8 @@ import { parse, refine } from "@conform-to/zod";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
 import { Form, useActionData, useLoaderData } from "@remix-run/react";
-import { useId, useRef } from "react";
+import { useEffect, useId, useRef, useState } from "react";
+import { ClientOnly } from "remix-utils";
 import { z } from "zod";
 
 import { Button } from "~/components/ui/button";
@@ -213,13 +214,27 @@ export default function InvoicesNew() {
       </div>
       <div>
         <Label htmlFor={fields.paymentTermId.id}>Payment Terms</Label>
-        <select {...conform.select(fields.paymentTermId)}>
-          {paymentTerms.map((term) => (
-            <option key={term.id} value={term.id}>
-              {term.name}
-            </option>
-          ))}
-        </select>
+        <ClientOnly
+          fallback={
+            <select {...conform.select(fields.paymentTermId)}>
+              {paymentTerms.map((term) => (
+                <option key={term.id} value={term.id}>
+                  {term.name}
+                </option>
+              ))}
+            </select>
+          }
+        >
+          {() => (
+            <select {...conform.select(fields.paymentTermId)}>
+              {paymentTerms.map((term) => (
+                <option key={term.id} value={term.id}>
+                  {term.name}
+                </option>
+              ))}
+            </select>
+          )}
+        </ClientOnly>
         {/* <Input {...conform.input(fields.paymentTermId)} /> */}
         <p id={fields.paymentTermId.errorId}>{fields.paymentTermId.errors}</p>
       </div>
