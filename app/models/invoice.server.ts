@@ -28,9 +28,19 @@ export async function getInvoiceListItems() {
   });
 }
 
+export function getPaymentTerms() {
+  return prisma.paymentTerm.findMany({
+    select: { id: true, name: true },
+    orderBy: {
+      days: "asc",
+    },
+  });
+}
+
 export function createInvoice({
   userId,
   items,
+  paymentTermId,
   ...data
 }: Pick<
   Invoice,
@@ -45,7 +55,7 @@ export function createInvoice({
   | "billToPostCode"
   | "billToCountry"
   | "invoiceDate"
-  | "paymentTerms"
+  | "paymentTermId"
   | "projectDescription"
 > & { userId: User["id"] } & {
   items: Array<Pick<InvoiceItem, "name" | "quantity" | "price">>;
@@ -60,6 +70,11 @@ export function createInvoice({
       },
       items: {
         create: items,
+      },
+      paymentTerm: {
+        connect: {
+          id: paymentTermId,
+        },
       },
     },
   });

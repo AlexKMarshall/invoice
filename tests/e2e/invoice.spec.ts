@@ -67,7 +67,9 @@ test("user can create invoice", async ({ page }) => {
   await page
     .getByRole("textbox", { name: /invoice date/i })
     .fill(format(faker.date.past(), "y-MM-dd"));
-  await page.getByRole("textbox", { name: /payment terms/i }).fill("30");
+  await page
+    .getByLabel(/payment terms/i)
+    .selectOption({ label: "Net 30 Days" });
   await page
     .getByRole("textbox", { name: /project description/i })
     .fill(faker.lorem.sentence());
@@ -85,6 +87,13 @@ test("user can create invoice", async ({ page }) => {
     .fill(String(price1));
 
   await page.getByRole("button", { name: /add item/i }).click();
+
+  // wait for there to be two invoice items
+  await expect(
+    page.getByRole("group").filter({
+      has: page.getByRole("textbox", { name: /item name/i }),
+    }),
+  ).toHaveCount(2);
 
   const secondInvoiceItemFieldset = await getLatestInvoiceItem(page);
 
