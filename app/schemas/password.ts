@@ -1,5 +1,7 @@
 import * as z from "zod"
-import { CompleteUser, RelatedUserModel } from "./index"
+
+import type { CompleteUser} from "./index";
+import { RelatedUserModel } from "./index"
 
 export const PasswordModel = z.object({
   hash: z.string(),
