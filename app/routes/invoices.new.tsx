@@ -102,7 +102,7 @@ export async function action({ request }: ActionArgs) {
     return json(submission);
   }
 
-  await createInvoice({ ...submission.value, userId });
+  await createInvoice({ ...submission.value, userId, status: "pending" });
 
   return redirect("/invoices");
 }

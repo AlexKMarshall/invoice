@@ -1,0 +1,35 @@
+/*
+  Warnings:
+
+  - Added the required column `status` to the `Invoice` table without a default value. This is not possible if the table is not empty.
+
+*/
+-- RedefineTables
+PRAGMA foreign_keys=OFF;
+CREATE TABLE "new_Invoice" (
+    "id" TEXT NOT NULL PRIMARY KEY,
+    "createdAt" DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "updatedAt" DATETIME NOT NULL,
+    "userId" TEXT NOT NULL,
+    "billFromStreet" TEXT NOT NULL,
+    "billFromCity" TEXT NOT NULL,
+    "billFromPostCode" TEXT NOT NULL,
+    "billFromCountry" TEXT NOT NULL,
+    "clientName" TEXT NOT NULL,
+    "clientEmail" TEXT NOT NULL,
+    "billToStreet" TEXT NOT NULL,
+    "billToCity" TEXT NOT NULL,
+    "billToPostCode" TEXT NOT NULL,
+    "billToCountry" TEXT NOT NULL,
+    "invoiceDate" TEXT NOT NULL,
+    "paymentTermId" TEXT NOT NULL,
+    "projectDescription" TEXT NOT NULL,
+    "status" TEXT NOT NULL,
+    CONSTRAINT "Invoice_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User" ("id") ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT "Invoice_paymentTermId_fkey" FOREIGN KEY ("paymentTermId") REFERENCES "PaymentTerm" ("id") ON DELETE RESTRICT ON UPDATE CASCADE
+);
+INSERT INTO "new_Invoice" ("billFromCity", "billFromCountry", "billFromPostCode", "billFromStreet", "billToCity", "billToCountry", "billToPostCode", "billToStreet", "clientEmail", "clientName", "createdAt", "id", "invoiceDate", "paymentTermId", "projectDescription", "updatedAt", "userId", "status") SELECT "billFromCity", "billFromCountry", "billFromPostCode", "billFromStreet", "billToCity", "billToCountry", "billToPostCode", "billToStreet", "clientEmail", "clientName", "createdAt", "id", "invoiceDate", "paymentTermId", "projectDescription", "updatedAt", "userId", "pending" FROM "Invoice";
+DROP TABLE "Invoice";
+ALTER TABLE "new_Invoice" RENAME TO "Invoice";
+PRAGMA foreign_key_check;
+PRAGMA foreign_keys=ON;

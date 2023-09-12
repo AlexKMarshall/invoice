@@ -87,6 +87,8 @@ model Invoice {
 
   projectDescription String
 
+  status String
+
   items InvoiceItem[]
 }
 

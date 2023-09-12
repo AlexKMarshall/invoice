@@ -68,6 +68,7 @@ export function createInvoice({
   | "projectDescription"
 > & { userId: User["id"] } & {
   items: Array<Pick<InvoiceItem, "name" | "quantity" | "price">>;
+  status: "pending";
 }) {
   return prisma.invoice.create({
     data: {

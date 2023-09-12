@@ -59,6 +59,7 @@ async function seed() {
       invoiceDate: faker.date.past().toDateString(),
       paymentTermId: "net-30",
       projectDescription: faker.lorem.sentence(),
+      status: faker.helpers.arrayElement(["draft", "pending", "paid"]),
       items: {
         create: [
           { name: faker.commerce.productName(), quantity: 1, price: 100 },
