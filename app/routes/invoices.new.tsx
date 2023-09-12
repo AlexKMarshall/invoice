@@ -6,61 +6,97 @@ import {
   useFieldset,
   useForm,
 } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
+import { parse, refine } from "@conform-to/zod";
 import type { ActionArgs } from "@remix-run/node";
 import { json, redirect } from "@remix-run/node";
-import { Form, useActionData } from "@remix-run/react";
-import { format, isValid, parse as dateFnsParse } from "date-fns";
-import { CalendarIcon } from "lucide-react";
-import { useId, useRef, useState } from "react";
+import { Form, useActionData, useLoaderData } from "@remix-run/react";
+import { useId, useRef } from "react";
+import { ClientOnly } from "remix-utils";
 import { z } from "zod";
 
 import { Button } from "~/components/ui/button";
-import { Calendar } from "~/components/ui/calendar";
+import { DatePicker } from "~/components/ui/datePicker";
 import { Input } from "~/components/ui/input";
 import { Label } from "~/components/ui/label";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "~/components/ui/popover";
-import { createInvoice } from "~/models/invoice.server";
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "~/components/ui/select";
+import { prisma } from "~/db.server";
+import { createInvoice, getPaymentTerms } from "~/models/invoice.server";
 import { requireUserId } from "~/utils/auth.server";
 
-const invoiceFormSchema = z.object({
-  billFromStreet: z.string().nonempty("can't be empty"),
-  billFromCity: z.string().nonempty("can't be empty"),
-  billFromPostCode: z.string().nonempty("can't be empty"),
-  billFromCountry: z.string().nonempty("can't be empty"),
-  clientName: z.string().nonempty("can't be empty"),
-  clientEmail: z
-    .string()
-    .nonempty("can't be empty")
-    .email("must be a valid email address"),
-  billToStreet: z.string().nonempty("can't be empty"),
-  billToCity: z.string().nonempty("can't be empty"),
-  billToPostCode: z.string().nonempty("can't be empty"),
-  billToCountry: z.string().nonempty("can't be empty"),
-  invoiceDate: z.string().nonempty("can't be empty"),
-  paymentTerms: z.string().nonempty("can't be empty"),
-  projectDescription: z.string().nonempty("can't be empty"),
-  items: z.array(
-    z.object({
-      name: z.string().nonempty("can't be empty"),
-      quantity: z.coerce.number().int().positive("must be a positive number"),
-      price: z.coerce.number().int().positive("must be a positive number"),
-    }),
-  ),
-});
+function createInvoiceFormSchema(
+  options: {
+    doesPaymentTermExist?: (paymentTermId: string) => Promise<boolean>;
+  } = {},
+) {
+  return z.object({
+    billFromStreet: z.string().nonempty("can't be empty"),
+    billFromCity: z.string().nonempty("can't be empty"),
+    billFromPostCode: z.string().nonempty("can't be empty"),
+    billFromCountry: z.string().nonempty("can't be empty"),
+    clientName: z.string().nonempty("can't be empty"),
+    clientEmail: z
+      .string()
+      .nonempty("can't be empty")
+      .email("must be a valid email address"),
+    billToStreet: z.string().nonempty("can't be empty"),
+    billToCity: z.string().nonempty("can't be empty"),
+    billToPostCode: z.string().nonempty("can't be empty"),
+    billToCountry: z.string().nonempty("can't be empty"),
+    invoiceDate: z.string().nonempty("can't be empty"),
+    paymentTermId: z
+      .string()
+      .nonempty("can't be empty")
+      .pipe(
+        z.string().superRefine((paymentTermId, ctx) =>
+          refine(ctx, {
+            validate: () => options.doesPaymentTermExist?.(paymentTermId),
+            message: "must be a valid payment term",
+          }),
+        ),
+      ),
+    projectDescription: z.string().nonempty("can't be empty"),
+    items: z.array(
+      z.object({
+        name: z.string().nonempty("can't be empty"),
+        quantity: z.coerce.number().int().positive("must be a positive number"),
+        price: z.coerce.number().int().positive("must be a positive number"),
+      }),
+    ),
+  });
+}
 
-type InvoiceItemFieldset = z.infer<typeof invoiceFormSchema>["items"][number];
+type InvoiceItemFieldset = z.infer<
+  ReturnType<typeof createInvoiceFormSchema>
+>["items"][number];
+
+export async function loader() {
+  const paymentTerms = await getPaymentTerms();
+
+  return json({ paymentTerms });
+}
 
 export async function action({ request }: ActionArgs) {
   const userId = await requireUserId(request);
 
   const formData = await request.formData();
 
-  const submission = parse(formData, { schema: invoiceFormSchema });
+  const submission = await parse(formData, {
+    schema: createInvoiceFormSchema({
+      async doesPaymentTermExist(paymentTermId) {
+        const existingPaymentTerm = await prisma.paymentTerm.findUnique({
+          where: { id: paymentTermId },
+        });
+        return Boolean(existingPaymentTerm);
+      },
+    }),
+    async: true,
+  });
 
   if (submission.intent !== "submit" || !submission.value) {
     return json(submission);
@@ -72,16 +108,15 @@ export async function action({ request }: ActionArgs) {
 }
 
 export default function InvoicesNew() {
+  const { paymentTerms } = useLoaderData<typeof loader>();
   const lastSubmission = useActionData<typeof action>();
   const id = useId();
-  const invoiceDateInputRef = useRef<HTMLInputElement>(null);
-  const [invoiceDate, setInvoiceDate] = useState<Date>();
   const [form, fields] = useForm({
     id,
     lastSubmission,
     shouldValidate: "onBlur",
     onValidate({ formData }) {
-      return parse(formData, { schema: invoiceFormSchema });
+      return parse(formData, { schema: createInvoiceFormSchema() });
     },
     defaultValue: {
       items: [{ name: "", quantity: "", price: "" }],
@@ -181,47 +216,42 @@ export default function InvoicesNew() {
       </fieldset>
       <div>
         <Label htmlFor={fields.invoiceDate.id}>Invoice Date</Label>
-        <Input
-          ref={invoiceDateInputRef}
-          {...conform.input(fields.invoiceDate)}
-          onChange={(event) => {
-            const date = dateFnsParse(
-              event.target.value,
-              "y-MM-dd",
-              new Date(),
-            );
-            if (isValid(date)) {
-              setInvoiceDate(date);
-            } else {
-              setInvoiceDate(undefined);
-            }
-          }}
-        />
-        <Popover>
-          <PopoverTrigger aria-label="open date picker">
-            <CalendarIcon className="h-4 w-4" />
-          </PopoverTrigger>
-          <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              defaultMonth={invoiceDate}
-              selected={invoiceDate}
-              onSelect={(date) => {
-                setInvoiceDate(date);
-                if (date && invoiceDateInputRef.current) {
-                  invoiceDateInputRef.current.value = format(date, "y-MM-dd");
-                }
-              }}
-              initialFocus
-            />
-          </PopoverContent>
-        </Popover>
+        <DatePicker {...conform.input(fields.invoiceDate)} />
         <p id={fields.invoiceDate.errorId}>{fields.invoiceDate.errors}</p>
       </div>
       <div>
-        <Label htmlFor={fields.paymentTerms.id}>Payment Terms</Label>
-        <Input {...conform.input(fields.paymentTerms)} />
-        <p id={fields.paymentTerms.errorId}>{fields.paymentTerms.errors}</p>
+        <Label htmlFor={fields.paymentTermId.id}>Payment Terms</Label>
+        <ClientOnly
+          fallback={
+            <select {...conform.select(fields.paymentTermId)}>
+              {paymentTerms.map((term) => (
+                <option key={term.id} value={term.id}>
+                  {term.name}
+                </option>
+              ))}
+            </select>
+          }
+        >
+          {() => (
+            <Select
+              {...conform.select(fields.paymentTermId)}
+              defaultValue={String(fields.paymentTermId.defaultValue)}
+            >
+              <SelectTrigger id={fields.paymentTermId.id}>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {paymentTerms.map((term) => (
+                  <SelectItem key={term.id} value={term.id}>
+                    {term.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </ClientOnly>
+        {/* <Input {...conform.input(fields.paymentTermId)} /> */}
+        <p id={fields.paymentTermId.errorId}>{fields.paymentTermId.errors}</p>
       </div>
       <div>
         <Label htmlFor={fields.projectDescription.id}>

@@ -57,7 +57,7 @@ async function seed() {
       billToPostCode: faker.location.zipCode(),
       billToCountry: faker.location.country(),
       invoiceDate: faker.date.past().toDateString(),
-      paymentTerms: "30",
+      paymentTermId: "net-30",
       projectDescription: faker.lorem.sentence(),
       items: {
         create: [

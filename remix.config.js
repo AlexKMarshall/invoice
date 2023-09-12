@@ -13,4 +13,5 @@ module.exports = {
   postcss: true,
   serverModuleFormat: "cjs",
   tailwind: true,
+  serverDependenciesToBundle: ["react-merge-refs"],
 };

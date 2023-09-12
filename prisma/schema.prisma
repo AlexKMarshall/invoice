@@ -39,6 +39,16 @@ model Note {
   userId String
 }
 
+model PaymentTerm {
+  id        String   @id
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  name     String
+  days     Int
+  invoices Invoice[]
+}
+
 model InvoiceItem {
   id        String   @id @default(cuid())
   createdAt DateTime @default(now())
@@ -71,8 +81,9 @@ model Invoice {
   billToPostCode String
   billToCountry  String
 
-  invoiceDate  String
-  paymentTerms String
+  invoiceDate   String
+  paymentTerm   PaymentTerm @relation(fields: [paymentTermId], references: [id])
+  paymentTermId String
 
   projectDescription String
 
