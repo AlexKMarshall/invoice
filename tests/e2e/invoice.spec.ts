@@ -67,9 +67,14 @@ test("user can create invoice", async ({ page }) => {
   await page
     .getByRole("textbox", { name: /invoice date/i })
     .fill(format(faker.date.past(), "y-MM-dd"));
-  await page
-    .getByLabel(/payment terms/i)
-    .selectOption({ label: "Net 30 Days" });
+  try {
+    await page
+      .getByLabel(/payment terms/i)
+      .selectOption({ label: "Net 30 Days" });
+  } catch (_e) {
+    await page.getByLabel(/payment terms/i).click();
+    await page.getByRole("option", { name: /net 30 days/i }).click();
+  }
   await page
     .getByRole("textbox", { name: /project description/i })
     .fill(faker.lorem.sentence());
