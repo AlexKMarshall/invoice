@@ -88,7 +88,8 @@
     "typescript": "^5.1.6",
     "vite": "^4.4.9",
     "vite-tsconfig-paths": "^3.6.0",
-    "vitest": "^0.34.2"
+    "vitest": "^0.34.2",
+    "zod-prisma": "^0.5.4"
   },
   "engines": {
     "node": ">=14.0.0"
