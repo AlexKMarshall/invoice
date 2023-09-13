@@ -2,6 +2,8 @@ import { faker } from "@faker-js/faker";
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 
+import { generateFid } from "~/models/invoice.server";
+
 const prisma = new PrismaClient();
 
 async function seed() {
@@ -46,6 +48,7 @@ async function seed() {
   await prisma.invoice.create({
     data: {
       userId: user.id,
+      fid: await generateFid(),
       billFromStreet: faker.location.streetAddress(),
       billFromCity: faker.location.city(),
       billFromPostCode: faker.location.zipCode(),
@@ -59,6 +62,7 @@ async function seed() {
       invoiceDate: faker.date.past().toDateString(),
       paymentTermId: "net-30",
       projectDescription: faker.lorem.sentence(),
+      status: faker.helpers.arrayElement(["draft", "pending", "paid"]),
       items: {
         create: [
           { name: faker.commerce.productName(), quantity: 1, price: 100 },
