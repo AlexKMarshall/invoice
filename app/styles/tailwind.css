@@ -4,6 +4,8 @@
  
 @layer base {
   :root {
+    --font-sans: League Spartan, League Spartan Fallback;
+
     --background: 0 0% 100%;
     --foreground: 222.2 84% 4.9%;
 
