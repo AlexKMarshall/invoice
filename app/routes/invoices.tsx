@@ -1,6 +1,5 @@
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
-import { format } from "date-fns";
 
 import { getInvoiceListItems } from "~/models/invoice.server";
 
@@ -33,7 +32,7 @@ export default function Invoices() {
               <div>#{invoice.fid}</div>
               <div>{invoice.clientName}</div>
               <div>{invoice.total}</div>
-              <div>{format(new Date(invoice.dueDate), "y-MM-dd")}</div>
+              <div>{invoice.dueDate}</div>
               <div>{invoice.status}</div>
             </li>
           ))}

@@ -1,5 +1,5 @@
 import type { Invoice, InvoiceItem, User } from "@prisma/client";
-import { add } from "date-fns";
+import { add, format } from "date-fns";
 import { z } from "zod";
 
 import { prisma } from "~/db.server";
@@ -46,7 +46,10 @@ export async function getInvoiceListItems() {
         (acc, item) => acc + item.price * item.quantity,
         0,
       );
-      const dueDate = add(new Date(invoiceDate), { days: paymentTerm.days });
+      const dueDate = format(
+        add(new Date(invoiceDate), { days: paymentTerm.days }),
+        "y-MM-dd",
+      );
       return {
         ...invoice,
         total,
