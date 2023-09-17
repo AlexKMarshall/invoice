@@ -66,7 +66,16 @@ export default function Invoices() {
                 <p className="text-muted-foreground">Due {invoice.dueDate}</p>
                 <p>{invoice.total}</p>
               </div>
-              <Badge className="justify-self-end self-end">
+              <Badge
+                className="justify-self-end self-end min-w-[6.875rem]"
+                variant={
+                  invoice.status === "paid"
+                    ? "success"
+                    : invoice.status === "pending"
+                    ? "warning"
+                    : "default"
+                }
+              >
                 {invoice.status}
               </Badge>
             </li>
