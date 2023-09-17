@@ -1,6 +1,7 @@
 import { json } from "@remix-run/node";
 import { Link, Outlet, useLoaderData } from "@remix-run/react";
 
+import { Badge } from "~/components/ui/badge";
 import { Button } from "~/components/ui/button";
 import { getInvoiceListItems } from "~/models/invoice.server";
 
@@ -35,8 +36,10 @@ export default function Invoices() {
       <div className="flex mb-8 items-center">
         <div className="flex-grow">
           <h1 className="font-bold text-3xl">Invoices</h1>
-          <p className="sm:hidden">{subheading.base}</p>
-          <p className="hidden sm:block">{subheading.sm}</p>
+          <p className="text-muted-foreground">
+            <span className="sm:hidden">{subheading.base}</span>
+            <span className="hidden sm:inline">{subheading.sm}</span>
+          </p>
         </div>
         <Button asChild>
           <Link to="new">New invoice</Link>
@@ -48,15 +51,19 @@ export default function Invoices() {
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="grid grid-cols-2 rounded-lg bg-gray-200 p-6 gap-6"
+              className="grid grid-cols-2 rounded-lg bg-card text-card-foreground p-6 gap-6"
             >
               <h2 className="before:content-['#']">{invoice.fid}</h2>
-              <p className="justify-self-end">{invoice.clientName}</p>
+              <p className="justify-self-end text-muted-foreground">
+                {invoice.clientName}
+              </p>
               <div className="self-end">
+                <p className="text-muted-foreground">Due {invoice.dueDate}</p>
                 <p>{invoice.total}</p>
-                <p>{invoice.dueDate}</p>
               </div>
-              <p className="justify-self-end self-end">{invoice.status}</p>
+              <Badge className="justify-self-end self-end">
+                {invoice.status}
+              </Badge>
             </li>
           ))}
         </ul>
