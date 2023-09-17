@@ -6,6 +6,34 @@ import { generateFid } from "~/models/invoice.server";
 
 const prisma = new PrismaClient();
 
+async function createInvoice(userId: string) {
+  return prisma.invoice.create({
+    data: {
+      userId,
+      fid: await generateFid(),
+      billFromStreet: faker.location.streetAddress(),
+      billFromCity: faker.location.city(),
+      billFromPostCode: faker.location.zipCode(),
+      billFromCountry: faker.location.country(),
+      clientName: faker.person.fullName(),
+      clientEmail: faker.internet.email(),
+      billToStreet: faker.location.streetAddress(),
+      billToCity: faker.location.city(),
+      billToPostCode: faker.location.zipCode(),
+      billToCountry: faker.location.country(),
+      invoiceDate: faker.date.past().toDateString(),
+      paymentTermId: "net-30",
+      projectDescription: faker.lorem.sentence(),
+      status: faker.helpers.arrayElement(["draft", "pending", "paid"]),
+      items: {
+        create: [
+          { name: faker.commerce.productName(), quantity: 1, price: 100 },
+        ],
+      },
+    },
+  });
+}
+
 async function seed() {
   const email = "rachel@remix.run";
 
@@ -45,31 +73,9 @@ async function seed() {
 
   await prisma.invoice.deleteMany({});
 
-  await prisma.invoice.create({
-    data: {
-      userId: user.id,
-      fid: await generateFid(),
-      billFromStreet: faker.location.streetAddress(),
-      billFromCity: faker.location.city(),
-      billFromPostCode: faker.location.zipCode(),
-      billFromCountry: faker.location.country(),
-      clientName: faker.person.fullName(),
-      clientEmail: faker.internet.email(),
-      billToStreet: faker.location.streetAddress(),
-      billToCity: faker.location.city(),
-      billToPostCode: faker.location.zipCode(),
-      billToCountry: faker.location.country(),
-      invoiceDate: faker.date.past().toDateString(),
-      paymentTermId: "net-30",
-      projectDescription: faker.lorem.sentence(),
-      status: faker.helpers.arrayElement(["draft", "pending", "paid"]),
-      items: {
-        create: [
-          { name: faker.commerce.productName(), quantity: 1, price: 100 },
-        ],
-      },
-    },
-  });
+  await createInvoice(user.id);
+  await createInvoice(user.id);
+  await createInvoice(user.id);
 
   console.log(`Database has been seeded. 🌱`);
 }

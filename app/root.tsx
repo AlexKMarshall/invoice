@@ -12,10 +12,12 @@ import {
 } from "@remix-run/react";
 
 import { getUser } from "~/session.server";
-import stylesheet from "~/tailwind.css";
+import fontCss from "~/styles/font.css";
+import tailwindCss from "~/styles/tailwind.css";
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: stylesheet },
+  { rel: "stylesheet", href: fontCss },
+  { rel: "stylesheet", href: tailwindCss },
   ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
 ];
 
@@ -27,7 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function App() {
   const { reducedData } = useLoaderData<typeof loader>();
   return (
-    <html lang="en" className="h-full">
+    <html lang="en" className="h-full dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
