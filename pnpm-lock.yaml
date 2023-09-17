@@ -88,6 +88,9 @@ dependencies:
     version: 3.22.2
 
 devDependencies:
+  '@capsizecss/metrics':
+    specifier: ^1.2.0
+    version: 1.2.0
   '@faker-js/faker':
     specifier: ^8.0.2
     version: 8.0.2
@@ -181,6 +184,9 @@ devDependencies:
   tailwindcss:
     specifier: ^3.3.3
     version: 3.3.3(ts-node@10.9.1)
+  tailwindcss-capsize:
+    specifier: ^3.0.4
+    version: 3.0.4(tailwindcss@3.3.3)
   tailwindcss-radix:
     specifier: ^2.8.0
     version: 2.8.0
@@ -1525,6 +1531,16 @@ packages:
 
   /@bcoe/v8-coverage@0.2.3:
     resolution: {integrity: sha512-0hYQ8SB4Db5zvZB4axdMHGwEaQjkZzFjQiN9LVYvIFB2nSUHW9tYpxWriPrWDASIxiaXax83REcLxuSdnGPZtw==}
+    dev: true
+
+  /@capsizecss/core@3.1.1:
+    resolution: {integrity: sha512-1YxfErFXdxcyDyc8peDwH2hiJF5U8sBY5i5HX0f/tpvabbu40w9r8VHYMOOw9Fox5O/+kf2gAhyfVe+sLnaaBA==}
+    dependencies:
+      csstype: 3.1.2
+    dev: true
+
+  /@capsizecss/metrics@1.2.0:
+    resolution: {integrity: sha512-zUYcqaR0rv4TYXyY97G1vRMMOyz+3EteXqLsM1XO/N8LnThwR1wYSE5cU15CUx3KPAiAEIbUZ13B7+plxYjHUA==}
     dev: true
 
   /@colors/colors@1.5.0:
@@ -9508,6 +9524,16 @@ packages:
     dependencies:
       tailwindcss: 3.3.3(ts-node@10.9.1)
     dev: false
+
+  /tailwindcss-capsize@3.0.4(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-JuJN36DH8f1M0seRD4R+W2+vBI2G/hmmaoFLPvnvGtTI8n3e1YSDI9Ey2WRJiOkod2UcK0R/ut5qOGMy+ScjaA==}
+    engines: {node: '>=10'}
+    peerDependencies:
+      tailwindcss: '>= 1.5'
+    dependencies:
+      '@capsizecss/core': 3.1.1
+      tailwindcss: 3.3.3(ts-node@10.9.1)
+    dev: true
 
   /tailwindcss-radix@2.8.0:
     resolution: {integrity: sha512-1k1UfoIYgVyBl13FKwwoKavjnJ5VEaUClCTAsgz3VLquN4ay/lyaMPzkbqD71sACDs2fRGImytAUlMb4TzOt1A==}

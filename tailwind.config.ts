@@ -1,3 +1,4 @@
+import fontMetrics from "@capsizecss/metrics/leagueSpartan";
 import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme.js";
 import animatePlugin from "tailwindcss-animate";
@@ -88,7 +89,14 @@ export default {
       fontFamily: {
         sans: ["var(--font-sans)", ...defaultTheme.fontFamily.sans],
       },
+      fontMetrics: {
+        sans: fontMetrics,
+      },
     },
   },
-  plugins: [animatePlugin, radixPlugin],
+  plugins: [
+    animatePlugin,
+    radixPlugin,
+    require("tailwindcss-capsize")({ className: "leading-trim" }),
+  ],
 } satisfies Config;
