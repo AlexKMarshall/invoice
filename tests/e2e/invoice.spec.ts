@@ -21,7 +21,7 @@ test("user can create invoice", async ({ page }) => {
   const price2 = faker.number.int({ min: 1, max: 100 });
   const expectedTotal = quantity1 * price1 + quantity2 * price2;
   const invoiceDate = faker.date.past();
-  const expectedDueDate = format(add(invoiceDate, { days: 30 }), "y-MM-dd");
+  const expectedDueDate = format(add(invoiceDate, { days: 30 }), "dd MMM yyyy");
 
   await page.goto("/invoices");
 
@@ -118,5 +118,5 @@ test("user can create invoice", async ({ page }) => {
 
   await expect(page.getByText(clientName)).toBeVisible();
   await expect(page.getByText(String(expectedTotal))).toBeVisible();
-  await expect(page.getByText(expectedDueDate)).toBeVisible();
+  await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible();
 });
