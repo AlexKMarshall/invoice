@@ -23,8 +23,11 @@ export async function loader() {
     invoiceListItems,
     count,
     subheading: {
-      base: pluralInvoice(count, true),
-      sm: `There ${pluralIs(count)} ${count} total ${pluralInvoice(count)}`,
+      base: count > 0 ? pluralInvoice(count, true) : "No invoices",
+      sm:
+        count > 0
+          ? `There ${pluralIs(count)} ${count} total ${pluralInvoice(count)}`
+          : "No invoices",
     },
   });
 }
@@ -53,7 +56,9 @@ export default function Invoices() {
               key={invoice.id}
               className="grid grid-cols-2 rounded-lg bg-card text-card-foreground p-6 gap-6"
             >
-              <h2 className="before:content-['#']">{invoice.fid}</h2>
+              <h2 className="before:content-['#'] font-bold before:text-muted-foreground before:dark:[--muted-foreground:231_36%_63%]">
+                {invoice.fid}
+              </h2>
               <p className="justify-self-end text-muted-foreground">
                 {invoice.clientName}
               </p>

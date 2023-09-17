@@ -48,7 +48,7 @@ export async function getInvoiceListItems() {
       );
       const dueDate = format(
         add(new Date(invoiceDate), { days: paymentTerm.days }),
-        "y-MM-dd",
+        "dd MMM yyyy",
       );
       return {
         ...invoice,
