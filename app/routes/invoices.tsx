@@ -39,8 +39,8 @@ export default function Invoices() {
     <main className="px-6 py-8">
       <div className="flex mb-8 items-center">
         <div className="flex-grow">
-          <h1 className="font-bold text-3xl">Invoices</h1>
-          <p className="text-muted-foreground">
+          <h1 className="font-bold text-3xl leading-trim mb-2">Invoices</h1>
+          <p className="text-muted-foreground leading-trim">
             <span className="sm:hidden">{subheading.base}</span>
             <span className="hidden sm:inline">{subheading.sm}</span>
           </p>
@@ -55,17 +55,22 @@ export default function Invoices() {
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="grid grid-cols-2 rounded-lg bg-card text-card-foreground p-6 gap-6"
+              className="grid grid-cols-2 rounded-lg bg-card text-card-foreground p-6 gap-7"
             >
-              <h2 className="before:content-['#'] font-bold before:text-muted-foreground before:dark:[--muted-foreground:231_36%_63%]">
-                {invoice.fid}
+              <h2 className="font-bold leading-trim">
+                <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
+                  #
+                </span>
+                <span>{invoice.fid}</span>
               </h2>
-              <p className="justify-self-end text-muted-foreground">
+              <p className="justify-self-end text-muted-foreground leading-trim">
                 {invoice.clientName}
               </p>
               <div className="self-end">
-                <p className="text-muted-foreground">Due {invoice.dueDate}</p>
-                <p>{invoice.total}</p>
+                <p className="text-muted-foreground leading-trim mb-4">
+                  Due {invoice.dueDate}
+                </p>
+                <p className="leading-trim">{invoice.total}</p>
               </div>
               <InvoiceStatus
                 className="justify-self-end self-end min-w-[6.875rem]"
