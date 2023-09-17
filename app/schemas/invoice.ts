@@ -1,7 +1,15 @@
-import * as z from "zod"
+import * as z from "zod";
 
-import type { CompleteInvoiceItem, CompletePaymentTerm, CompleteUser} from "./index";
-import { RelatedInvoiceItemModel,RelatedPaymentTermModel, RelatedUserModel } from "./index"
+import type {
+  CompleteInvoiceItem,
+  CompletePaymentTerm,
+  CompleteUser,
+} from "./index";
+import {
+  RelatedInvoiceItemModel,
+  RelatedPaymentTermModel,
+  RelatedUserModel,
+} from "./index";
 
 export const InvoiceModel = z.object({
   id: z.string(),
@@ -23,12 +31,12 @@ export const InvoiceModel = z.object({
   paymentTermId: z.string(),
   projectDescription: z.string(),
   status: z.enum(["draft", "pending", "paid"]),
-})
+});
 
 export interface CompleteInvoice extends z.infer<typeof InvoiceModel> {
-  user: CompleteUser
-  paymentTerm: CompletePaymentTerm
-  items: CompleteInvoiceItem[]
+  user: CompleteUser;
+  paymentTerm: CompletePaymentTerm;
+  items: CompleteInvoiceItem[];
 }
 
 /**
@@ -36,8 +44,10 @@ export interface CompleteInvoice extends z.infer<typeof InvoiceModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedInvoiceModel: z.ZodSchema<CompleteInvoice> = z.lazy(() => InvoiceModel.extend({
-  user: RelatedUserModel,
-  paymentTerm: RelatedPaymentTermModel,
-  items: RelatedInvoiceItemModel.array(),
-}))
+export const RelatedInvoiceModel: z.ZodSchema<CompleteInvoice> = z.lazy(() =>
+  InvoiceModel.extend({
+    user: RelatedUserModel,
+    paymentTerm: RelatedPaymentTermModel,
+    items: RelatedInvoiceItemModel.array(),
+  }),
+);

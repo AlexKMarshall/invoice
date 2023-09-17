@@ -129,7 +129,7 @@ export default function LoginPage() {
           <div>
             <Label
               htmlFor={fields.email.id}
-              className="block text-sm font-medium text-gray-700"
+              className="block font-medium text-gray-700 text-sm"
             >
               Email address
             </Label>
@@ -145,7 +145,7 @@ export default function LoginPage() {
           <div>
             <Label
               htmlFor={fields.password.id}
-              className="block text-sm font-medium text-gray-700"
+              className="block font-medium text-gray-700 text-sm"
             >
               Password
             </Label>
@@ -177,12 +177,12 @@ export default function LoginPage() {
               />
               <label
                 htmlFor={fields.remember.id}
-                className="ml-2 block text-sm text-gray-900"
+                className="ml-2 block text-gray-900 text-sm"
               >
                 Remember me
               </label>
             </div>
-            <div className="text-center text-sm text-gray-500">
+            <div className="text-center text-gray-500 text-sm">
               Don't have an account?{" "}
               <Link
                 className="text-blue-500 underline"

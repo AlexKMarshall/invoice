@@ -29,7 +29,7 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function App() {
   const { reducedData } = useLoaderData<typeof loader>();
   return (
-    <html lang="en" className="h-full dark">
+    <html lang="en" className="dark h-full">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />

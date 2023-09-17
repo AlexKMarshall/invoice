@@ -37,10 +37,10 @@ export default function Invoices() {
   const { invoiceListItems, subheading } = useLoaderData<typeof loader>();
   return (
     <main className="px-6 py-8">
-      <div className="flex mb-8 items-center">
+      <div className="mb-8 flex items-center">
         <div className="flex-grow">
-          <h1 className="font-bold text-3xl leading-trim mb-2">Invoices</h1>
-          <p className="text-muted-foreground leading-trim">
+          <h1 className="mb-2 font-bold text-2xl leading-trim">Invoices</h1>
+          <p className="text-muted-foreground text-sm leading-trim">
             <span className="sm:hidden">{subheading.base}</span>
             <span className="hidden sm:inline">{subheading.sm}</span>
           </p>
@@ -55,7 +55,7 @@ export default function Invoices() {
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="grid grid-cols-2 rounded-lg bg-card text-card-foreground p-6 gap-7"
+              className="grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground"
             >
               <h2 className="font-bold leading-trim">
                 <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
@@ -63,17 +63,17 @@ export default function Invoices() {
                 </span>
                 <span>{invoice.fid}</span>
               </h2>
-              <p className="justify-self-end text-muted-foreground leading-trim">
+              <p className="justify-self-end text-muted-foreground text-sm leading-trim">
                 {invoice.clientName}
               </p>
               <div className="self-end">
-                <p className="text-muted-foreground leading-trim mb-4">
+                <p className="mb-4 text-muted-foreground text-sm leading-trim">
                   Due {invoice.dueDate}
                 </p>
                 <p className="leading-trim">{invoice.total}</p>
               </div>
               <InvoiceStatus
-                className="justify-self-end self-end min-w-[6.875rem]"
+                className="min-w-[6.875rem] self-end justify-self-end"
                 status={invoice.status}
               />
             </li>
