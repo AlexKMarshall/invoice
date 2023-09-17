@@ -1,40 +1,40 @@
-import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { json } from '@remix-run/node'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
 
-import { Button } from "~/components/ui/button";
-import { getInvoiceListItems } from "~/models/invoice.server";
+import { Button } from '~/components/ui/button'
+import { getInvoiceListItems } from '~/models/invoice.server'
 
-import { InvoiceStatus } from "../components/ui/invoiceStatus";
+import { InvoiceStatus } from '../components/ui/invoiceStatus'
 
 function pluralize(word: string, pluralVersion = `${word}s`) {
   return (count: number, includeCount = false) => {
-    const prefix = includeCount ? `${count} ` : "";
-    return count === 1 ? `${prefix}${word}` : `${prefix}${pluralVersion}`;
-  };
+    const prefix = includeCount ? `${count} ` : ''
+    return count === 1 ? `${prefix}${word}` : `${prefix}${pluralVersion}`
+  }
 }
 
-const pluralIs = pluralize("is", "are");
-const pluralInvoice = pluralize("invoice");
+const pluralIs = pluralize('is', 'are')
+const pluralInvoice = pluralize('invoice')
 
 export async function loader() {
-  const invoiceListItems = await getInvoiceListItems();
-  const count = invoiceListItems.length;
+  const invoiceListItems = await getInvoiceListItems()
+  const count = invoiceListItems.length
 
   return json({
     invoiceListItems,
     count,
     subheading: {
-      base: count > 0 ? pluralInvoice(count, true) : "No invoices",
+      base: count > 0 ? pluralInvoice(count, true) : 'No invoices',
       sm:
         count > 0
           ? `There ${pluralIs(count)} ${count} total ${pluralInvoice(count)}`
-          : "No invoices",
+          : 'No invoices',
     },
-  });
+  })
 }
 
 export default function Invoices() {
-  const { invoiceListItems, subheading } = useLoaderData<typeof loader>();
+  const { invoiceListItems, subheading } = useLoaderData<typeof loader>()
   return (
     <main className="px-6 py-8">
       <div className="mb-8 flex items-center">
@@ -83,5 +83,5 @@ export default function Invoices() {
         <p>No invoices found</p>
       )}
     </main>
-  );
+  )
 }

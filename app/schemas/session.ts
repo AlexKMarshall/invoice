@@ -1,7 +1,7 @@
-import * as z from "zod";
+import * as z from 'zod'
 
-import type { CompleteUser } from "./index";
-import { RelatedUserModel } from "./index";
+import type { CompleteUser } from './index'
+import { RelatedUserModel } from './index'
 
 export const SessionModel = z.object({
   id: z.string(),
@@ -9,10 +9,10 @@ export const SessionModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   userId: z.string(),
-});
+})
 
 export interface CompleteSession extends z.infer<typeof SessionModel> {
-  user: CompleteUser;
+  user: CompleteUser
 }
 
 /**
@@ -24,4 +24,4 @@ export const RelatedSessionModel: z.ZodSchema<CompleteSession> = z.lazy(() =>
   SessionModel.extend({
     user: RelatedUserModel,
   }),
-);
+)

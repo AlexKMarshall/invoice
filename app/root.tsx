@@ -1,6 +1,6 @@
-import { cssBundleHref } from "@remix-run/css-bundle";
-import type { LinksFunction, LoaderArgs } from "@remix-run/node";
-import { json } from "@remix-run/node";
+import { cssBundleHref } from '@remix-run/css-bundle'
+import type { LinksFunction, LoaderArgs } from '@remix-run/node'
+import { json } from '@remix-run/node'
 import {
   Links,
   LiveReload,
@@ -9,25 +9,25 @@ import {
   Scripts,
   ScrollRestoration,
   useLoaderData,
-} from "@remix-run/react";
+} from '@remix-run/react'
 
-import { getUser } from "~/session.server";
-import fontCss from "~/styles/font.css";
-import tailwindCss from "~/styles/tailwind.css";
+import { getUser } from '~/session.server'
+import fontCss from '~/styles/font.css'
+import tailwindCss from '~/styles/tailwind.css'
 
 export const links: LinksFunction = () => [
-  { rel: "stylesheet", href: fontCss },
-  { rel: "stylesheet", href: tailwindCss },
-  ...(cssBundleHref ? [{ rel: "stylesheet", href: cssBundleHref }] : []),
-];
+  { rel: 'stylesheet', href: fontCss },
+  { rel: 'stylesheet', href: tailwindCss },
+  ...(cssBundleHref ? [{ rel: 'stylesheet', href: cssBundleHref }] : []),
+]
 
 export const loader = async ({ request }: LoaderArgs) => {
-  const reducedData = request.headers.get("Save-Data") === "on";
-  return json({ user: await getUser(request), reducedData });
-};
+  const reducedData = request.headers.get('Save-Data') === 'on'
+  return json({ user: await getUser(request), reducedData })
+}
 
 export default function App() {
-  const { reducedData } = useLoaderData<typeof loader>();
+  const { reducedData } = useLoaderData<typeof loader>()
   return (
     <html lang="en" className="dark h-full">
       <head>
@@ -47,5 +47,5 @@ export default function App() {
         <LiveReload />
       </body>
     </html>
-  );
+  )
 }

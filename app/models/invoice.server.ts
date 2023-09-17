@@ -1,9 +1,9 @@
-import type { Invoice, InvoiceItem, User } from "@prisma/client";
-import { add, format } from "date-fns";
-import { z } from "zod";
+import type { Invoice, InvoiceItem, User } from '@prisma/client'
+import { add, format } from 'date-fns'
+import { z } from 'zod'
 
-import { prisma } from "~/db.server";
-import { InvoiceItemModel, InvoiceModel, PaymentTermModel } from "~/schemas";
+import { prisma } from '~/db.server'
+import { InvoiceItemModel, InvoiceModel, PaymentTermModel } from '~/schemas'
 
 export async function getInvoiceListItems() {
   const rawInvoices = await prisma.invoice.findMany({
@@ -25,7 +25,7 @@ export async function getInvoiceListItems() {
         },
       },
     },
-  });
+  })
 
   return z
     .array(
@@ -45,26 +45,26 @@ export async function getInvoiceListItems() {
       const total = items.reduce(
         (acc, item) => acc + item.price * item.quantity,
         0,
-      );
+      )
       const dueDate = format(
         add(new Date(invoiceDate), { days: paymentTerm.days }),
-        "dd MMM yyyy",
-      );
+        'dd MMM yyyy',
+      )
       return {
         ...invoice,
         total,
         dueDate,
-      };
-    });
+      }
+    })
 }
 
 export function getPaymentTerms() {
   return prisma.paymentTerm.findMany({
     select: { id: true, name: true },
     orderBy: {
-      days: "asc",
+      days: 'asc',
     },
-  });
+  })
 }
 
 export async function createInvoice({
@@ -74,29 +74,29 @@ export async function createInvoice({
   ...data
 }: Pick<
   Invoice,
-  | "billFromStreet"
-  | "billFromCity"
-  | "billFromPostCode"
-  | "billFromCountry"
-  | "clientName"
-  | "clientEmail"
-  | "billToStreet"
-  | "billToCity"
-  | "billToPostCode"
-  | "billToCountry"
-  | "invoiceDate"
-  | "paymentTermId"
-  | "projectDescription"
-> & { userId: User["id"] } & {
-  items: Array<Pick<InvoiceItem, "name" | "quantity" | "price">>;
-  status: "pending";
+  | 'billFromStreet'
+  | 'billFromCity'
+  | 'billFromPostCode'
+  | 'billFromCountry'
+  | 'clientName'
+  | 'clientEmail'
+  | 'billToStreet'
+  | 'billToCity'
+  | 'billToPostCode'
+  | 'billToCountry'
+  | 'invoiceDate'
+  | 'paymentTermId'
+  | 'projectDescription'
+> & { userId: User['id'] } & {
+  items: Array<Pick<InvoiceItem, 'name' | 'quantity' | 'price'>>
+  status: 'pending'
 }) {
   const fid = await generateFid({
     isFidUnique: async (fid) => {
-      const count = await prisma.invoice.count({ where: { fid } });
-      return count === 0;
+      const count = await prisma.invoice.count({ where: { fid } })
+      return count === 0
     },
-  });
+  })
   return prisma.invoice.create({
     data: {
       ...data,
@@ -115,47 +115,47 @@ export async function createInvoice({
         },
       },
     },
-  });
+  })
 }
 
 export function generateFid({
   isFidUnique,
   maxIterations = 10,
 }: {
-  isFidUnique?: (fid: string) => Promise<boolean>;
-  maxIterations?: number;
+  isFidUnique?: (fid: string) => Promise<boolean>
+  maxIterations?: number
 } = {}) {
   function generator() {
     // generate a 2 character string of random capital letters
     const prefix = Array.from({ length: 2 })
       .map(() => String.fromCharCode(Math.floor(Math.random() * 26) + 65))
-      .join("");
+      .join('')
     // generate a 4 digit number
     const suffix = Math.floor(Math.random() * 10000)
       .toString()
-      .padStart(4, "0");
+      .padStart(4, '0')
 
-    return prefix + suffix;
+    return prefix + suffix
   }
 
-  let iterations = 0;
+  let iterations = 0
 
   async function generateUniqueFid() {
     if (iterations >= maxIterations) {
       throw new Error(
-        "Could not generate a unique fid. Max iterations reached.",
-      );
+        'Could not generate a unique fid. Max iterations reached.',
+      )
     }
-    iterations++;
+    iterations++
 
-    const fid = generator();
-    const isUnique = (await isFidUnique?.(fid)) ?? true;
+    const fid = generator()
+    const isUnique = (await isFidUnique?.(fid)) ?? true
     if (isUnique) {
-      return fid;
+      return fid
     } else {
-      return generateUniqueFid();
+      return generateUniqueFid()
     }
   }
 
-  return generateUniqueFid();
+  return generateUniqueFid()
 }

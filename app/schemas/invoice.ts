@@ -1,15 +1,15 @@
-import * as z from "zod";
+import * as z from 'zod'
 
 import type {
   CompleteInvoiceItem,
   CompletePaymentTerm,
   CompleteUser,
-} from "./index";
+} from './index'
 import {
   RelatedInvoiceItemModel,
   RelatedPaymentTermModel,
   RelatedUserModel,
-} from "./index";
+} from './index'
 
 export const InvoiceModel = z.object({
   id: z.string(),
@@ -30,13 +30,13 @@ export const InvoiceModel = z.object({
   invoiceDate: z.string(),
   paymentTermId: z.string(),
   projectDescription: z.string(),
-  status: z.enum(["draft", "pending", "paid"]),
-});
+  status: z.enum(['draft', 'pending', 'paid']),
+})
 
 export interface CompleteInvoice extends z.infer<typeof InvoiceModel> {
-  user: CompleteUser;
-  paymentTerm: CompletePaymentTerm;
-  items: CompleteInvoiceItem[];
+  user: CompleteUser
+  paymentTerm: CompletePaymentTerm
+  items: CompleteInvoiceItem[]
 }
 
 /**
@@ -50,4 +50,4 @@ export const RelatedInvoiceModel: z.ZodSchema<CompleteInvoice> = z.lazy(() =>
     paymentTerm: RelatedPaymentTermModel,
     items: RelatedInvoiceItemModel.array(),
   }),
-);
+)

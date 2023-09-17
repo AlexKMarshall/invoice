@@ -1,7 +1,7 @@
-import * as z from "zod";
+import * as z from 'zod'
 
-import type { CompleteUser } from "./index";
-import { RelatedUserModel } from "./index";
+import type { CompleteUser } from './index'
+import { RelatedUserModel } from './index'
 
 export const NoteModel = z.object({
   id: z.string(),
@@ -10,10 +10,10 @@ export const NoteModel = z.object({
   createdAt: z.date(),
   updatedAt: z.date(),
   userId: z.string(),
-});
+})
 
 export interface CompleteNote extends z.infer<typeof NoteModel> {
-  user: CompleteUser;
+  user: CompleteUser
 }
 
 /**
@@ -25,4 +25,4 @@ export const RelatedNoteModel: z.ZodSchema<CompleteNote> = z.lazy(() =>
   NoteModel.extend({
     user: RelatedUserModel,
   }),
-);
+)

@@ -1,7 +1,7 @@
-import * as z from "zod";
+import * as z from 'zod'
 
-import type { CompleteInvoice } from "./index";
-import { RelatedInvoiceModel } from "./index";
+import type { CompleteInvoice } from './index'
+import { RelatedInvoiceModel } from './index'
 
 export const PaymentTermModel = z.object({
   id: z.string(),
@@ -9,10 +9,10 @@ export const PaymentTermModel = z.object({
   updatedAt: z.date(),
   name: z.string(),
   days: z.number().int(),
-});
+})
 
 export interface CompletePaymentTerm extends z.infer<typeof PaymentTermModel> {
-  invoices: CompleteInvoice[];
+  invoices: CompleteInvoice[]
 }
 
 /**
@@ -25,4 +25,4 @@ export const RelatedPaymentTermModel: z.ZodSchema<CompletePaymentTerm> = z.lazy(
     PaymentTermModel.extend({
       invoices: RelatedInvoiceModel.array(),
     }),
-);
+)

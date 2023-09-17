@@ -1,33 +1,33 @@
-import { conform, useForm } from "@conform-to/react";
-import { parse } from "@conform-to/zod";
-import type { ActionArgs, LoaderArgs, V2_MetaFunction } from "@remix-run/node";
-import { json } from "@remix-run/node";
-import { Form, Link, useActionData, useSearchParams } from "@remix-run/react";
-import { useId } from "react";
-import { z } from "zod";
+import { conform, useForm } from '@conform-to/react'
+import { parse } from '@conform-to/zod'
+import type { ActionArgs, LoaderArgs, V2_MetaFunction } from '@remix-run/node'
+import { json } from '@remix-run/node'
+import { Form, Link, useActionData, useSearchParams } from '@remix-run/react'
+import { useId } from 'react'
+import { z } from 'zod'
 
-import { Button } from "~/components/ui/button";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
-import { prisma } from "~/db.server";
-import { requireAnonymous, signup } from "~/utils/auth.server";
+import { Button } from '~/components/ui/button'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
+import { prisma } from '~/db.server'
+import { requireAnonymous, signup } from '~/utils/auth.server'
 
-import { handleNewSession } from "./login";
+import { handleNewSession } from './login'
 
 export const loader = async ({ request }: LoaderArgs) => {
-  await requireAnonymous(request);
-  return json({});
-};
+  await requireAnonymous(request)
+  return json({})
+}
 
 const signupFormSchema = z.object({
   email: z.string().email().toLowerCase(),
   password: z.string().min(8),
   remember: z.boolean().optional(),
   redirectTo: z.string().optional(),
-});
+})
 
 export const action = async ({ request }: ActionArgs) => {
-  const formData = await request.formData();
+  const formData = await request.formData()
 
   const submission = await parse(formData, {
     schema: signupFormSchema
@@ -35,62 +35,62 @@ export const action = async ({ request }: ActionArgs) => {
         const existingUser = await prisma.user.findUnique({
           where: { email: data.email },
           select: { id: true },
-        });
+        })
         if (existingUser) {
           ctx.addIssue({
-            path: ["email"],
+            path: ['email'],
             code: z.ZodIssueCode.custom,
-            message: "A user already exists with this email",
-          });
-          return;
+            message: 'A user already exists with this email',
+          })
+          return
         }
       })
       .transform(async (data) => {
-        const session = await signup(data);
-        return { ...data, session };
+        const session = await signup(data)
+        return { ...data, session }
       }),
     async: true,
-  });
+  })
 
-  delete submission.payload.password;
+  delete submission.payload.password
 
-  if (submission.intent !== "submit") {
+  if (submission.intent !== 'submit') {
     // @ts-ignore
-    delete submission.value?.password;
-    return json({ status: "idle", submission } as const);
+    delete submission.value?.password
+    return json({ status: 'idle', submission } as const)
   }
 
   if (!submission.value?.session) {
-    return json({ status: "error", submission } as const, { status: 400 });
+    return json({ status: 'error', submission } as const, { status: 400 })
   }
 
-  const { session, remember, redirectTo } = submission.value;
+  const { session, remember, redirectTo } = submission.value
 
   return handleNewSession({
     request,
     session,
     remember: remember ?? false,
     redirectTo,
-  });
-};
+  })
+}
 
-export const meta: V2_MetaFunction = () => [{ title: "Sign Up" }];
+export const meta: V2_MetaFunction = () => [{ title: 'Sign Up' }]
 
 export default function Signup() {
-  const actionData = useActionData<typeof action>();
-  const [searchParams] = useSearchParams();
-  const redirectTo = searchParams.get("redirectTo");
-  const formId = useId();
+  const actionData = useActionData<typeof action>()
+  const [searchParams] = useSearchParams()
+  const redirectTo = searchParams.get('redirectTo')
+  const formId = useId()
 
   const [form, fields] = useForm({
     id: formId,
     defaultValue: { redirectTo },
     lastSubmission: actionData?.submission,
     onValidate({ formData }) {
-      return parse(formData, { schema: signupFormSchema });
+      return parse(formData, { schema: signupFormSchema })
     },
-    shouldValidate: "onBlur",
-  });
+    shouldValidate: 'onBlur',
+  })
 
   return (
     <div className="flex min-h-full flex-col justify-center">
@@ -105,7 +105,7 @@ export default function Signup() {
             </Label>
             <div className="mt-1">
               <Input
-                {...conform.input(fields.email, { type: "email" })}
+                {...conform.input(fields.email, { type: 'email' })}
                 autoComplete="email"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
               />
@@ -122,7 +122,7 @@ export default function Signup() {
             </Label>
             <div className="mt-1">
               <Input
-                {...conform.input(fields.password, { type: "password" })}
+                {...conform.input(fields.password, { type: 'password' })}
                 autoComplete="new-password"
                 className="w-full rounded border border-gray-500 px-2 py-1 text-lg"
               />
@@ -130,7 +130,7 @@ export default function Signup() {
             </div>
           </div>
 
-          <input {...conform.input(fields.redirectTo, { type: "hidden" })} />
+          <input {...conform.input(fields.redirectTo, { type: 'hidden' })} />
           <p id={form.errorId}>{form.errors}</p>
           <Button
             type="submit"
@@ -142,7 +142,7 @@ export default function Signup() {
             <div className="flex items-center">
               <input
                 {...conform.input(fields.remember, {
-                  type: "checkbox",
+                  type: 'checkbox',
                 })}
                 className="h-4 w-4 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
               />
@@ -154,11 +154,11 @@ export default function Signup() {
               </label>
             </div>
             <div className="text-center text-gray-500 text-sm">
-              Already have an account?{" "}
+              Already have an account?{' '}
               <Link
                 className="text-blue-500 underline"
                 to={{
-                  pathname: "/login",
+                  pathname: '/login',
                   search: searchParams.toString(),
                 }}
               >
@@ -169,5 +169,5 @@ export default function Signup() {
         </Form>
       </div>
     </div>
-  );
+  )
 }
