@@ -2,6 +2,7 @@ import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 
 import { Button } from '~/components/ui/button'
+import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
 import { Text } from '~/components/ui/text'
 import { getInvoiceListItems } from '~/models/invoice.server'
@@ -75,11 +76,7 @@ export default function Invoices() {
                   Due {invoice.dueDate}
                 </Text>
                 <Text className="font-bold">
-                  <span className="flex gap-[0.5ch]">
-                    {invoice.totalParts.map((part, index) => (
-                      <span key={index}>{part}</span>
-                    ))}
-                  </span>
+                  <CurrencyValue currencyParts={invoice.totalParts} />
                 </Text>
               </div>
               <InvoiceStatus
