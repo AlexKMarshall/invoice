@@ -2,6 +2,7 @@ import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 
 import { Button } from '~/components/ui/button'
+import { Heading } from '~/components/ui/heading'
 import { Text } from '~/components/ui/text'
 import { getInvoiceListItems } from '~/models/invoice.server'
 
@@ -40,7 +41,9 @@ export default function Invoices() {
     <main className="px-6 py-8">
       <div className="mb-8 flex items-center">
         <div className="flex-grow">
-          <h1 className="mb-2 font-bold text-2xl leading-trim">Invoices</h1>
+          <Heading level={1} className="mb-2 font-bold text-2xl">
+            Invoices
+          </Heading>
           <p className="text-muted-foreground text-sm leading-trim">
             <span className="sm:hidden">{subheading.base}</span>
             <span className="hidden sm:inline">{subheading.sm}</span>
