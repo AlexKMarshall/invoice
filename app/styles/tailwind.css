@@ -83,3 +83,9 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer components {
+  .leading-trim {
+    @apply font-sans text-base align-middle;
+  }
+}

@@ -1,49 +1,54 @@
-import { json } from "@remix-run/node";
-import { Link, Outlet, useLoaderData } from "@remix-run/react";
+import { json } from '@remix-run/node'
+import { Link, Outlet, useLoaderData } from '@remix-run/react'
 
-import { Button } from "~/components/ui/button";
-import { getInvoiceListItems } from "~/models/invoice.server";
+import { Button } from '~/components/ui/button'
+import { CurrencyValue } from '~/components/ui/currencyValue'
+import { Heading } from '~/components/ui/heading'
+import { Text } from '~/components/ui/text'
+import { getInvoiceListItems } from '~/models/invoice.server'
 
-import { InvoiceStatus } from "../components/ui/invoiceStatus";
+import { InvoiceStatus } from '../components/ui/invoiceStatus'
 
 function pluralize(word: string, pluralVersion = `${word}s`) {
   return (count: number, includeCount = false) => {
-    const prefix = includeCount ? `${count} ` : "";
-    return count === 1 ? `${prefix}${word}` : `${prefix}${pluralVersion}`;
-  };
+    const prefix = includeCount ? `${count} ` : ''
+    return count === 1 ? `${prefix}${word}` : `${prefix}${pluralVersion}`
+  }
 }
 
-const pluralIs = pluralize("is", "are");
-const pluralInvoice = pluralize("invoice");
+const pluralIs = pluralize('is', 'are')
+const pluralInvoice = pluralize('invoice')
 
 export async function loader() {
-  const invoiceListItems = await getInvoiceListItems();
-  const count = invoiceListItems.length;
+  const invoiceListItems = await getInvoiceListItems()
+  const count = invoiceListItems.length
 
   return json({
     invoiceListItems,
     count,
     subheading: {
-      base: count > 0 ? pluralInvoice(count, true) : "No invoices",
+      base: count > 0 ? pluralInvoice(count, true) : 'No invoices',
       sm:
         count > 0
           ? `There ${pluralIs(count)} ${count} total ${pluralInvoice(count)}`
-          : "No invoices",
+          : 'No invoices',
     },
-  });
+  })
 }
 
 export default function Invoices() {
-  const { invoiceListItems, subheading } = useLoaderData<typeof loader>();
+  const { invoiceListItems, subheading } = useLoaderData<typeof loader>()
   return (
     <main className="px-6 py-8">
-      <div className="flex mb-8 items-center">
+      <div className="mb-8 flex items-center">
         <div className="flex-grow">
-          <h1 className="font-bold text-3xl">Invoices</h1>
-          <p className="text-muted-foreground">
+          <Heading level={1} className="mb-2 font-bold text-2xl">
+            Invoices
+          </Heading>
+          <Text className="text-muted-foreground text-sm">
             <span className="sm:hidden">{subheading.base}</span>
             <span className="hidden sm:inline">{subheading.sm}</span>
-          </p>
+          </Text>
         </div>
         <Button asChild>
           <Link to="new">New invoice</Link>
@@ -55,20 +60,27 @@ export default function Invoices() {
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="grid grid-cols-2 rounded-lg bg-card text-card-foreground p-6 gap-6"
+              className="grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground"
             >
-              <h2 className="before:content-['#'] font-bold before:text-muted-foreground before:dark:[--muted-foreground:231_36%_63%]">
-                {invoice.fid}
-              </h2>
-              <p className="justify-self-end text-muted-foreground">
+              <Heading level={2} className="font-bold">
+                <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
+                  #
+                </span>
+                <span>{invoice.fid}</span>
+              </Heading>
+              <Text className="justify-self-end text-muted-foreground text-sm">
                 {invoice.clientName}
-              </p>
+              </Text>
               <div className="self-end">
-                <p className="text-muted-foreground">Due {invoice.dueDate}</p>
-                <p>{invoice.total}</p>
+                <Text className="mb-4 text-muted-foreground text-sm">
+                  Due {invoice.dueDate}
+                </Text>
+                <Text className="font-bold">
+                  <CurrencyValue currencyParts={invoice.totalParts} />
+                </Text>
               </div>
               <InvoiceStatus
-                className="justify-self-end self-end min-w-[6.875rem]"
+                className="min-w-[6.875rem] self-end justify-self-end"
                 status={invoice.status}
               />
             </li>
@@ -78,5 +90,5 @@ export default function Invoices() {
         <p>No invoices found</p>
       )}
     </main>
-  );
+  )
 }

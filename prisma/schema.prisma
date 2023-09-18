@@ -91,6 +91,9 @@ model Invoice {
   paymentTerm   PaymentTerm @relation(fields: [paymentTermId], references: [id])
   paymentTermId String
 
+  /// @zod.custom(z.enum(["GBP"]))
+  currency String @default("GBP")
+
   projectDescription String
 
   /// @zod.custom(z.enum(["draft", "pending", "paid"]))

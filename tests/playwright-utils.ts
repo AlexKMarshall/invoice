@@ -1,21 +1,21 @@
-import type { Page } from "@playwright/test";
-import { test } from "@playwright/test";
-import * as setCookieParser from "set-cookie-parser";
+import type { Page } from '@playwright/test'
+import { test } from '@playwright/test'
+import * as setCookieParser from 'set-cookie-parser'
 
-import { prisma } from "~/db.server";
-import { getSessionExpirationDate, sessionKey } from "~/utils/auth.server";
-import { sessionStorage } from "~/utils/session.server";
+import { prisma } from '~/db.server'
+import { getSessionExpirationDate, sessionKey } from '~/utils/auth.server'
+import { sessionStorage } from '~/utils/session.server'
 
-import { insertedUsers, insertNewUser } from "./db-utils";
+import { insertedUsers, insertNewUser } from './db-utils'
 
-export * from "./db-utils";
+export * from './db-utils'
 
 export async function loginPage({
   page,
   user: givenUser,
 }: {
-  page: Page;
-  user?: { id: string };
+  page: Page
+  user?: { id: string }
 }) {
   const user = givenUser
     ? await prisma.user.findUniqueOrThrow({
@@ -27,24 +27,24 @@ export async function loginPage({
           email: true,
         },
       })
-    : await insertNewUser();
+    : await insertNewUser()
   const session = await prisma.session.create({
     data: {
       expirationDate: getSessionExpirationDate(),
       userId: user.id,
     },
     select: { id: true },
-  });
+  })
 
-  const cookieSession = await sessionStorage.getSession();
-  cookieSession.set(sessionKey, session.id);
+  const cookieSession = await sessionStorage.getSession()
+  cookieSession.set(sessionKey, session.id)
   const cookieConfig = setCookieParser.parseString(
     await sessionStorage.commitSession(cookieSession),
-  ) as any;
+  ) as any
 
-  await page.context().addCookies([{ ...cookieConfig, domain: "localhost" }]);
+  await page.context().addCookies([{ ...cookieConfig, domain: 'localhost' }])
 
-  return user;
+  return user
 }
 
 test.afterEach(async () => {
@@ -52,6 +52,6 @@ test.afterEach(async () => {
     where: {
       id: { in: Array.from(insertedUsers) },
     },
-  });
-  insertedUsers.clear();
-});
+  })
+  insertedUsers.clear()
+})

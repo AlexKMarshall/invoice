@@ -1,37 +1,37 @@
-import type { FieldConfig } from "@conform-to/react";
+import type { FieldConfig } from '@conform-to/react'
 import {
   conform,
   list,
   useFieldList,
   useFieldset,
   useForm,
-} from "@conform-to/react";
-import { parse, refine } from "@conform-to/zod";
-import type { ActionArgs } from "@remix-run/node";
-import { json, redirect } from "@remix-run/node";
-import { Form, useActionData, useLoaderData } from "@remix-run/react";
-import { useId, useRef } from "react";
-import { ClientOnly } from "remix-utils";
-import { z } from "zod";
+} from '@conform-to/react'
+import { parse, refine } from '@conform-to/zod'
+import type { ActionArgs } from '@remix-run/node'
+import { json, redirect } from '@remix-run/node'
+import { Form, useActionData, useLoaderData } from '@remix-run/react'
+import { useId, useRef } from 'react'
+import { ClientOnly } from 'remix-utils'
+import { z } from 'zod'
 
-import { Button } from "~/components/ui/button";
-import { DatePicker } from "~/components/ui/datePicker";
-import { Input } from "~/components/ui/input";
-import { Label } from "~/components/ui/label";
+import { Button } from '~/components/ui/button'
+import { DatePicker } from '~/components/ui/datePicker'
+import { Input } from '~/components/ui/input'
+import { Label } from '~/components/ui/label'
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "~/components/ui/select";
-import { prisma } from "~/db.server";
-import { createInvoice, getPaymentTerms } from "~/models/invoice.server";
-import { requireUserId } from "~/utils/auth.server";
+} from '~/components/ui/select'
+import { prisma } from '~/db.server'
+import { createInvoice, getPaymentTerms } from '~/models/invoice.server'
+import { requireUserId } from '~/utils/auth.server'
 
 function createInvoiceFormSchema(
   options: {
-    doesPaymentTermExist?: (paymentTermId: string) => Promise<boolean>;
+    doesPaymentTermExist?: (paymentTermId: string) => Promise<boolean>
   } = {},
 ) {
   return z.object({
@@ -43,7 +43,7 @@ function createInvoiceFormSchema(
     clientEmail: z
       .string()
       .nonempty("can't be empty")
-      .email("must be a valid email address"),
+      .email('must be a valid email address'),
     billToStreet: z.string().nonempty("can't be empty"),
     billToCity: z.string().nonempty("can't be empty"),
     billToPostCode: z.string().nonempty("can't be empty"),
@@ -56,7 +56,7 @@ function createInvoiceFormSchema(
         z.string().superRefine((paymentTermId, ctx) =>
           refine(ctx, {
             validate: () => options.doesPaymentTermExist?.(paymentTermId),
-            message: "must be a valid payment term",
+            message: 'must be a valid payment term',
           }),
         ),
       ),
@@ -64,65 +64,65 @@ function createInvoiceFormSchema(
     items: z.array(
       z.object({
         name: z.string().nonempty("can't be empty"),
-        quantity: z.coerce.number().int().positive("must be a positive number"),
-        price: z.coerce.number().int().positive("must be a positive number"),
+        quantity: z.coerce.number().int().positive('must be a positive number'),
+        price: z.coerce.number().int().positive('must be a positive number'),
       }),
     ),
-  });
+  })
 }
 
 type InvoiceItemFieldset = z.infer<
   ReturnType<typeof createInvoiceFormSchema>
->["items"][number];
+>['items'][number]
 
 export async function loader() {
-  const paymentTerms = await getPaymentTerms();
+  const paymentTerms = await getPaymentTerms()
 
-  return json({ paymentTerms });
+  return json({ paymentTerms })
 }
 
 export async function action({ request }: ActionArgs) {
-  const userId = await requireUserId(request);
+  const userId = await requireUserId(request)
 
-  const formData = await request.formData();
+  const formData = await request.formData()
 
   const submission = await parse(formData, {
     schema: createInvoiceFormSchema({
       async doesPaymentTermExist(paymentTermId) {
         const existingPaymentTerm = await prisma.paymentTerm.findUnique({
           where: { id: paymentTermId },
-        });
-        return Boolean(existingPaymentTerm);
+        })
+        return Boolean(existingPaymentTerm)
       },
     }),
     async: true,
-  });
+  })
 
-  if (submission.intent !== "submit" || !submission.value) {
-    return json(submission);
+  if (submission.intent !== 'submit' || !submission.value) {
+    return json(submission)
   }
 
-  await createInvoice({ ...submission.value, userId, status: "pending" });
+  await createInvoice({ ...submission.value, userId, status: 'pending' })
 
-  return redirect("/invoices");
+  return redirect('/invoices')
 }
 
 export default function InvoicesNew() {
-  const { paymentTerms } = useLoaderData<typeof loader>();
-  const lastSubmission = useActionData<typeof action>();
-  const id = useId();
+  const { paymentTerms } = useLoaderData<typeof loader>()
+  const lastSubmission = useActionData<typeof action>()
+  const id = useId()
   const [form, fields] = useForm({
     id,
     lastSubmission,
-    shouldValidate: "onBlur",
+    shouldValidate: 'onBlur',
     onValidate({ formData }) {
-      return parse(formData, { schema: createInvoiceFormSchema() });
+      return parse(formData, { schema: createInvoiceFormSchema() })
     },
     defaultValue: {
-      items: [{ name: "", quantity: "", price: "" }],
+      items: [{ name: '', quantity: '', price: '' }],
     },
-  });
-  const items = useFieldList(form.ref, fields.items);
+  })
+  const items = useFieldList(form.ref, fields.items)
 
   return (
     <Form method="post" {...form.props}>
@@ -277,7 +277,7 @@ export default function InvoicesNew() {
 
       <Button type="submit">Save &amp; Send</Button>
     </Form>
-  );
+  )
 }
 
 function InvoiceItemFieldset({
@@ -285,12 +285,12 @@ function InvoiceItemFieldset({
   name: fieldsetName,
   index,
 }: {
-  config: FieldConfig<InvoiceItemFieldset>;
-  name: string;
-  index: number;
+  config: FieldConfig<InvoiceItemFieldset>
+  name: string
+  index: number
 }) {
-  const ref = useRef<HTMLFieldSetElement>(null);
-  const { name, quantity, price } = useFieldset(ref, config);
+  const ref = useRef<HTMLFieldSetElement>(null)
+  const { name, quantity, price } = useFieldset(ref, config)
 
   return (
     <fieldset ref={ref}>
@@ -311,5 +311,5 @@ function InvoiceItemFieldset({
       </div>
       <Button {...list.remove(fieldsetName, { index })}>remove</Button>
     </fieldset>
-  );
+  )
 }

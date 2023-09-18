@@ -1,12 +1,12 @@
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
-  plugins: ["simple-import-sort"],
+  plugins: ['simple-import-sort'],
   extends: [
-    "@remix-run/eslint-config",
-    "@remix-run/eslint-config/node",
-    "plugin:playwright/playwright-test",
-    "prettier",
+    '@remix-run/eslint-config',
+    '@remix-run/eslint-config/node',
+    'plugin:playwright/playwright-test',
+    'prettier',
   ],
   // we're using vitest which has a very similar API to jest
   // (so the linting plugins work nicely), but it means we have to explicitly
@@ -17,7 +17,7 @@ module.exports = {
     },
   },
   rules: {
-    "simple-import-sort/imports": "error",
-    "simple-import-sort/exports": "error",
+    'simple-import-sort/imports': 'error',
+    'simple-import-sort/exports': 'error',
   },
-};
+}
