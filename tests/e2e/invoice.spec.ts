@@ -19,7 +19,9 @@ test('user can create invoice', async ({ page }) => {
   const price1 = faker.number.int({ min: 1, max: 100 })
   const quantity2 = faker.number.int({ min: 1, max: 100 })
   const price2 = faker.number.int({ min: 1, max: 100 })
-  const expectedTotal = quantity1 * price1 + quantity2 * price2
+  const expectedTotal = new Intl.NumberFormat('en-GB').format(
+    quantity1 * price1 + quantity2 * price2,
+  )
   const invoiceDate = faker.date.past()
   const expectedDueDate = format(add(invoiceDate, { days: 30 }), 'dd MMM yyyy')
 
