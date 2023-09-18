@@ -51,14 +51,21 @@ export default function Invoices() {
             <span className="hidden sm:inline">{subheading.sm}</span>
           </Text>
         </div>
-        <Button asChild className="relative pl-14 pr-4">
-          <Link to="new">
-            <span className="absolute bottom-2 left-2 top-2 aspect-square rounded-full bg-foreground p-1.5">
-              <PlusIcon className="h-full w-full bg-transparent text-background" />
-            </span>
-            New invoice
-          </Link>
-        </Button>
+        <div className="@container flex basis-40 justify-end">
+          <Button asChild className="relative pl-14 pr-4">
+            <Link to="new">
+              <span className="absolute bottom-2 left-2 top-2 aspect-square rounded-full bg-foreground p-1.5">
+                <PlusIcon className="h-full w-full bg-transparent text-background" />
+              </span>
+              <span>
+                New
+                <span className="@[10rem]:not-sr-only sr-only">
+                  &nbsp;invoice
+                </span>
+              </span>
+            </Link>
+          </Button>
+        </div>
       </div>
       <Outlet />
       {invoiceListItems.length ? (
