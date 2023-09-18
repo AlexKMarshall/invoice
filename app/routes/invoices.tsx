@@ -2,6 +2,7 @@ import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
 
 import { Button } from '~/components/ui/button'
+import { Text } from '~/components/ui/text'
 import { getInvoiceListItems } from '~/models/invoice.server'
 
 import { InvoiceStatus } from '../components/ui/invoiceStatus'
@@ -63,9 +64,9 @@ export default function Invoices() {
                 </span>
                 <span>{invoice.fid}</span>
               </h2>
-              <p className="justify-self-end text-muted-foreground text-sm leading-trim">
+              <Text className="justify-self-end text-muted-foreground text-sm">
                 {invoice.clientName}
-              </p>
+              </Text>
               <div className="self-end">
                 <p className="mb-4 text-muted-foreground text-sm leading-trim">
                   Due {invoice.dueDate}
