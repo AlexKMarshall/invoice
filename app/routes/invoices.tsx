@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { PlusIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 import { CurrencyValue } from '~/components/ui/currencyValue'
@@ -50,8 +51,13 @@ export default function Invoices() {
             <span className="hidden sm:inline">{subheading.sm}</span>
           </Text>
         </div>
-        <Button asChild>
-          <Link to="new">New invoice</Link>
+        <Button asChild className="relative pl-14 pr-4">
+          <Link to="new">
+            <span className="absolute bottom-2 left-2 top-2 aspect-square rounded-full bg-foreground p-1.5">
+              <PlusIcon className="h-full w-full bg-transparent text-background" />
+            </span>
+            New invoice
+          </Link>
         </Button>
       </div>
       <Outlet />
