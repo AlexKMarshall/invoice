@@ -44,10 +44,10 @@ export default function Invoices() {
           <Heading level={1} className="mb-2 font-bold text-2xl">
             Invoices
           </Heading>
-          <p className="text-muted-foreground text-sm leading-trim">
+          <Text className="text-muted-foreground text-sm">
             <span className="sm:hidden">{subheading.base}</span>
             <span className="hidden sm:inline">{subheading.sm}</span>
-          </p>
+          </Text>
         </div>
         <Button asChild>
           <Link to="new">New invoice</Link>
@@ -61,20 +61,20 @@ export default function Invoices() {
               key={invoice.id}
               className="grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground"
             >
-              <h2 className="font-bold leading-trim">
+              <Heading level={2} className="font-bold">
                 <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
                   #
                 </span>
                 <span>{invoice.fid}</span>
-              </h2>
+              </Heading>
               <Text className="justify-self-end text-muted-foreground text-sm">
                 {invoice.clientName}
               </Text>
               <div className="self-end">
-                <p className="mb-4 text-muted-foreground text-sm leading-trim">
+                <Text className="mb-4 text-muted-foreground text-sm">
                   Due {invoice.dueDate}
-                </p>
-                <p className="leading-trim">{invoice.total}</p>
+                </Text>
+                <Text>{invoice.total}</Text>
               </div>
               <InvoiceStatus
                 className="min-w-[6.875rem] self-end justify-self-end"
