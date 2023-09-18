@@ -1,7 +1,5 @@
-import * as z from 'zod'
-
-import type { CompleteInvoice } from './index'
-import { RelatedInvoiceModel } from './index'
+import * as z from "zod"
+import { CompleteInvoice, RelatedInvoiceModel } from "./index"
 
 export const PaymentTermModel = z.object({
   id: z.string(),
@@ -20,9 +18,6 @@ export interface CompletePaymentTerm extends z.infer<typeof PaymentTermModel> {
  *
  * NOTE: Lazy required in case of potential circular dependencies within schema
  */
-export const RelatedPaymentTermModel: z.ZodSchema<CompletePaymentTerm> = z.lazy(
-  () =>
-    PaymentTermModel.extend({
-      invoices: RelatedInvoiceModel.array(),
-    }),
-)
+export const RelatedPaymentTermModel: z.ZodSchema<CompletePaymentTerm> = z.lazy(() => PaymentTermModel.extend({
+  invoices: RelatedInvoiceModel.array(),
+}))

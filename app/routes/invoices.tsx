@@ -74,7 +74,13 @@ export default function Invoices() {
                 <Text className="mb-4 text-muted-foreground text-sm">
                   Due {invoice.dueDate}
                 </Text>
-                <Text>{invoice.total}</Text>
+                <Text className="font-bold">
+                  <span className="flex gap-[0.5ch]">
+                    {invoice.totalParts.map((part, index) => (
+                      <span key={index}>{part}</span>
+                    ))}
+                  </span>
+                </Text>
               </div>
               <InvoiceStatus
                 className="min-w-[6.875rem] self-end justify-self-end"

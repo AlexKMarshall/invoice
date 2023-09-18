@@ -29,6 +29,7 @@ export const InvoiceModel = z.object({
   billToCountry: z.string(),
   invoiceDate: z.string(),
   paymentTermId: z.string(),
+  currency: z.enum(['GBP']),
   projectDescription: z.string(),
   status: z.enum(['draft', 'pending', 'paid']),
 })
