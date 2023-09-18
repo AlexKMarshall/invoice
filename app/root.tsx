@@ -29,14 +29,14 @@ export const loader = async ({ request }: LoaderArgs) => {
 export default function App() {
   const { reducedData } = useLoaderData<typeof loader>()
   return (
-    <html lang="en" className="dark h-full">
+    <html lang="en" className="dark">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width,initial-scale=1" />
         <Meta />
         <Links />
       </head>
-      <body className="h-full">
+      <body className="min-h-screen">
         <Outlet />
         {!reducedData && (
           <>
