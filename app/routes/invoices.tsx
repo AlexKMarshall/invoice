@@ -47,7 +47,7 @@ export default function Invoices() {
   const { invoiceListItems, subheading } = useLoaderData<typeof loader>()
   return (
     <main className="px-6 py-8">
-      <div className="mb-8 flex items-center gap-8">
+      <div className="max-[22rem]:gap-4 mb-8 flex items-center gap-8">
         <div className="@container flex-grow basis-36">
           <Heading level={1} className="mb-2 font-bold text-2xl">
             Invoices
@@ -60,29 +60,40 @@ export default function Invoices() {
           </Text>
         </div>
 
-        <Popover>
-          <PopoverTrigger>Filter</PopoverTrigger>
-          <PopoverContent className="flex min-w-[10rem] flex-col gap-4 p-6">
-            <div className="flex items-center gap-3">
-              <Checkbox id="draft" />
-              <Text asChild className="font-bold leading-none">
-                <label htmlFor="draft">Draft</label>
-              </Text>
-            </div>
-            <div className="flex items-center gap-3">
-              <Checkbox id="pending" />
-              <Text asChild className="font-bold leading-none">
-                <label htmlFor="pending">Pending</label>
-              </Text>
-            </div>
-            <div className="flex items-center gap-3">
-              <Checkbox id="paid" />
-              <Text asChild className="font-bold leading-none">
-                <label htmlFor="paid">Paid</label>
-              </Text>
-            </div>
-          </PopoverContent>
-        </Popover>
+        <div className="@container flex basis-32 justify-end">
+          <Popover>
+            <Text asChild>
+              <PopoverTrigger>
+                <span>
+                  Filter
+                  <span className="@[7.5rem]:not-sr-only sr-only">
+                    &nbsp;by status
+                  </span>
+                </span>
+              </PopoverTrigger>
+            </Text>
+            <PopoverContent className="flex min-w-[10rem] flex-col gap-4 p-6">
+              <div className="flex items-center gap-3">
+                <Checkbox id="draft" />
+                <Text asChild className="font-bold leading-none">
+                  <label htmlFor="draft">Draft</label>
+                </Text>
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox id="pending" />
+                <Text asChild className="font-bold leading-none">
+                  <label htmlFor="pending">Pending</label>
+                </Text>
+              </div>
+              <div className="flex items-center gap-3">
+                <Checkbox id="paid" />
+                <Text asChild className="font-bold leading-none">
+                  <label htmlFor="paid">Paid</label>
+                </Text>
+              </div>
+            </PopoverContent>
+          </Popover>
+        </div>
 
         <div className="@container flex basis-40 justify-end">
           <Button asChild className="relative pl-14 pr-4">
