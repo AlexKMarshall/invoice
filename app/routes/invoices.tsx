@@ -5,6 +5,7 @@ import { json } from '@remix-run/node'
 import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
 import { ChevronDownIcon, PlusIcon } from 'lucide-react'
 import type { FormEvent } from 'react'
+import { ClientOnly } from 'remix-utils'
 import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
@@ -126,43 +127,83 @@ export default function Invoices() {
         </div>
 
         <div className="@container flex basis-36 justify-end">
-          <Popover>
-            <Text asChild className="font-bold">
-              <PopoverTrigger className="data-[state=open]:[--rotate:180deg]">
-                <span>
+          <ClientOnly
+            fallback={
+              <details className="relative duration-1000 animate-in fade-in">
+                <summary className="font-bold">
                   Filter
                   <span className="@[9rem]:not-sr-only sr-only">
                     &nbsp;by status
                   </span>
-                </span>
-                <ChevronDownIcon className="ml-3 inline-block h-4 w-4 rotate-[--rotate] transition-transform" />
-              </PopoverTrigger>
-            </Text>
-            <PopoverContent className="min-w-[10rem] p-6">
-              <Form
-                method="get"
-                {...form.props}
-                className="flex flex-col gap-4"
-                onChange={handleFilterChange}
-              >
-                {conform
-                  .collection(status, {
-                    type: 'checkbox',
-                    options: ['draft', 'pending', 'paid'],
-                  })
-                  .map(({ type: _type, ...props }, index) => (
-                    <div key={index} className="flex items-center gap-3">
-                      <Checkbox {...props} />
-                      <Text asChild className="font-bold leading-none">
-                        <label htmlFor={props.id} className="capitalize">
-                          {props.value}
-                        </label>
-                      </Text>
-                    </div>
-                  ))}
-              </Form>
-            </PopoverContent>
-          </Popover>
+                </summary>
+                <div className="absolute left-1/2 top-full z-50 w-fit min-w-[10rem] -translate-x-1/2 translate-y-1 rounded-md bg-popover p-6 text-popover-foreground shadow-lg shadow-[hsl(231,38%,45%)]/10 outline-none dark:shadow-black/25">
+                  <Form
+                    method="get"
+                    {...form.props}
+                    className="flex flex-col gap-4"
+                    onChange={handleFilterChange}
+                  >
+                    {conform
+                      .collection(status, {
+                        type: 'checkbox',
+                        options: ['draft', 'pending', 'paid'],
+                      })
+                      .map(({ type: _type, ...props }, index) => (
+                        <div key={index} className="flex items-center gap-3">
+                          <Checkbox {...props} />
+                          <Text asChild className="font-bold leading-none">
+                            <label htmlFor={props.id} className="capitalize">
+                              {props.value}
+                            </label>
+                          </Text>
+                        </div>
+                      ))}
+                    <Button type="submit">Apply</Button>
+                  </Form>
+                </div>
+              </details>
+            }
+          >
+            {() => (
+              <Popover>
+                <Text asChild className="font-bold">
+                  <PopoverTrigger className="data-[state=open]:[--rotate:180deg]">
+                    <span>
+                      Filter
+                      <span className="@[9rem]:not-sr-only sr-only">
+                        &nbsp;by status
+                      </span>
+                    </span>
+                    <ChevronDownIcon className="ml-3 inline-block h-4 w-4 rotate-[--rotate] transition-transform" />
+                  </PopoverTrigger>
+                </Text>
+                <PopoverContent className="min-w-[10rem] p-6">
+                  <Form
+                    method="get"
+                    {...form.props}
+                    className="flex flex-col gap-4"
+                    onChange={handleFilterChange}
+                  >
+                    {conform
+                      .collection(status, {
+                        type: 'checkbox',
+                        options: ['draft', 'pending', 'paid'],
+                      })
+                      .map(({ type: _type, ...props }, index) => (
+                        <div key={index} className="flex items-center gap-3">
+                          <Checkbox {...props} />
+                          <Text asChild className="font-bold leading-none">
+                            <label htmlFor={props.id} className="capitalize">
+                              {props.value}
+                            </label>
+                          </Text>
+                        </div>
+                      ))}
+                  </Form>
+                </PopoverContent>
+              </Popover>
+            )}
+          </ClientOnly>
         </div>
 
         <div className="@container flex basis-40 justify-end">

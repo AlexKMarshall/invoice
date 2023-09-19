@@ -250,7 +250,6 @@ export default function InvoicesNew() {
             </Select>
           )}
         </ClientOnly>
-        {/* <Input {...conform.input(fields.paymentTermId)} /> */}
         <p id={fields.paymentTermId.errorId}>{fields.paymentTermId.errors}</p>
       </div>
       <div>
