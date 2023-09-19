@@ -1,6 +1,6 @@
 import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
-import { PlusIcon } from 'lucide-react'
+import { ChevronDownIcon, ChevronUpIcon, PlusIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
@@ -62,14 +62,15 @@ export default function Invoices() {
 
         <div className="@container flex basis-32 justify-end">
           <Popover>
-            <Text asChild>
-              <PopoverTrigger>
+            <Text asChild className="font-bold">
+              <PopoverTrigger className="data-[state=open]:[--rotate:180deg]">
                 <span>
                   Filter
                   <span className="@[7.5rem]:not-sr-only sr-only">
                     &nbsp;by status
                   </span>
                 </span>
+                <ChevronDownIcon className="ml-3 inline-block h-4 w-4 rotate-[--rotate] transition-transform" />
               </PopoverTrigger>
             </Text>
             <PopoverContent className="flex min-w-[10rem] flex-col gap-4 p-6">
