@@ -51,6 +51,7 @@ export async function loader({ request }: LoaderArgs) {
   const count = invoiceListItems.length
 
   return json({
+    submission,
     invoiceListItems,
     count,
     subheading: {
@@ -64,12 +65,17 @@ export async function loader({ request }: LoaderArgs) {
 }
 
 export default function Invoices() {
-  const { invoiceListItems, subheading } = useLoaderData<typeof loader>()
+  const {
+    submission: lastSubmission,
+    invoiceListItems,
+    subheading,
+  } = useLoaderData<typeof loader>()
   const submit = useSubmit()
   const [form, { status }] = useForm({
     onValidate({ formData }) {
       return parse(formData, { schema: filterSchema })
     },
+    lastSubmission,
   })
 
   function handleFilterChange(event: FormEvent<HTMLFormElement>) {
