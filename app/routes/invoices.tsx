@@ -3,8 +3,14 @@ import { Link, Outlet, useLoaderData } from '@remix-run/react'
 import { PlusIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
+import { Checkbox } from '~/components/ui/checkbox'
 import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from '~/components/ui/popover'
 import { Text } from '~/components/ui/text'
 import { getInvoiceListItems } from '~/models/invoice.server'
 
@@ -53,6 +59,31 @@ export default function Invoices() {
             </span>
           </Text>
         </div>
+
+        <Popover>
+          <PopoverTrigger>Filter</PopoverTrigger>
+          <PopoverContent className="flex min-w-[10rem] flex-col gap-4 p-6">
+            <div className="flex items-center gap-3">
+              <Checkbox id="draft" />
+              <Text asChild className="font-bold leading-none">
+                <label htmlFor="draft">Draft</label>
+              </Text>
+            </div>
+            <div className="flex items-center gap-3">
+              <Checkbox id="pending" />
+              <Text asChild className="font-bold leading-none">
+                <label htmlFor="pending">Pending</label>
+              </Text>
+            </div>
+            <div className="flex items-center gap-3">
+              <Checkbox id="paid" />
+              <Text asChild className="font-bold leading-none">
+                <label htmlFor="paid">Paid</label>
+              </Text>
+            </div>
+          </PopoverContent>
+        </Popover>
+
         <div className="@container flex basis-40 justify-end">
           <Button asChild className="relative pl-14 pr-4">
             <Link to="new">
@@ -69,7 +100,9 @@ export default function Invoices() {
           </Button>
         </div>
       </div>
+
       <Outlet />
+
       {invoiceListItems.length ? (
         <ul className="flex flex-col gap-4">
           {invoiceListItems.map((invoice) => (
