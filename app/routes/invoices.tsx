@@ -148,9 +148,10 @@ export default function Invoices() {
                         type: 'checkbox',
                         options: ['draft', 'pending', 'paid'],
                       })
-                      .map(({ type: _type, ...props }, index) => (
+                      .map((props, index) => (
                         <div key={index} className="flex items-center gap-3">
-                          <Checkbox {...props} />
+                          {/* <Checkbox {...props} /> */}
+                          <input {...props} />
                           <Text asChild className="font-bold leading-none">
                             <label htmlFor={props.id} className="capitalize">
                               {props.value}
