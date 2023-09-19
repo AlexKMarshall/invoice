@@ -1,6 +1,11 @@
+import { conform, useForm } from '@conform-to/react'
+import { parse } from '@conform-to/zod'
+import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Link, Outlet, useLoaderData } from '@remix-run/react'
-import { ChevronDownIcon, ChevronUpIcon, PlusIcon } from 'lucide-react'
+import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
+import { ChevronDownIcon, PlusIcon } from 'lucide-react'
+import type { FormEvent } from 'react'
+import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
@@ -26,8 +31,23 @@ function pluralize(word: string, pluralVersion = `${word}s`) {
 const pluralIs = pluralize('is', 'are')
 const pluralInvoice = pluralize('invoice')
 
-export async function loader() {
-  const invoiceListItems = await getInvoiceListItems()
+const filterSchema = z.object({
+  status: z.array(z.enum(['draft', 'pending', 'paid'])),
+})
+
+export async function loader({ request }: LoaderArgs) {
+  const url = new URL(request.url)
+  const searchParams = new URLSearchParams(url.search)
+  const submission = parse(searchParams, { schema: filterSchema })
+
+  const statusFilter =
+    submission.value?.status && submission.value.status.length > 0
+      ? submission.value.status
+      : undefined
+
+  const invoiceListItems = await getInvoiceListItems({
+    where: { status: statusFilter },
+  })
   const count = invoiceListItems.length
 
   return json({
@@ -45,6 +65,16 @@ export async function loader() {
 
 export default function Invoices() {
   const { invoiceListItems, subheading } = useLoaderData<typeof loader>()
+  const submit = useSubmit()
+  const [form, { status }] = useForm({
+    onValidate({ formData }) {
+      return parse(formData, { schema: filterSchema })
+    },
+  })
+
+  function handleFilterChange(event: FormEvent<HTMLFormElement>) {
+    submit(event.currentTarget, { replace: true })
+  }
   return (
     <main className="px-6 py-8">
       <div className="max-[22rem]:gap-4 mb-8 flex items-center gap-8">
@@ -60,7 +90,7 @@ export default function Invoices() {
           </Text>
         </div>
 
-        <div className="@container flex basis-32 justify-end">
+        <div className="@container flex basis-36 justify-end">
           <Popover>
             <Text asChild className="font-bold">
               <PopoverTrigger className="data-[state=open]:[--rotate:180deg]">
@@ -73,25 +103,41 @@ export default function Invoices() {
                 <ChevronDownIcon className="ml-3 inline-block h-4 w-4 rotate-[--rotate] transition-transform" />
               </PopoverTrigger>
             </Text>
-            <PopoverContent className="flex min-w-[10rem] flex-col gap-4 p-6">
-              <div className="flex items-center gap-3">
-                <Checkbox id="draft" />
-                <Text asChild className="font-bold leading-none">
-                  <label htmlFor="draft">Draft</label>
-                </Text>
-              </div>
-              <div className="flex items-center gap-3">
-                <Checkbox id="pending" />
-                <Text asChild className="font-bold leading-none">
-                  <label htmlFor="pending">Pending</label>
-                </Text>
-              </div>
-              <div className="flex items-center gap-3">
-                <Checkbox id="paid" />
-                <Text asChild className="font-bold leading-none">
-                  <label htmlFor="paid">Paid</label>
-                </Text>
-              </div>
+            <PopoverContent className="min-w-[10rem] p-6">
+              <Form
+                method="get"
+                {...form.props}
+                className="flex flex-col gap-4"
+                onChange={handleFilterChange}
+              >
+                {conform
+                  .collection(status, {
+                    type: 'checkbox',
+                    options: ['draft', 'pending', 'paid'],
+                  })
+                  .map(({ type: _type, ...props }, index) => (
+                    <div key={index} className="flex items-center gap-3">
+                      <Checkbox {...props} />
+                      <Text asChild className="font-bold leading-none">
+                        <label htmlFor={props.id} className="capitalize">
+                          {props.value}
+                        </label>
+                      </Text>
+                    </div>
+                  ))}
+                {/* <div className="flex items-center gap-3">
+                  <Checkbox id="pending" value="pending" name="status" />
+                  <Text asChild className="font-bold leading-none">
+                    <label htmlFor="pending">Pending</label>
+                  </Text>
+                </div>
+                <div className="flex items-center gap-3">
+                  <Checkbox id="paid" value="paid" name="status" />
+                  <Text asChild className="font-bold leading-none">
+                    <label htmlFor="paid">Paid</label>
+                  </Text>
+                </div> */}
+              </Form>
             </PopoverContent>
           </Popover>
         </div>

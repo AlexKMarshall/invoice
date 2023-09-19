@@ -6,10 +6,6 @@ import { prisma } from '~/db.server'
 import type { CompleteInvoice } from '~/schemas'
 import { InvoiceItemModel, InvoiceModel, PaymentTermModel } from '~/schemas'
 
-const currencySymbolMap = {
-  GBP: '£',
-} as const
-
 /**
  * Splits an array into subarrays, where each subarray contains either a single matching element
  * or non-matching elements from the original array, effectively separating matches from non-matches.
@@ -59,7 +55,9 @@ function getCurrencyParts(
   )
 }
 
-export async function getInvoiceListItems() {
+export async function getInvoiceListItems({
+  where: filter,
+}: { where?: { status?: Array<Invoice['status']> } } = {}) {
   const rawInvoices = await prisma.invoice.findMany({
     select: {
       id: true,
@@ -78,6 +76,11 @@ export async function getInvoiceListItems() {
         select: {
           days: true,
         },
+      },
+    },
+    where: {
+      status: {
+        in: filter?.status,
       },
     },
   })
@@ -107,13 +110,11 @@ export async function getInvoiceListItems() {
         add(new Date(invoiceDate), { days: paymentTerm.days }),
         'dd MMM yyyy',
       )
-      const currencySymbol = currencySymbolMap[currency]
       return {
         ...invoice,
         total,
         totalParts,
         dueDate,
-        currencySymbol,
       }
     })
 }
