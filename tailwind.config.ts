@@ -1,4 +1,5 @@
 import fontMetrics from '@capsizecss/metrics/leagueSpartan'
+import containerQueryPlugin from '@tailwindcss/container-queries'
 import type { Config } from 'tailwindcss'
 import defaultTheme from 'tailwindcss/defaultTheme.js'
 import animatePlugin from 'tailwindcss-animate'
@@ -97,6 +98,7 @@ export default {
   plugins: [
     animatePlugin,
     radixPlugin,
+    containerQueryPlugin,
     require('tailwindcss-capsize')({ className: 'leading-trim' }),
   ],
 } satisfies Config

@@ -1,5 +1,6 @@
 import { json } from '@remix-run/node'
 import { Link, Outlet, useLoaderData } from '@remix-run/react'
+import { PlusIcon } from 'lucide-react'
 
 import { Button } from '~/components/ui/button'
 import { CurrencyValue } from '~/components/ui/currencyValue'
@@ -40,19 +41,33 @@ export default function Invoices() {
   const { invoiceListItems, subheading } = useLoaderData<typeof loader>()
   return (
     <main className="px-6 py-8">
-      <div className="mb-8 flex items-center">
-        <div className="flex-grow">
+      <div className="mb-8 flex items-center gap-8">
+        <div className="@container flex-grow basis-36">
           <Heading level={1} className="mb-2 font-bold text-2xl">
             Invoices
           </Heading>
           <Text className="text-muted-foreground text-sm">
-            <span className="sm:hidden">{subheading.base}</span>
-            <span className="hidden sm:inline">{subheading.sm}</span>
+            <span className="@[8.5rem]:hidden">{subheading.base}</span>
+            <span className="@[8.5rem]:inline hidden whitespace-nowrap">
+              {subheading.sm}
+            </span>
           </Text>
         </div>
-        <Button asChild>
-          <Link to="new">New invoice</Link>
-        </Button>
+        <div className="@container flex basis-40 justify-end">
+          <Button asChild className="relative pl-14 pr-4">
+            <Link to="new">
+              <span className="absolute bottom-2 left-2 top-2 aspect-square rounded-full bg-foreground p-1.5">
+                <PlusIcon className="h-full w-full bg-transparent text-background" />
+              </span>
+              <span>
+                New
+                <span className="@[10rem]:not-sr-only sr-only">
+                  &nbsp;invoice
+                </span>
+              </span>
+            </Link>
+          </Button>
+        </div>
       </div>
       <Outlet />
       {invoiceListItems.length ? (
