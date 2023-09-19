@@ -35,6 +35,38 @@ const filterSchema = z.object({
   status: z.array(z.enum(['draft', 'pending', 'paid'])),
 })
 
+function getHumanFriendlyList(
+  words: string[],
+  separator: 'and' | 'or' = 'and',
+) {
+  if (words.length === 0) return ''
+
+  const firstWords = words.slice(0, -1)
+  const lastWord = words.at(-1)
+
+  if (firstWords.length === 0) return lastWord
+
+  return `${firstWords.join(', ')} ${separator} ${lastWord}`
+}
+
+function getFullInvoiceSubheading(count: number, statusFilter?: string[]) {
+  if (!statusFilter?.length && count === 0) {
+    return 'No invoices'
+  }
+  const filterString = statusFilter?.length
+    ? getHumanFriendlyList(statusFilter, 'or')
+    : 'total'
+
+  // There are 3 pending or draft invoices
+  return `There ${pluralIs(count)} ${count} ${filterString} ${pluralInvoice(
+    count,
+  )}`
+}
+
+function getShortInvoiceSubheading(count: number) {
+  return count > 0 ? pluralInvoice(count, true) : 'No invoices'
+}
+
 export async function loader({ request }: LoaderArgs) {
   const url = new URL(request.url)
   const searchParams = new URLSearchParams(url.search)
@@ -55,11 +87,8 @@ export async function loader({ request }: LoaderArgs) {
     invoiceListItems,
     count,
     subheading: {
-      base: count > 0 ? pluralInvoice(count, true) : 'No invoices',
-      sm:
-        count > 0
-          ? `There ${pluralIs(count)} ${count} total ${pluralInvoice(count)}`
-          : 'No invoices',
+      short: getShortInvoiceSubheading(count),
+      full: getFullInvoiceSubheading(count, statusFilter),
     },
   })
 }
@@ -89,9 +118,9 @@ export default function Invoices() {
             Invoices
           </Heading>
           <Text className="text-muted-foreground text-sm">
-            <span className="@[8.5rem]:hidden">{subheading.base}</span>
+            <span className="@[8.5rem]:hidden">{subheading.short}</span>
             <span className="@[8.5rem]:inline hidden whitespace-nowrap">
-              {subheading.sm}
+              {subheading.full}
             </span>
           </Text>
         </div>
@@ -102,7 +131,7 @@ export default function Invoices() {
               <PopoverTrigger className="data-[state=open]:[--rotate:180deg]">
                 <span>
                   Filter
-                  <span className="@[7.5rem]:not-sr-only sr-only">
+                  <span className="@[9rem]:not-sr-only sr-only">
                     &nbsp;by status
                   </span>
                 </span>
@@ -131,18 +160,6 @@ export default function Invoices() {
                       </Text>
                     </div>
                   ))}
-                {/* <div className="flex items-center gap-3">
-                  <Checkbox id="pending" value="pending" name="status" />
-                  <Text asChild className="font-bold leading-none">
-                    <label htmlFor="pending">Pending</label>
-                  </Text>
-                </div>
-                <div className="flex items-center gap-3">
-                  <Checkbox id="paid" value="paid" name="status" />
-                  <Text asChild className="font-bold leading-none">
-                    <label htmlFor="paid">Paid</label>
-                  </Text>
-                </div> */}
               </Form>
             </PopoverContent>
           </Popover>
