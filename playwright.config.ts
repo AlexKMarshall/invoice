@@ -52,7 +52,7 @@ export default defineConfig<TestOptions>({
       use: {
         ...devices['Desktop Chrome'],
         extraHTTPHeaders: { 'Save-Data': 'on' },
-        isOffline: true,
+        isJsEnabled: true,
       },
     },
 

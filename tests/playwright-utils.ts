@@ -10,7 +10,7 @@ import { sessionStorage } from '~/utils/session.server'
 import { insertNewUser } from './db-utils'
 
 export type TestOptions = {
-  isOffline: boolean
+  isJsEnabled: boolean
 }
 
 const test = testBase.extend<
@@ -21,7 +21,7 @@ const test = testBase.extend<
     ) => Promise<Array<Awaited<ReturnType<typeof createInvoice>>>>
   } & TestOptions
 >({
-  isOffline: [false, { option: true }],
+  isJsEnabled: [false, { option: true }],
   login: async ({ page }, use) => {
     let userId: string | undefined = undefined
     await use(async (givenUser) => {

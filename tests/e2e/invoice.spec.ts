@@ -13,7 +13,7 @@ function getLatestInvoiceItem(page: Page) {
     .last()
 }
 
-test('user can create invoice', async ({ page, isOffline, login }) => {
+test('user can create invoice', async ({ page, isJsEnabled, login }) => {
   await login()
 
   const clientName = faker.person.fullName()
@@ -75,7 +75,7 @@ test('user can create invoice', async ({ page, isOffline, login }) => {
     .fill(format(invoiceDate, 'y-MM-dd'))
   // Todo extract to an abstraction
   // eslint-disable-next-line playwright/no-conditional-in-test
-  if (isOffline) {
+  if (isJsEnabled) {
     await page
       .getByLabel(/payment terms/i)
       .selectOption({ label: 'Net 30 Days' })
@@ -127,10 +127,11 @@ test('user can create invoice', async ({ page, isOffline, login }) => {
   await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible()
 })
 
-test.only('user can filter invoices', async ({
+test('user can filter invoices', async ({
   page,
   login,
   existingInvoices,
+  isJsEnabled,
 }) => {
   const user = await login()
   const [invoice] = await existingInvoices(await createFakeInvoice(user.id))
@@ -142,9 +143,17 @@ test.only('user can filter invoices', async ({
   await expect(page.getByText(invoice.clientName)).toBeVisible()
 
   // Filter only draft invoices
-
-  await page.getByRole('button', { name: /filter/i }).click()
-  await page.getByRole('checkbox', { name: /draft/i }).check()
+  // TODO: create abstraction
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (isJsEnabled) {
+    // Is there a better accessible role for a disclosure summary?
+    await page.getByText(/filter/i).click()
+    await page.getByRole('checkbox', { name: /draft/i }).check()
+    await page.getByRole('button', { name: /apply/i }).click()
+  } else {
+    await page.getByRole('button', { name: /filter/i }).click()
+    await page.getByRole('checkbox', { name: /draft/i }).check()
+  }
 
   await expect(page.getByText(invoice.clientName)).toBeHidden()
 })
