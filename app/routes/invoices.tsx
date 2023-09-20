@@ -4,7 +4,7 @@ import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
 import { ChevronDownIcon, PlusIcon } from 'lucide-react'
-import type { FormEvent } from 'react'
+import { type FormEvent, useId } from 'react'
 import { ClientOnly } from 'remix-utils'
 import { z } from 'zod'
 
@@ -101,7 +101,9 @@ export default function Invoices() {
     subheading,
   } = useLoaderData<typeof loader>()
   const submit = useSubmit()
+  const id = useId()
   const [form, { status }] = useForm({
+    id,
     onValidate({ formData }) {
       return parse(formData, { schema: filterSchema })
     },

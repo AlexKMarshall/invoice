@@ -2,6 +2,8 @@ import { expect, test as testBase } from '@playwright/test'
 import * as setCookieParser from 'set-cookie-parser'
 
 import { prisma } from '~/db.server'
+import type { InvoiceToCreate } from '~/models/invoice.server'
+import { createInvoice } from '~/models/invoice.server'
 import { getSessionExpirationDate, sessionKey } from '~/utils/auth.server'
 import { sessionStorage } from '~/utils/session.server'
 
@@ -14,6 +16,9 @@ export type TestOptions = {
 const test = testBase.extend<
   {
     login: (user?: { id: string }) => Promise<{ id: string; email: string }>
+    existingInvoices: (
+      ...invoicesToCreate: InvoiceToCreate[]
+    ) => Promise<Array<Awaited<ReturnType<typeof createInvoice>>>>
   } & TestOptions
 >({
   isOffline: [false, { option: true }],
@@ -63,6 +68,25 @@ const test = testBase.extend<
         },
       })
       .catch(() => {})
+  },
+  existingInvoices: async ({}, use) => {
+    let invoices: Array<Awaited<ReturnType<typeof createInvoice>>> = []
+    await use(async (...invoicesToCreate) => {
+      invoices = await Promise.all(
+        invoicesToCreate.map((invoice) => createInvoice(invoice)),
+      )
+
+      return invoices
+    })
+
+    // Clean up
+    await prisma.invoice.deleteMany({
+      where: {
+        id: {
+          in: invoices.map((invoice) => invoice.id),
+        },
+      },
+    })
   },
 })
 

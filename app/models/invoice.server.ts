@@ -80,12 +80,7 @@ export function getPaymentTerms() {
   })
 }
 
-export async function createInvoice({
-  userId,
-  items,
-  paymentTermId,
-  ...data
-}: Pick<
+export type InvoiceToCreate = Pick<
   Invoice,
   | 'billFromStreet'
   | 'billFromCity'
@@ -103,7 +98,14 @@ export async function createInvoice({
 > & { userId: User['id'] } & {
   items: Array<Pick<InvoiceItem, 'name' | 'quantity' | 'price'>>
   status: 'pending'
-}) {
+}
+
+export async function createInvoice({
+  userId,
+  items,
+  paymentTermId,
+  ...data
+}: InvoiceToCreate) {
   const fid = await generateFid({
     isFidUnique: async (fid) => {
       const count = await prisma.invoice.count({ where: { fid } })
