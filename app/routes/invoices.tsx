@@ -114,7 +114,7 @@ export default function Invoices() {
     submit(event.currentTarget, { replace: true })
   }
   return (
-    <main className="px-6 py-8">
+    <main className="mx-auto max-w-4xl px-6 py-8">
       <div className="max-[22rem]:gap-4 mb-8 flex items-center gap-8">
         <div className="@container flex-grow basis-36">
           <Heading level={1} className="mb-2 font-bold text-2xl">
@@ -233,7 +233,7 @@ export default function Invoices() {
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="@2xl:grid-cols-5 @2xl:items-center @2xl:[grid-template-areas:'id_date_client_total_status'] grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground [grid-template-areas:'id_client'_'values_status']"
+              className="@2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:[grid-template-areas:'id_date_client_total_status'] grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground [grid-template-areas:'id_client'_'values_status']"
             >
               <Heading level={2} className="font-bold [grid-area:id]">
                 <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
@@ -241,19 +241,19 @@ export default function Invoices() {
                 </span>
                 <span>{invoice.fid}</span>
               </Heading>
-              <Text className="justify-self-end text-muted-foreground text-sm [grid-area:client]">
+              <Text className="@2xl:justify-self-start justify-self-end text-muted-foreground text-sm [grid-area:client]">
                 {invoice.clientName}
               </Text>
               <div className="@2xl:contents flex flex-col gap-4 self-end [grid-area:values]">
                 <Text className="text-muted-foreground text-sm [grid-area:date]">
                   Due {invoice.dueDate}
                 </Text>
-                <Text className="font-bold [grid-area:total]">
+                <Text className="@2xl:justify-self-end font-bold [grid-area:total]">
                   <CurrencyValue currencyParts={invoice.totalParts} />
                 </Text>
               </div>
               <InvoiceStatus
-                className="min-w-[6.875rem] self-end justify-self-end [grid-area:status]"
+                className="@2xl:justify-self-stretch min-w-[6.875rem] self-end justify-self-end [grid-area:status]"
                 status={invoice.status}
               />
             </li>
