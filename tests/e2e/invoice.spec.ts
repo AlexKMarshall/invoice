@@ -1,8 +1,10 @@
 import { faker } from '@faker-js/faker'
 import type { Page } from '@playwright/test'
-import { expect, test } from '@playwright/test'
 import { add, format } from 'date-fns'
-import { loginPage } from 'tests/playwright-utils'
+
+import { generateFid } from '~/utils/misc'
+
+import { expect, test } from '../playwright-utils'
 
 function getLatestInvoiceItem(page: Page) {
   return page
@@ -11,8 +13,8 @@ function getLatestInvoiceItem(page: Page) {
     .last()
 }
 
-test('user can create invoice', async ({ page }) => {
-  await loginPage({ page })
+test('user can create invoice', async ({ page, isJsEnabled, login }) => {
+  await login()
 
   const clientName = faker.person.fullName()
   const quantity1 = faker.number.int({ min: 1, max: 100 })
@@ -71,11 +73,13 @@ test('user can create invoice', async ({ page }) => {
   await page
     .getByRole('textbox', { name: /invoice date/i })
     .fill(format(invoiceDate, 'y-MM-dd'))
-  try {
+  // Todo extract to an abstraction
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (isJsEnabled) {
     await page
       .getByLabel(/payment terms/i)
       .selectOption({ label: 'Net 30 Days' })
-  } catch (_e) {
+  } else {
     await page.getByLabel(/payment terms/i).click()
     await page.getByRole('option', { name: /net 30 days/i }).click()
   }
@@ -122,3 +126,56 @@ test('user can create invoice', async ({ page }) => {
   await expect(page.getByText(String(expectedTotal))).toBeVisible()
   await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible()
 })
+
+test('user can filter invoices', async ({
+  page,
+  login,
+  existingInvoices,
+  isJsEnabled,
+}) => {
+  const user = await login()
+  const [invoice] = await existingInvoices(await createFakeInvoice(user.id))
+
+  await page.goto('/invoices')
+
+  await expect(page.getByRole('heading', { name: /invoices/i })).toBeVisible()
+
+  await expect(page.getByText(invoice.clientName)).toBeVisible()
+
+  // Filter only draft invoices
+  // TODO: create abstraction
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (isJsEnabled) {
+    // Is there a better accessible role for a disclosure summary?
+    await page.getByText(/filter/i).click()
+    await page.getByRole('checkbox', { name: /draft/i }).check()
+    await page.getByRole('button', { name: /apply/i }).click()
+  } else {
+    await page.getByRole('button', { name: /filter/i }).click()
+    await page.getByRole('checkbox', { name: /draft/i }).check()
+  }
+
+  await expect(page.getByText(invoice.clientName)).toBeHidden()
+})
+
+async function createFakeInvoice(userId: string) {
+  return {
+    userId,
+    fid: await generateFid(),
+    billFromStreet: faker.location.streetAddress(),
+    billFromCity: faker.location.city(),
+    billFromPostCode: faker.location.zipCode(),
+    billFromCountry: faker.location.country(),
+    clientName: faker.person.fullName(),
+    clientEmail: faker.internet.email(),
+    billToStreet: faker.location.streetAddress(),
+    billToCity: faker.location.city(),
+    billToPostCode: faker.location.zipCode(),
+    billToCountry: faker.location.country(),
+    invoiceDate: faker.date.past().toDateString(),
+    paymentTermId: 'net-30',
+    projectDescription: faker.lorem.sentence(),
+    status: 'pending' as const,
+    items: [{ name: faker.commerce.productName(), quantity: 1, price: 100 }],
+  }
+}

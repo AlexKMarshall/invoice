@@ -17,8 +17,6 @@ export function createPassword(password: string = faker.internet.password()) {
   }
 }
 
-export const insertedUsers = new Set<string>()
-
 export async function insertNewUser({
   username,
   password,
@@ -37,6 +35,5 @@ export async function insertNewUser({
       },
     },
   })
-  insertedUsers.add(user.id)
   return user
 }
