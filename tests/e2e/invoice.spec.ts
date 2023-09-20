@@ -1,8 +1,9 @@
 import { faker } from '@faker-js/faker'
 import type { Page } from '@playwright/test'
-import { expect, test } from '@playwright/test'
 import { add, format } from 'date-fns'
 import { loginPage } from 'tests/playwright-utils'
+
+import { expect, test } from '../playwright-fixtures'
 
 function getLatestInvoiceItem(page: Page) {
   return page
@@ -11,7 +12,7 @@ function getLatestInvoiceItem(page: Page) {
     .last()
 }
 
-test('user can create invoice', async ({ page }) => {
+test('user can create invoice', async ({ page, isOffline }) => {
   await loginPage({ page })
 
   const clientName = faker.person.fullName()
@@ -71,11 +72,13 @@ test('user can create invoice', async ({ page }) => {
   await page
     .getByRole('textbox', { name: /invoice date/i })
     .fill(format(invoiceDate, 'y-MM-dd'))
-  try {
+  // Todo extract to an abstraction
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (isOffline) {
     await page
       .getByLabel(/payment terms/i)
       .selectOption({ label: 'Net 30 Days' })
-  } catch (_e) {
+  } else {
     await page.getByLabel(/payment terms/i).click()
     await page.getByRole('option', { name: /net 30 days/i }).click()
   }

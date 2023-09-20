@@ -1,4 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
+import type { TestOptions } from 'tests/playwright-fixtures'
 
 /**
  * Read environment variables from file.
@@ -9,7 +10,7 @@ import { defineConfig, devices } from '@playwright/test'
 /**
  * See https://playwright.dev/docs/test-configuration.
  */
-export default defineConfig({
+export default defineConfig<TestOptions>({
   testDir: './tests/e2e',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -51,6 +52,7 @@ export default defineConfig({
       use: {
         ...devices['Desktop Chrome'],
         extraHTTPHeaders: { 'Save-Data': 'on' },
+        isOffline: true,
       },
     },
 
