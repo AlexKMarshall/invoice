@@ -2,7 +2,7 @@ import { faker } from '@faker-js/faker'
 import { PrismaClient } from '@prisma/client'
 import bcrypt from 'bcryptjs'
 
-import { generateFid } from '~/models/invoice.server'
+import { generateFid } from '~/utils/misc'
 
 const prisma = new PrismaClient()
 
