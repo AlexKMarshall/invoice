@@ -40,7 +40,7 @@ export default function App() {
         <Outlet />
         {!reducedData && (
           <>
-            {/* <Scripts /> */}
+            <Scripts />
             <ScrollRestoration />
           </>
         )}
