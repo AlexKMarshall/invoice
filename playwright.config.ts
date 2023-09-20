@@ -1,5 +1,5 @@
 import { defineConfig, devices } from '@playwright/test'
-import type { TestOptions } from 'tests/playwright-fixtures'
+import type { TestOptions } from 'tests/playwright-utils'
 
 /**
  * Read environment variables from file.

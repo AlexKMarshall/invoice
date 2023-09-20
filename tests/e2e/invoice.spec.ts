@@ -1,9 +1,8 @@
 import { faker } from '@faker-js/faker'
 import type { Page } from '@playwright/test'
 import { add, format } from 'date-fns'
-import { loginPage } from 'tests/playwright-utils'
 
-import { expect, test } from '../playwright-fixtures'
+import { expect, test } from '../playwright-utils'
 
 function getLatestInvoiceItem(page: Page) {
   return page
@@ -12,8 +11,8 @@ function getLatestInvoiceItem(page: Page) {
     .last()
 }
 
-test('user can create invoice', async ({ page, isOffline }) => {
-  await loginPage({ page })
+test('user can create invoice', async ({ page, isOffline, login }) => {
+  await login()
 
   const clientName = faker.person.fullName()
   const quantity1 = faker.number.int({ min: 1, max: 100 })
