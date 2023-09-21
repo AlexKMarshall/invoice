@@ -4,7 +4,8 @@ import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
 import { ChevronDownIcon, ChevronRightIcon, PlusIcon } from 'lucide-react'
-import { type FormEvent, useId } from 'react'
+import type { FormEvent, MouseEvent } from 'react'
+import { useId, useRef } from 'react'
 import { ClientOnly } from 'remix-utils'
 import { z } from 'zod'
 
@@ -20,6 +21,7 @@ import {
 import { Text } from '~/components/ui/text'
 import illustrationEmpty from '~/images/illustration-empty.svg'
 import { getInvoiceListItems } from '~/models/invoice.server'
+import type { CompleteInvoice } from '~/schemas'
 
 import { InvoiceStatus } from '../components/ui/invoiceStatus'
 
@@ -231,37 +233,7 @@ export default function Invoices() {
       {invoiceListItems.length ? (
         <ul className="flex flex-col gap-4 @container">
           {invoiceListItems.map((invoice) => (
-            <li
-              key={invoice.id}
-              className="grid cursor-pointer grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 [grid-template-areas:'id_client'_'values_status'] focus-within:ring-1 focus-within:ring-primary @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25"
-            >
-              <Heading level={2} className="font-bold [grid-area:id]">
-                <Link to={invoice.fid} className="focus:outline-0">
-                  <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
-                    #
-                  </span>
-                  <span>{invoice.fid}</span>
-                </Link>
-              </Heading>
-              <Text className="justify-self-end text-muted-foreground text-sm [grid-area:client] @2xl:justify-self-start">
-                {invoice.clientName}
-              </Text>
-              <div className="flex flex-col gap-4 self-end [grid-area:values] @2xl:contents">
-                <Text className="text-muted-foreground text-sm [grid-area:date]">
-                  Due {invoice.dueDate}
-                </Text>
-                <Text className="font-bold [grid-area:total] @2xl:justify-self-end">
-                  <CurrencyValue currencyParts={invoice.totalParts} />
-                </Text>
-              </div>
-              <div className="flex items-center gap-5 self-end justify-self-end [grid-area:status] @2xl:justify-self-stretch">
-                <InvoiceStatus
-                  className="min-w-[6.875rem] flex-grow"
-                  status={invoice.status}
-                />
-                <ChevronRightIcon className="hidden h-5 w-5 text-primary @2xl:block" />
-              </div>
-            </li>
+            <InvoiceListItem invoice={invoice} key={invoice.id} />
           ))}
         </ul>
       ) : (
@@ -280,5 +252,59 @@ export default function Invoices() {
         </div>
       )}
     </main>
+  )
+}
+
+function InvoiceListItem({
+  invoice,
+}: {
+  invoice: {
+    id: string
+    fid: string
+    clientName: string
+    dueDate: string
+    totalParts: string[]
+    status: CompleteInvoice['status']
+  }
+}) {
+  const linkRef = useRef<HTMLAnchorElement>(null)
+  const handleInvoiceClick = (event: MouseEvent) => {
+    if (event.target === linkRef.current) return
+    linkRef.current?.click()
+  }
+
+  return (
+    <li
+      key={invoice.id}
+      className="grid cursor-pointer grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 [grid-template-areas:'id_client'_'values_status'] focus-within:ring-1 focus-within:ring-primary @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25"
+      onClick={handleInvoiceClick}
+    >
+      <Heading level={2} className="font-bold [grid-area:id]">
+        <Link ref={linkRef} to={invoice.fid} className="focus:outline-0">
+          <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
+            #
+          </span>
+          <span>{invoice.fid}</span>
+        </Link>
+      </Heading>
+      <Text className="justify-self-end text-muted-foreground text-sm [grid-area:client] @2xl:justify-self-start">
+        {invoice.clientName}
+      </Text>
+      <div className="flex flex-col gap-4 self-end [grid-area:values] @2xl:contents">
+        <Text className="text-muted-foreground text-sm [grid-area:date]">
+          Due {invoice.dueDate}
+        </Text>
+        <Text className="font-bold [grid-area:total] @2xl:justify-self-end">
+          <CurrencyValue currencyParts={invoice.totalParts} />
+        </Text>
+      </div>
+      <div className="flex items-center gap-5 self-end justify-self-end [grid-area:status] @2xl:justify-self-stretch">
+        <InvoiceStatus
+          className="min-w-[6.875rem] flex-grow"
+          status={invoice.status}
+        />
+        <ChevronRightIcon className="hidden h-5 w-5 text-primary @2xl:block" />
+      </div>
+    </li>
   )
 }
