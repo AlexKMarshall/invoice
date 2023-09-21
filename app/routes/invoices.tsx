@@ -115,7 +115,7 @@ export default function Invoices() {
   }
   return (
     <main className="mx-auto max-w-4xl px-6 py-8">
-      <div className="max-[22rem]:gap-4 mb-8 flex items-center gap-8 2xl:gap-9">
+      <div className="max-[22rem]:gap-4 relative z-10 mb-8 flex items-center gap-8 2xl:gap-9">
         <div className="@container flex-grow basis-36">
           <Heading level={1} className="mb-2 font-bold text-2xl">
             Invoices
