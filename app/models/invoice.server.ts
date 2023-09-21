@@ -78,12 +78,56 @@ export async function getInvoiceDetail({
 }) {
   const rawInvoice = await prisma.invoice.findUnique({
     where,
+    select: {
+      id: true,
+      fid: true,
+      projectDescription: true,
+      billFromStreet: true,
+      billFromCity: true,
+      billFromPostCode: true,
+      billFromCountry: true,
+      invoiceDate: true,
+      clientName: true,
+      clientEmail: true,
+      billToStreet: true,
+      billToCity: true,
+      billToPostCode: true,
+      billToCountry: true,
+      paymentTerm: {
+        select: {
+          days: true,
+        },
+      },
+    },
   })
 
   return InvoiceModel.pick({
     id: true,
     fid: true,
-  }).parse(rawInvoice)
+    projectDescription: true,
+    billFromStreet: true,
+    billFromCity: true,
+    billFromPostCode: true,
+    billFromCountry: true,
+    invoiceDate: true,
+    clientName: true,
+    clientEmail: true,
+    billToStreet: true,
+    billToCity: true,
+    billToPostCode: true,
+    billToCountry: true,
+  })
+    .extend({
+      paymentTerm: PaymentTermModel.pick({ days: true }),
+    })
+    .transform(({ paymentTerm, ...invoice }) => ({
+      ...invoice,
+      dueDate: format(
+        add(new Date(invoice.invoiceDate), { days: paymentTerm.days }),
+        'dd MMM yyyy',
+      ),
+    }))
+    .parse(rawInvoice)
 }
 
 export function getPaymentTerms() {
