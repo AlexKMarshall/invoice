@@ -4,9 +4,9 @@ import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
 import { ChevronDownIcon, ChevronRightIcon, PlusIcon } from 'lucide-react'
-import type { FormEvent, MouseEvent } from 'react'
+import type { FormEvent, PointerEvent } from 'react'
 import { useId, useRef } from 'react'
-import { ClientOnly } from 'remix-utils'
+import { ClientOnly, useHydrated } from 'remix-utils'
 import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
@@ -20,6 +20,7 @@ import {
 } from '~/components/ui/popover'
 import { Text } from '~/components/ui/text'
 import illustrationEmpty from '~/images/illustration-empty.svg'
+import { cn } from '~/lib/utils'
 import { getInvoiceListItems } from '~/models/invoice.server'
 import type { CompleteInvoice } from '~/schemas'
 
@@ -268,19 +269,50 @@ function InvoiceListItem({
   }
 }) {
   const linkRef = useRef<HTMLAnchorElement>(null)
-  const handleInvoiceClick = (event: MouseEvent) => {
-    if (event.target === linkRef.current) return
+  const pointerDownTimeRef = useRef<number>()
+  const handlePointerDown = () => {
+    pointerDownTimeRef.current = Date.now()
+  }
+  const handlePointerUp = (event: PointerEvent) => {
+    const mouseUpTime = Date.now()
+    // If mouse up is after 200ms assume user is dragging to select text
+    if (
+      pointerDownTimeRef.current &&
+      mouseUpTime - pointerDownTimeRef.current > 200
+    ) {
+      return
+    }
+
+    // Don't click again on the link if that's where the user clicked
+    if (linkRef.current?.contains(event.target as Node)) {
+      return
+    }
+
     linkRef.current?.click()
   }
+  // Only style the list item as clickable if the page is hydrated
+  // Otherwise only the link is clickable
+  const isHydrated = useHydrated()
 
   return (
     <li
       key={invoice.id}
-      className="grid cursor-pointer grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 [grid-template-areas:'id_client'_'values_status'] focus-within:ring-1 focus-within:ring-primary @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25"
-      onClick={handleInvoiceClick}
+      className={cn(
+        "grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 [grid-template-areas:'id_client'_'values_status']  @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25",
+        {
+          'cursor-pointer focus-within:ring-1 focus-within:ring-primary':
+            isHydrated,
+        },
+      )}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
     >
       <Heading level={2} className="font-bold [grid-area:id]">
-        <Link ref={linkRef} to={invoice.fid} className="focus:outline-0">
+        <Link
+          ref={linkRef}
+          to={invoice.fid}
+          className={cn({ 'focus:outline-0': isHydrated })}
+        >
           <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
             #
           </span>
