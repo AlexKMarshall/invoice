@@ -3,7 +3,7 @@ import { parse } from '@conform-to/zod'
 import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
 import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
-import { ChevronDownIcon, PlusIcon } from 'lucide-react'
+import { ChevronDownIcon, ChevronRightIcon, PlusIcon } from 'lucide-react'
 import { type FormEvent, useId } from 'react'
 import { ClientOnly } from 'remix-utils'
 import { z } from 'zod'
@@ -114,8 +114,8 @@ export default function Invoices() {
     submit(event.currentTarget, { replace: true })
   }
   return (
-    <main className="px-6 py-8">
-      <div className="max-[22rem]:gap-4 mb-8 flex items-center gap-8">
+    <main className="mx-auto max-w-4xl px-6 py-8">
+      <div className="max-[22rem]:gap-4 relative z-10 mb-8 flex items-center gap-8 2xl:gap-9">
         <div className="@container flex-grow basis-36">
           <Heading level={1} className="mb-2 font-bold text-2xl">
             Invoices
@@ -152,7 +152,6 @@ export default function Invoices() {
                       })
                       .map((props, index) => (
                         <div key={index} className="flex items-center gap-3">
-                          {/* <Checkbox {...props} /> */}
                           <input {...props} />
                           <Text asChild className="font-bold leading-none">
                             <label htmlFor={props.id} className="capitalize">
@@ -229,33 +228,36 @@ export default function Invoices() {
       <Outlet />
 
       {invoiceListItems.length ? (
-        <ul className="flex flex-col gap-4">
+        <ul className="@container flex flex-col gap-4">
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground"
+              className="@2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:[grid-template-areas:'id_date_client_total_status'] @2xl:px-6 @2xl:py-4 @3xl:px-8 grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground [grid-template-areas:'id_client'_'values_status']"
             >
-              <Heading level={2} className="font-bold">
+              <Heading level={2} className="font-bold [grid-area:id]">
                 <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
                   #
                 </span>
                 <span>{invoice.fid}</span>
               </Heading>
-              <Text className="justify-self-end text-muted-foreground text-sm">
+              <Text className="@2xl:justify-self-start justify-self-end text-muted-foreground text-sm [grid-area:client]">
                 {invoice.clientName}
               </Text>
-              <div className="self-end">
-                <Text className="mb-4 text-muted-foreground text-sm">
+              <div className="@2xl:contents flex flex-col gap-4 self-end [grid-area:values]">
+                <Text className="text-muted-foreground text-sm [grid-area:date]">
                   Due {invoice.dueDate}
                 </Text>
-                <Text className="font-bold">
+                <Text className="@2xl:justify-self-end font-bold [grid-area:total]">
                   <CurrencyValue currencyParts={invoice.totalParts} />
                 </Text>
               </div>
-              <InvoiceStatus
-                className="min-w-[6.875rem] self-end justify-self-end"
-                status={invoice.status}
-              />
+              <div className="@2xl:justify-self-stretch flex items-center gap-5 self-end justify-self-end [grid-area:status]">
+                <InvoiceStatus
+                  className="min-w-[6.875rem] flex-grow"
+                  status={invoice.status}
+                />
+                <ChevronRightIcon className="@2xl:block hidden h-5 w-5 text-primary" />
+              </div>
             </li>
           ))}
         </ul>
