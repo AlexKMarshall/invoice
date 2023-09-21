@@ -5,7 +5,7 @@ import { cn } from '~/lib/utils'
 
 export interface StackProps extends React.HTMLAttributes<HTMLDivElement> {
   asChild?: boolean
-  gap?: 1 | 2 | 3 | 4 | 6 | 8
+  gap?: 1 | 2 | 3 | 4 | 6 | 8 | 10
 }
 
 const gapMap = {
@@ -15,6 +15,7 @@ const gapMap = {
   4: 'gap-4',
   6: 'gap-6',
   8: 'gap-8',
+  10: 'gap-10',
 } satisfies Record<NonNullable<StackProps['gap']>, string>
 
 const Stack = React.forwardRef<HTMLDivElement, StackProps>(

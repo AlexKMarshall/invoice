@@ -33,15 +33,17 @@ export default function InvoiceDetail() {
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
       <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25">
-        <Stack gap={8}>
+        <Stack gap={10}>
           <Stack gap={3}>
             <Heading level={1} className="font-bold">
               <InvoiceFid fid={invoice.fid} />
             </Heading>
-            <Text className="text-sm">{invoice.projectDescription}</Text>
+            <Text className="text-muted-foreground text-sm">
+              {invoice.projectDescription}
+            </Text>
           </Stack>
-          <Stack gap={2} asChild>
-            <address>
+          <Stack gap={3} asChild>
+            <address className="text-muted-foreground">
               <Text asChild className="text-sm">
                 <span>{invoice.billFromStreet}</span>
               </Text>
@@ -57,24 +59,24 @@ export default function InvoiceDetail() {
             </address>
           </Stack>
           <Stack gap={4}>
-            <Heading level={2} className="text-sm">
+            <Heading level={2} className="text-muted-foreground text-sm">
               Invoice Date
             </Heading>
             <Text className="font-bold">{invoice.invoiceDate}</Text>
           </Stack>
           <Stack gap={4}>
-            <Heading level={2} className="text-sm">
+            <Heading level={2} className="text-muted-foreground text-sm">
               Payment Due
             </Heading>
             <Text className="font-bold">{invoice.dueDate}</Text>
           </Stack>
           <Stack gap={4}>
-            <Heading level={2} className="text-sm">
+            <Heading level={2} className="text-muted-foreground text-sm">
               Bill To
             </Heading>
             <Text className="font-bold">{invoice.clientName}</Text>
-            <Stack gap={2} asChild>
-              <address>
+            <Stack gap={3} asChild>
+              <address className="text-muted-foreground">
                 <Text asChild className="text-sm">
                   <span>{invoice.billToStreet}</span>
                 </Text>
@@ -91,7 +93,7 @@ export default function InvoiceDetail() {
             </Stack>
           </Stack>
           <Stack gap={4}>
-            <Heading level={2} className="text-sm">
+            <Heading level={2} className="text-muted-foreground text-sm">
               Sent To
             </Heading>
             <Text className="font-bold">{invoice.clientEmail}</Text>
