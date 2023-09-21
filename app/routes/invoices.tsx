@@ -298,9 +298,9 @@ function InvoiceListItem({
     <li
       key={invoice.id}
       className={cn(
-        "grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 [grid-template-areas:'id_client'_'values_status']  @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25",
+        "grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 ring-1  ring-transparent transition-shadow [grid-template-areas:'id_client'_'values_status'] @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25",
         {
-          'cursor-pointer focus-within:ring-1 focus-within:ring-primary':
+          'cursor-pointer focus-within:ring-1 focus-within:ring-primary hover:ring-1 hover:ring-primary':
             isHydrated,
         },
       )}
