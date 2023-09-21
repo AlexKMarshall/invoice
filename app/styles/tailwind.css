@@ -80,6 +80,9 @@
   body {
     @apply bg-background text-foreground accent-primary;
   }
+  address {
+    @apply not-italic;
+  }
 }
 
 @layer components {

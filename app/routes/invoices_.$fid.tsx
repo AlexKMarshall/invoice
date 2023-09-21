@@ -3,6 +3,7 @@ import { useLoaderData } from '@remix-run/react'
 
 import { Heading } from '~/components/ui/heading'
 import { InvoiceFid } from '~/components/ui/invoiceFid'
+import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
 import { getInvoiceDetail } from '~/models/invoice.server'
 import { InvoiceModel } from '~/schemas'
@@ -31,30 +32,72 @@ export default function InvoiceDetail() {
   const { invoice } = useLoaderData<typeof loader>()
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
-      <Heading level={1} className="font-bold">
-        <InvoiceFid fid={invoice.fid} />
-      </Heading>
-      <Text>{invoice.projectDescription}</Text>
-      <address>
-        <span>{invoice.billFromStreet}</span>
-        <span>{invoice.billFromCity}</span>
-        <span>{invoice.billFromPostCode}</span>
-        <span>{invoice.billFromCountry}</span>
-      </address>
-      <Heading level={2}>Invoice Date</Heading>
-      <Text>{invoice.invoiceDate}</Text>
-      <Heading level={2}>Payment Due</Heading>
-      <Text>{invoice.dueDate}</Text>
-      <Heading level={2}>Bill To</Heading>
-      <Text>{invoice.clientName}</Text>
-      <address>
-        <span>{invoice.billToStreet}</span>
-        <span>{invoice.billToCity}</span>
-        <span>{invoice.billToPostCode}</span>
-        <span>{invoice.billToCountry}</span>
-      </address>
-      <Heading level={2}>Sent To</Heading>
-      <Text>{invoice.clientEmail}</Text>
+      <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25">
+        <Stack gap={8}>
+          <Stack gap={3}>
+            <Heading level={1} className="font-bold">
+              <InvoiceFid fid={invoice.fid} />
+            </Heading>
+            <Text className="text-sm">{invoice.projectDescription}</Text>
+          </Stack>
+          <Stack gap={2} asChild>
+            <address>
+              <Text asChild className="text-sm">
+                <span>{invoice.billFromStreet}</span>
+              </Text>
+              <Text asChild className="text-sm">
+                <span>{invoice.billFromCity}</span>
+              </Text>
+              <Text asChild className="text-sm">
+                <span>{invoice.billFromPostCode}</span>
+              </Text>
+              <Text asChild className="text-sm">
+                <span>{invoice.billFromCountry}</span>
+              </Text>
+            </address>
+          </Stack>
+          <Stack gap={4}>
+            <Heading level={2} className="text-sm">
+              Invoice Date
+            </Heading>
+            <Text className="font-bold">{invoice.invoiceDate}</Text>
+          </Stack>
+          <Stack gap={4}>
+            <Heading level={2} className="text-sm">
+              Payment Due
+            </Heading>
+            <Text className="font-bold">{invoice.dueDate}</Text>
+          </Stack>
+          <Stack gap={4}>
+            <Heading level={2} className="text-sm">
+              Bill To
+            </Heading>
+            <Text className="font-bold">{invoice.clientName}</Text>
+            <Stack gap={2} asChild>
+              <address>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billToStreet}</span>
+                </Text>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billToCity}</span>
+                </Text>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billToPostCode}</span>
+                </Text>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billToCountry}</span>
+                </Text>
+              </address>
+            </Stack>
+          </Stack>
+          <Stack gap={4}>
+            <Heading level={2} className="text-sm">
+              Sent To
+            </Heading>
+            <Text className="font-bold">{invoice.clientEmail}</Text>
+          </Stack>
+        </Stack>
+      </div>
     </main>
   )
 }
