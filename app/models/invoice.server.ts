@@ -71,6 +71,21 @@ export async function getInvoiceListItems({
     })
 }
 
+export async function getInvoiceDetail({
+  where,
+}: {
+  where: { id: Invoice['id'] } | { fid: Invoice['fid'] }
+}) {
+  const rawInvoice = await prisma.invoice.findUnique({
+    where,
+  })
+
+  return InvoiceModel.pick({
+    id: true,
+    fid: true,
+  }).parse(rawInvoice)
+}
+
 export function getPaymentTerms() {
   return prisma.paymentTerm.findMany({
     select: { id: true, name: true },

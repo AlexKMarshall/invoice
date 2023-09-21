@@ -13,6 +13,7 @@ import { Button } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
 import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
+import { InvoiceFid } from '~/components/ui/invoiceFid'
 import {
   Popover,
   PopoverContent,
@@ -313,10 +314,7 @@ function InvoiceListItem({
           to={invoice.fid}
           className={cn({ 'focus:outline-0': isHydrated })}
         >
-          <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
-            #
-          </span>
-          <span>{invoice.fid}</span>
+          <InvoiceFid fid={invoice.fid} />
         </Link>
       </Heading>
       <Text className="justify-self-end text-muted-foreground text-sm [grid-area:client] @2xl:justify-self-start">
