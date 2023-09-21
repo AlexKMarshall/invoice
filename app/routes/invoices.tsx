@@ -233,13 +233,15 @@ export default function Invoices() {
           {invoiceListItems.map((invoice) => (
             <li
               key={invoice.id}
-              className="grid grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground [grid-template-areas:'id_client'_'values_status'] @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8"
+              className="grid cursor-pointer grid-cols-2 gap-7 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 [grid-template-areas:'id_client'_'values_status'] focus-within:ring-1 focus-within:ring-primary @2xl:grid-cols-[1fr_minmax(max-content,2fr)_3fr_1fr_1fr] @2xl:items-center @2xl:gap-10 @2xl:px-6 @2xl:py-4 @2xl:[grid-template-areas:'id_date_client_total_status'] @3xl:px-8 dark:shadow-black/25"
             >
               <Heading level={2} className="font-bold [grid-area:id]">
-                <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
-                  #
-                </span>
-                <span>{invoice.fid}</span>
+                <Link to={invoice.fid} className="focus:outline-0">
+                  <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
+                    #
+                  </span>
+                  <span>{invoice.fid}</span>
+                </Link>
               </Heading>
               <Text className="justify-self-end text-muted-foreground text-sm [grid-area:client] @2xl:justify-self-start">
                 {invoice.clientName}
