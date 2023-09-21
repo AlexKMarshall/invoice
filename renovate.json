@@ -14,5 +14,6 @@
       "matchUpdateTypes": ["pin"],
       "automerge": true
     }
-  ]
+  ],
+  "rebaseWhen": "behind-base-branch"
 }
