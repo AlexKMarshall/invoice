@@ -1,7 +1,7 @@
 import * as z from "zod"
 
-import type { CompleteInvoice, CompleteNote, CompletePassword, CompleteSession} from "./index";
-import { RelatedInvoiceModel, RelatedNoteModel, RelatedPasswordModel, RelatedSessionModel } from "./index"
+import type { CompleteInvoice, CompletePassword, CompleteSession} from "./index";
+import { RelatedInvoiceModel, RelatedPasswordModel, RelatedSessionModel } from "./index"
 
 export const UserModel = z.object({
   id: z.string(),
@@ -12,7 +12,6 @@ export const UserModel = z.object({
 
 export interface CompleteUser extends z.infer<typeof UserModel> {
   password?: CompletePassword | null
-  notes: CompleteNote[]
   Invoice: CompleteInvoice[]
   Session: CompleteSession[]
 }
@@ -24,7 +23,6 @@ export interface CompleteUser extends z.infer<typeof UserModel> {
  */
 export const RelatedUserModel: z.ZodSchema<CompleteUser> = z.lazy(() => UserModel.extend({
   password: RelatedPasswordModel.nullish(),
-  notes: RelatedNoteModel.array(),
   Invoice: RelatedInvoiceModel.array(),
   Session: RelatedSessionModel.array(),
 }))
