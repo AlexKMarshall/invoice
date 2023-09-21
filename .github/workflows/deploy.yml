@@ -95,8 +95,8 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install
 
-      # - name: 🔎 Type check
-      #   run: pnpm typecheck
+      - name: 🔎 Type check
+        run: pnpm typecheck
 
   vitest:
     name: ⚡ Vitest
