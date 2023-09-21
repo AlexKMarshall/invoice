@@ -1,5 +1,7 @@
 import * as z from "zod"
-import { CompleteInvoice, RelatedInvoiceModel } from "./index"
+
+import type { CompleteInvoice} from "./index";
+import { RelatedInvoiceModel } from "./index"
 
 export const PaymentTermModel = z.object({
   id: z.string(),
