@@ -58,7 +58,6 @@
     "@remix-run/dev": "1.19.3",
     "@remix-run/eslint-config": "1.19.3",
     "@tailwindcss/container-queries": "0.1.1",
-    "@testing-library/cypress": "9.0.0",
     "@testing-library/jest-dom": "5.17.0",
     "@types/bcryptjs": "2.4.4",
     "@types/eslint": "8.44.2",
