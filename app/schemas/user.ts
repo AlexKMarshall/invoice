@@ -1,7 +1,5 @@
 import * as z from "zod"
-
-import type { CompleteInvoice, CompletePassword, CompleteSession} from "./index";
-import { RelatedInvoiceModel, RelatedPasswordModel, RelatedSessionModel } from "./index"
+import { CompletePassword, RelatedPasswordModel, CompleteInvoice, RelatedInvoiceModel, CompleteSession, RelatedSessionModel } from "./index"
 
 export const UserModel = z.object({
   id: z.string(),

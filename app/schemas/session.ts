@@ -1,7 +1,5 @@
 import * as z from "zod"
-
-import type { CompleteUser} from "./index";
-import { RelatedUserModel } from "./index"
+import { CompleteUser, RelatedUserModel } from "./index"
 
 export const SessionModel = z.object({
   id: z.string(),

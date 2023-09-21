@@ -95,6 +95,9 @@ jobs:
       - name: 📥 Install dependencies
         run: pnpm install
 
+      - name: 🛠 Setup Database
+        run: pnpm prisma generate
+
       - name: 🔎 Type check
         run: pnpm typecheck
 
