@@ -33,7 +33,7 @@ export default function InvoiceDetail() {
   const { invoice } = useLoaderData<typeof loader>()
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
-      <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25">
+      <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
         <Stack gap={10}>
           <div className="flex flex-col justify-between gap-10 md:flex-row">
             <Stack gap={3}>
