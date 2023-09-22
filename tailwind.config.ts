@@ -74,6 +74,7 @@ export default {
         palette: {
           4: 'hsl(var(--palette-4))',
           5: 'hsl(var(--palette-5))',
+          6: 'hsl(var(--palette-6))',
         },
       },
       borderRadius: {

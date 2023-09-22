@@ -1,6 +1,7 @@
 import { type DataFunctionArgs, json } from '@remix-run/node'
 import { useLoaderData } from '@remix-run/react'
 
+import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
 import { InvoiceFid } from '~/components/ui/invoiceFid'
 import { Stack } from '~/components/ui/stack'
@@ -105,6 +106,29 @@ export default function InvoiceDetail() {
             </Stack>
           </div>
         </Stack>
+        <div className="mt-10 overflow-hidden rounded-lg">
+          <ul className="bg-background p-6">
+            {invoice.items.map((item) => (
+              <li
+                key={item.id}
+                className="flex items-center justify-between gap-10"
+              >
+                <Stack gap={3}>
+                  <Heading level={2} className="font-bold">
+                    {item.name}
+                  </Heading>
+                  <Text className="font-bold text-muted-foreground dark:[--muted-foreground:--palette-6]">
+                    {item.quantity} x{' '}
+                    <CurrencyValue currencyParts={item.priceParts} />
+                  </Text>
+                </Stack>
+                <Text className="font-bold">
+                  <CurrencyValue currencyParts={item.totalParts} />
+                </Text>
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </main>
   )

@@ -93,9 +93,18 @@ export async function getInvoiceDetail({
       billToCity: true,
       billToPostCode: true,
       billToCountry: true,
+      currency: true,
       paymentTerm: {
         select: {
           days: true,
+        },
+      },
+      items: {
+        select: {
+          name: true,
+          price: true,
+          quantity: true,
+          id: true,
         },
       },
     },
@@ -116,17 +125,42 @@ export async function getInvoiceDetail({
     billToCity: true,
     billToPostCode: true,
     billToCountry: true,
+    currency: true,
   })
     .extend({
       paymentTerm: PaymentTermModel.pick({ days: true }),
-    })
-    .transform(({ paymentTerm, ...invoice }) => ({
-      ...invoice,
-      dueDate: format(
-        add(new Date(invoice.invoiceDate), { days: paymentTerm.days }),
-        'dd MMM yyyy',
+      items: z.array(
+        InvoiceItemModel.pick({
+          name: true,
+          price: true,
+          quantity: true,
+          id: true,
+        }),
       ),
-    }))
+    })
+    .transform(({ paymentTerm, items, ...invoice }) => {
+      const amountDue = items.reduce(
+        (acc, item) => acc + item.price * item.quantity,
+        0,
+      )
+      return {
+        ...invoice,
+        dueDate: format(
+          add(new Date(invoice.invoiceDate), { days: paymentTerm.days }),
+          'dd MMM yyyy',
+        ),
+        items: items.map(({ price, ...item }) => ({
+          ...item,
+          priceParts: getCurrencyParts(price, { currency: invoice.currency }),
+          totalParts: getCurrencyParts(price * item.quantity, {
+            currency: invoice.currency,
+          }),
+        })),
+        amountDueParts: getCurrencyParts(amountDue, {
+          currency: invoice.currency,
+        }),
+      }
+    })
     .parse(rawInvoice)
 }
 
