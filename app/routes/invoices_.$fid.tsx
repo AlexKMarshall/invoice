@@ -133,27 +133,29 @@ export default function InvoiceDetail() {
               </tbody>
             </table>
 
-            <ul className="md:hidden">
-              {invoice.items.map((item) => (
-                <li
-                  key={item.id}
-                  className="flex items-center justify-between gap-10"
-                >
-                  <Stack gap={3}>
-                    <Heading level={2} className="font-bold">
-                      {item.name}
-                    </Heading>
-                    <Text className="font-bold text-muted-foreground dark:[--muted-foreground:--palette-6]">
-                      {item.quantity} x{' '}
-                      <CurrencyValue currencyParts={item.priceParts} />
+            <Stack gap={8} className="md:hidden" asChild>
+              <ul>
+                {invoice.items.map((item) => (
+                  <li
+                    key={item.id}
+                    className="flex items-center justify-between gap-10"
+                  >
+                    <Stack gap={3}>
+                      <Heading level={2} className="font-bold">
+                        {item.name}
+                      </Heading>
+                      <Text className="font-bold text-muted-foreground dark:[--muted-foreground:--palette-6]">
+                        {item.quantity} x{' '}
+                        <CurrencyValue currencyParts={item.priceParts} />
+                      </Text>
+                    </Stack>
+                    <Text className="font-bold">
+                      <CurrencyValue currencyParts={item.totalParts} />
                     </Text>
-                  </Stack>
-                  <Text className="font-bold">
-                    <CurrencyValue currencyParts={item.totalParts} />
-                  </Text>
-                </li>
-              ))}
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            </Stack>
           </div>
           <div className="bg-palette-13 dark:bg-palette-8 flex items-center justify-between gap-8 px-6 py-8 text-white">
             <Heading level={2} className="text-sm">
