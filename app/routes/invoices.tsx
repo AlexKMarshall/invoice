@@ -13,11 +13,13 @@ import { Button } from '~/components/ui/button'
 import { Checkbox } from '~/components/ui/checkbox'
 import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
+import { InvoiceFid } from '~/components/ui/invoiceFid'
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from '~/components/ui/popover'
+import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
 import illustrationEmpty from '~/images/illustration-empty.svg'
 import { cn } from '~/lib/utils'
@@ -120,8 +122,8 @@ export default function Invoices() {
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
       <div className="relative z-10 mb-8 flex items-center gap-8 max-[22rem]:gap-4 2xl:gap-9">
-        <div className="flex-grow basis-36 @container">
-          <Heading level={1} className="mb-2 font-bold text-2xl">
+        <Stack gap={2} className="flex-grow basis-36 @container">
+          <Heading level={1} className="font-bold text-2xl">
             Invoices
           </Heading>
           <Text className="text-muted-foreground text-sm">
@@ -130,7 +132,7 @@ export default function Invoices() {
               {subheading.full}
             </span>
           </Text>
-        </div>
+        </Stack>
 
         <div className="flex basis-36 justify-end @container">
           <ClientOnly
@@ -143,29 +145,30 @@ export default function Invoices() {
                   </span>
                 </summary>
                 <div className="absolute left-1/2 top-full z-50 w-fit min-w-[10rem] -translate-x-1/2 translate-y-1 rounded-md bg-popover p-6 text-popover-foreground shadow-lg shadow-[hsl(231,38%,45%)]/10 outline-none dark:shadow-black/25">
-                  <Form
-                    method="get"
-                    {...form.props}
-                    className="flex flex-col gap-4"
-                    onChange={handleFilterChange}
-                  >
-                    {conform
-                      .collection(status, {
-                        type: 'checkbox',
-                        options: ['draft', 'pending', 'paid'],
-                      })
-                      .map((props, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <input {...props} />
-                          <Text asChild className="font-bold leading-none">
-                            <label htmlFor={props.id} className="capitalize">
-                              {props.value}
-                            </label>
-                          </Text>
-                        </div>
-                      ))}
-                    <Button type="submit">Apply</Button>
-                  </Form>
+                  <Stack gap={4} asChild>
+                    <Form
+                      method="get"
+                      {...form.props}
+                      onChange={handleFilterChange}
+                    >
+                      {conform
+                        .collection(status, {
+                          type: 'checkbox',
+                          options: ['draft', 'pending', 'paid'],
+                        })
+                        .map((props, index) => (
+                          <div key={index} className="flex items-center gap-3">
+                            <input {...props} />
+                            <Text asChild className="font-bold leading-none">
+                              <label htmlFor={props.id} className="capitalize">
+                                {props.value}
+                              </label>
+                            </Text>
+                          </div>
+                        ))}
+                      <Button type="submit">Apply</Button>
+                    </Form>
+                  </Stack>
                 </div>
               </details>
             }
@@ -184,28 +187,29 @@ export default function Invoices() {
                   </PopoverTrigger>
                 </Text>
                 <PopoverContent className="min-w-[10rem] p-6">
-                  <Form
-                    method="get"
-                    {...form.props}
-                    className="flex flex-col gap-4"
-                    onChange={handleFilterChange}
-                  >
-                    {conform
-                      .collection(status, {
-                        type: 'checkbox',
-                        options: ['draft', 'pending', 'paid'],
-                      })
-                      .map(({ type: _type, ...props }, index) => (
-                        <div key={index} className="flex items-center gap-3">
-                          <Checkbox {...props} />
-                          <Text asChild className="font-bold leading-none">
-                            <label htmlFor={props.id} className="capitalize">
-                              {props.value}
-                            </label>
-                          </Text>
-                        </div>
-                      ))}
-                  </Form>
+                  <Stack gap={4} asChild>
+                    <Form
+                      method="get"
+                      {...form.props}
+                      onChange={handleFilterChange}
+                    >
+                      {conform
+                        .collection(status, {
+                          type: 'checkbox',
+                          options: ['draft', 'pending', 'paid'],
+                        })
+                        .map(({ type: _type, ...props }, index) => (
+                          <div key={index} className="flex items-center gap-3">
+                            <Checkbox {...props} />
+                            <Text asChild className="font-bold leading-none">
+                              <label htmlFor={props.id} className="capitalize">
+                                {props.value}
+                              </label>
+                            </Text>
+                          </div>
+                        ))}
+                    </Form>
+                  </Stack>
                 </PopoverContent>
               </Popover>
             )}
@@ -232,11 +236,13 @@ export default function Invoices() {
       <Outlet />
 
       {invoiceListItems.length ? (
-        <ul className="flex flex-col gap-4 @container">
-          {invoiceListItems.map((invoice) => (
-            <InvoiceListItem invoice={invoice} key={invoice.id} />
-          ))}
-        </ul>
+        <Stack gap={4} className="@container" asChild>
+          <ul>
+            {invoiceListItems.map((invoice) => (
+              <InvoiceListItem invoice={invoice} key={invoice.id} />
+            ))}
+          </ul>
+        </Stack>
       ) : (
         <div className="flex max-w-[14rem] flex-1 flex-col items-center justify-center self-center text-center">
           <img src={illustrationEmpty} alt="" className="mb-10" />
@@ -313,23 +319,20 @@ function InvoiceListItem({
           to={invoice.fid}
           className={cn({ 'focus:outline-0': isHydrated })}
         >
-          <span className="text-muted-foreground dark:[--muted-foreground:231_36%_63%]">
-            #
-          </span>
-          <span>{invoice.fid}</span>
+          <InvoiceFid fid={invoice.fid} />
         </Link>
       </Heading>
       <Text className="justify-self-end text-muted-foreground text-sm [grid-area:client] @2xl:justify-self-start">
         {invoice.clientName}
       </Text>
-      <div className="flex flex-col gap-4 self-end [grid-area:values] @2xl:contents">
+      <Stack gap={4} className="self-end [grid-area:values] @2xl:contents">
         <Text className="text-muted-foreground text-sm [grid-area:date]">
           Due {invoice.dueDate}
         </Text>
         <Text className="font-bold [grid-area:total] @2xl:justify-self-end">
           <CurrencyValue currencyParts={invoice.totalParts} />
         </Text>
-      </div>
+      </Stack>
       <div className="flex items-center gap-5 self-end justify-self-end [grid-area:status] @2xl:justify-self-stretch">
         <InvoiceStatus
           className="min-w-[6.875rem] flex-grow"
