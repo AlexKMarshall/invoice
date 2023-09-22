@@ -86,6 +86,10 @@
   address {
     @apply not-italic;
   }
+
+  th {
+    font-weight: inherit;
+  }
 }
 
 @layer components {

@@ -28,6 +28,7 @@ async function createInvoice(userId: string) {
       items: {
         create: [
           { name: faker.commerce.productName(), quantity: 1, price: 100 },
+          { name: faker.commerce.productName(), quantity: 2, price: 150 },
         ],
       },
     },
