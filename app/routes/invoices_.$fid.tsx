@@ -62,7 +62,7 @@ export default function InvoiceDetail() {
             </Stack>
           </div>
           <div className="grid grid-cols-2 gap-10 md:grid-cols-3">
-            <Stack gap={10}>
+            <Stack gap={10} className="row-span-2">
               <Stack gap={4}>
                 <Heading level={2} className="text-muted-foreground text-sm">
                   Invoice Date
