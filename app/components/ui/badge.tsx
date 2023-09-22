@@ -11,7 +11,7 @@ const badgeVariants = cva(
         success: 'bg-success/5 text-success before:bg-success',
         warning: 'bg-warning/5 text-warning before:bg-warning',
         default:
-          'bg-[hsl(231_20%_27%/5%)] text-[hsl(231_20%_27%)] before:bg-[hsl(231_20%_27%)] dark:bg-palette-5/5 dark:text-palette-5 dark:before:bg-palette-5',
+          'bg-palette-13/5 text-palette-13 before:bg-palette-13 dark:bg-palette-5/5 dark:text-palette-5 dark:before:bg-palette-5',
       },
     },
     defaultVariants: {
