@@ -1,11 +1,15 @@
 import { type DataFunctionArgs, json } from '@remix-run/node'
-import { useLoaderData } from '@remix-run/react'
+import { useLoaderData, useNavigate } from '@remix-run/react'
+import { ChevronLeft } from 'lucide-react'
+import { useHydrated } from 'remix-utils'
 
 import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
 import { InvoiceFid } from '~/components/ui/invoiceFid'
+import { InvoiceStatus } from '~/components/ui/invoiceStatus'
 import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
+import { cn } from '~/lib/utils'
 import { getInvoiceDetail } from '~/models/invoice.server'
 import { InvoiceModel } from '~/schemas'
 
@@ -31,8 +35,32 @@ export async function loader({ params }: DataFunctionArgs) {
 
 export default function InvoiceDetail() {
   const { invoice } = useLoaderData<typeof loader>()
+  const navigate = useNavigate()
+  const isHydrated = useHydrated()
+
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
+      <button
+        onClick={() => navigate(-1)}
+        className={cn(
+          'mb-8 flex max-w-fit items-center gap-6 transition-opacity',
+          {
+            'invisible opacity-0': !isHydrated,
+            'visible opacity-100': isHydrated,
+          },
+        )}
+      >
+        <ChevronLeft className="h-5 w-5 text-primary" />
+        <Text asChild className="font-bold">
+          <span>Go back</span>
+        </Text>
+      </button>
+      <div className="mb-4 flex items-center justify-between gap-12 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
+        <Heading level={2} className="text-muted-foreground text-sm">
+          Status
+        </Heading>
+        <InvoiceStatus status={invoice.status} />
+      </div>
       <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
         <Stack gap={10}>
           <div className="flex flex-col justify-between gap-10 md:flex-row">

@@ -94,6 +94,7 @@ export async function getInvoiceDetail({
       billToPostCode: true,
       billToCountry: true,
       currency: true,
+      status: true,
       paymentTerm: {
         select: {
           days: true,
@@ -126,6 +127,7 @@ export async function getInvoiceDetail({
     billToPostCode: true,
     billToCountry: true,
     currency: true,
+    status: true,
   })
     .extend({
       paymentTerm: PaymentTermModel.pick({ days: true }),
