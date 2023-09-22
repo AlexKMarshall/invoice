@@ -34,42 +34,46 @@ export default function InvoiceDetail() {
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
       <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25">
         <Stack gap={10}>
-          <Stack gap={3}>
-            <Heading level={1} className="font-bold">
-              <InvoiceFid fid={invoice.fid} />
-            </Heading>
-            <Text className="text-muted-foreground text-sm">
-              {invoice.projectDescription}
-            </Text>
-          </Stack>
-          <Stack gap={3} asChild>
-            <address className="text-muted-foreground">
-              <Text asChild className="text-sm">
-                <span>{invoice.billFromStreet}</span>
-              </Text>
-              <Text asChild className="text-sm">
-                <span>{invoice.billFromCity}</span>
-              </Text>
-              <Text asChild className="text-sm">
-                <span>{invoice.billFromPostCode}</span>
-              </Text>
-              <Text asChild className="text-sm">
-                <span>{invoice.billFromCountry}</span>
-              </Text>
-            </address>
-          </Stack>
-          <div className="grid grid-flow-col grid-cols-2 gap-10">
-            <Stack gap={4}>
-              <Heading level={2} className="text-muted-foreground text-sm">
-                Invoice Date
+          <div className="flex flex-col justify-between gap-10 md:flex-row">
+            <Stack gap={3}>
+              <Heading level={1} className="font-bold">
+                <InvoiceFid fid={invoice.fid} />
               </Heading>
-              <Text className="font-bold">{invoice.invoiceDate}</Text>
+              <Text className="text-muted-foreground text-sm">
+                {invoice.projectDescription}
+              </Text>
             </Stack>
-            <Stack gap={4}>
-              <Heading level={2} className="text-muted-foreground text-sm">
-                Payment Due
-              </Heading>
-              <Text className="font-bold">{invoice.dueDate}</Text>
+            <Stack gap={3} asChild>
+              <address className="text-muted-foreground md:text-right">
+                <Text asChild className="text-sm">
+                  <span>{invoice.billFromStreet}</span>
+                </Text>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billFromCity}</span>
+                </Text>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billFromPostCode}</span>
+                </Text>
+                <Text asChild className="text-sm">
+                  <span>{invoice.billFromCountry}</span>
+                </Text>
+              </address>
+            </Stack>
+          </div>
+          <div className="grid grid-cols-2 gap-10 md:grid-cols-3">
+            <Stack gap={10}>
+              <Stack gap={4}>
+                <Heading level={2} className="text-muted-foreground text-sm">
+                  Invoice Date
+                </Heading>
+                <Text className="font-bold">{invoice.invoiceDate}</Text>
+              </Stack>
+              <Stack gap={4}>
+                <Heading level={2} className="text-muted-foreground text-sm">
+                  Payment Due
+                </Heading>
+                <Text className="font-bold">{invoice.dueDate}</Text>
+              </Stack>
             </Stack>
             <Stack gap={4} className="row-span-2">
               <Heading level={2} className="text-muted-foreground text-sm">
@@ -93,13 +97,13 @@ export default function InvoiceDetail() {
                 </address>
               </Stack>
             </Stack>
+            <Stack gap={4}>
+              <Heading level={2} className="text-muted-foreground text-sm">
+                Sent To
+              </Heading>
+              <Text className="font-bold">{invoice.clientEmail}</Text>
+            </Stack>
           </div>
-          <Stack gap={4}>
-            <Heading level={2} className="text-muted-foreground text-sm">
-              Sent To
-            </Heading>
-            <Text className="font-bold">{invoice.clientEmail}</Text>
-          </Stack>
         </Stack>
       </div>
     </main>
