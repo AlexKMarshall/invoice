@@ -107,7 +107,7 @@ export default function InvoiceDetail() {
           </div>
         </Stack>
         <div className="mt-10 overflow-hidden rounded-lg">
-          <ul className="bg-background p-6">
+          <ul className="bg-background p-6 dark:bg-palette-4">
             {invoice.items.map((item) => (
               <li
                 key={item.id}
@@ -128,6 +128,14 @@ export default function InvoiceDetail() {
               </li>
             ))}
           </ul>
+          <div className="bg-palette-13 dark:bg-palette-8 flex items-center justify-between gap-8 px-6 py-8 text-white">
+            <Heading level={2} className="text-sm">
+              Amount Due
+            </Heading>
+            <Text className="font-bold text-2xl">
+              <CurrencyValue currencyParts={invoice.amountDueParts} />
+            </Text>
+          </div>
         </div>
       </div>
     </main>
