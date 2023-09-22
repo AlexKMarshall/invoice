@@ -58,40 +58,42 @@ export default function InvoiceDetail() {
               </Text>
             </address>
           </Stack>
-          <Stack gap={4}>
-            <Heading level={2} className="text-muted-foreground text-sm">
-              Invoice Date
-            </Heading>
-            <Text className="font-bold">{invoice.invoiceDate}</Text>
-          </Stack>
-          <Stack gap={4}>
-            <Heading level={2} className="text-muted-foreground text-sm">
-              Payment Due
-            </Heading>
-            <Text className="font-bold">{invoice.dueDate}</Text>
-          </Stack>
-          <Stack gap={4}>
-            <Heading level={2} className="text-muted-foreground text-sm">
-              Bill To
-            </Heading>
-            <Text className="font-bold">{invoice.clientName}</Text>
-            <Stack gap={3} asChild>
-              <address className="text-muted-foreground">
-                <Text asChild className="text-sm">
-                  <span>{invoice.billToStreet}</span>
-                </Text>
-                <Text asChild className="text-sm">
-                  <span>{invoice.billToCity}</span>
-                </Text>
-                <Text asChild className="text-sm">
-                  <span>{invoice.billToPostCode}</span>
-                </Text>
-                <Text asChild className="text-sm">
-                  <span>{invoice.billToCountry}</span>
-                </Text>
-              </address>
+          <div className="grid grid-flow-col grid-cols-2 gap-10">
+            <Stack gap={4}>
+              <Heading level={2} className="text-muted-foreground text-sm">
+                Invoice Date
+              </Heading>
+              <Text className="font-bold">{invoice.invoiceDate}</Text>
             </Stack>
-          </Stack>
+            <Stack gap={4}>
+              <Heading level={2} className="text-muted-foreground text-sm">
+                Payment Due
+              </Heading>
+              <Text className="font-bold">{invoice.dueDate}</Text>
+            </Stack>
+            <Stack gap={4} className="row-span-2">
+              <Heading level={2} className="text-muted-foreground text-sm">
+                Bill To
+              </Heading>
+              <Text className="font-bold">{invoice.clientName}</Text>
+              <Stack gap={3} asChild>
+                <address className="text-muted-foreground">
+                  <Text asChild className="text-sm">
+                    <span>{invoice.billToStreet}</span>
+                  </Text>
+                  <Text asChild className="text-sm">
+                    <span>{invoice.billToCity}</span>
+                  </Text>
+                  <Text asChild className="text-sm">
+                    <span>{invoice.billToPostCode}</span>
+                  </Text>
+                  <Text asChild className="text-sm">
+                    <span>{invoice.billToCountry}</span>
+                  </Text>
+                </address>
+              </Stack>
+            </Stack>
+          </div>
           <Stack gap={4}>
             <Heading level={2} className="text-muted-foreground text-sm">
               Sent To
