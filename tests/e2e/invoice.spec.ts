@@ -26,6 +26,7 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
   )
   const invoiceDate = faker.date.past()
   const expectedDueDate = format(add(invoiceDate, { days: 30 }), 'dd MMM yyyy')
+  const projectDescription = faker.commerce.productDescription()
 
   await page.goto('/invoices')
 
@@ -73,7 +74,7 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
   await page
     .getByRole('textbox', { name: /invoice date/i })
     .fill(format(invoiceDate, 'y-MM-dd'))
-  // Todo extract to an abstraction
+  // TODO: extract to an abstraction
   // eslint-disable-next-line playwright/no-conditional-in-test
   if (isJsEnabled) {
     await page
@@ -85,7 +86,7 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
   }
   await page
     .getByRole('textbox', { name: /project description/i })
-    .fill(faker.lorem.sentence())
+    .fill(projectDescription)
 
   const firstInvoiceItemFieldset = await getLatestInvoiceItem(page)
 
@@ -125,6 +126,20 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
   await expect(page.getByText(clientName)).toBeVisible()
   await expect(page.getByText(String(expectedTotal))).toBeVisible()
   await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible()
+
+  // View invoice detail
+  const invoiceItem = await page
+    .getByRole('listitem')
+    .filter({ has: page.getByText(clientName) })
+  if (isJsEnabled) {
+    // If JS is enabled the whole item should be clickable
+    await invoiceItem.getByText(clientName).click()
+  } else {
+    // Otherwise only the link will be clickable
+    await invoiceItem.getByRole('link').click()
+  }
+
+  await expect(page.getByText(projectDescription)).toBeVisible()
 })
 
 test('user can filter invoices', async ({
