@@ -2,12 +2,10 @@ import { expect, test as testBase } from '@playwright/test'
 import * as setCookieParser from 'set-cookie-parser'
 
 import { prisma } from '~/db.server'
-import type { InvoiceToCreate } from '~/models/invoice.server'
-import { createInvoice } from '~/models/invoice.server'
 import { getSessionExpirationDate, sessionKey } from '~/utils/auth.server'
 import { sessionStorage } from '~/utils/session.server'
 
-import { insertNewUser } from './db-utils'
+import { insertNewInvoice, insertNewUser } from './db-utils'
 
 export type TestOptions = {
   isJsEnabled: boolean
@@ -17,8 +15,8 @@ const test = testBase.extend<
   {
     login: (user?: { id: string }) => Promise<{ id: string; email: string }>
     existingInvoices: (
-      ...invoicesToCreate: InvoiceToCreate[]
-    ) => Promise<Array<Awaited<ReturnType<typeof createInvoice>>>>
+      ...invoicesToCreate: Array<Parameters<typeof insertNewInvoice>[0]>
+    ) => Promise<Array<Awaited<ReturnType<typeof insertNewInvoice>>>>
   } & TestOptions
 >({
   isJsEnabled: [false, { option: true }],
@@ -70,10 +68,10 @@ const test = testBase.extend<
       .catch(() => {})
   },
   existingInvoices: async ({}, use) => {
-    let invoices: Array<Awaited<ReturnType<typeof createInvoice>>> = []
+    let invoices: Array<Awaited<ReturnType<typeof insertNewInvoice>>> = []
     await use(async (...invoicesToCreate) => {
       invoices = await Promise.all(
-        invoicesToCreate.map((invoice) => createInvoice(invoice)),
+        invoicesToCreate.map((invoice) => insertNewInvoice(invoice)),
       )
 
       return invoices

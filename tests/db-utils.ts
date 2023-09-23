@@ -3,7 +3,10 @@ import bcrypt from 'bcryptjs'
 import { UniqueEnforcer } from 'enforce-unique'
 
 import { prisma } from '~/db.server'
+import type { InvoiceToCreate } from '~/models/invoice.server'
 import { getPasswordHash } from '~/models/user.server'
+import type { CompleteInvoice } from '~/schemas'
+import { generateFid } from '~/utils/misc'
 
 const uniqueUsernameEnforcer = new UniqueEnforcer()
 
@@ -33,4 +36,37 @@ export async function insertNewUser({
     },
   })
   return user
+}
+
+export async function insertNewInvoice({
+  userId,
+  items,
+  paymentTermId,
+  ...data
+}: Omit<InvoiceToCreate, 'status'> & { status: CompleteInvoice['status'] }) {
+  const fid = await generateFid({
+    isFidUnique: async (fid) => {
+      const count = await prisma.invoice.count({ where: { fid } })
+      return count === 0
+    },
+  })
+  return prisma.invoice.create({
+    data: {
+      ...data,
+      fid,
+      user: {
+        connect: {
+          id: userId,
+        },
+      },
+      items: {
+        create: items,
+      },
+      paymentTerm: {
+        connect: {
+          id: paymentTermId,
+        },
+      },
+    },
+  })
 }

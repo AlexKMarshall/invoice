@@ -2,10 +2,16 @@ import { faker } from '@faker-js/faker'
 import type { PartialDeep, SetRequired } from 'type-fest'
 
 import type { InvoiceToCreate } from '~/models/invoice.server'
+import type { CompleteInvoice } from '~/schemas'
 
 export function makeInvoice(
-  overrides: SetRequired<PartialDeep<InvoiceToCreate>, 'userId'>,
-): InvoiceToCreate {
+  overrides: SetRequired<
+    PartialDeep<
+      Omit<InvoiceToCreate, 'status'> & { status: CompleteInvoice['status'] }
+    >,
+    'userId'
+  >,
+): Omit<InvoiceToCreate, 'status'> & { status: CompleteInvoice['status'] } {
   const billFromStreet = faker.location.streetAddress()
   const billFromCity = faker.location.city()
   const billFromPostCode = faker.location.zipCode()
@@ -24,7 +30,11 @@ export function makeInvoice(
     'net-30',
   ])
   const projectDescription = faker.company.buzzPhrase()
-  const status = faker.helpers.arrayElement(['pending'] as const)
+  const status = faker.helpers.arrayElement([
+    'draft',
+    'pending',
+    'paid',
+  ] as const)
 
   return {
     billFromStreet,

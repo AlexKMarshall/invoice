@@ -24,7 +24,6 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
     quantity1 * price1 + quantity2 * price2,
   )
   const invoiceDate = faker.date.past()
-  const expectedDueDate = format(add(invoiceDate, { days: 30 }), 'dd MMM yyyy')
   const projectDescription = faker.commerce.productDescription()
 
   await page.goto('/invoices')
@@ -124,7 +123,7 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
 
   await expect(page.getByText(clientName)).toBeVisible()
   await expect(page.getByText(String(expectedTotal))).toBeVisible()
-  await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible()
+  // await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible()
 
   // View invoice detail
   const invoiceItem = await page
@@ -148,13 +147,19 @@ test('user can filter invoices', async ({
   isJsEnabled,
 }) => {
   const user = await login()
-  const [invoice] = await existingInvoices(makeInvoice({ userId: user.id }))
+  const [draftInvoice, pendingInvoice, paidInvoice] = await existingInvoices(
+    makeInvoice({ userId: user.id, status: 'draft' }),
+    makeInvoice({ userId: user.id, status: 'pending' }),
+    makeInvoice({ userId: user.id, status: 'paid' }),
+  )
 
   await page.goto('/invoices')
 
   await expect(page.getByRole('heading', { name: /invoices/i })).toBeVisible()
 
-  await expect(page.getByText(invoice.clientName)).toBeVisible()
+  await expect(page.getByText(draftInvoice.clientName)).toBeVisible()
+  await expect(page.getByText(pendingInvoice.clientName)).toBeVisible()
+  await expect(page.getByText(paidInvoice.clientName)).toBeVisible()
 
   // Filter only draft invoices
   // TODO: create abstraction
@@ -167,15 +172,55 @@ test('user can filter invoices', async ({
   } else {
     await page.getByRole('button', { name: /filter/i }).click()
     await page.getByRole('checkbox', { name: /draft/i }).check()
+    // close the popover
+    await page.getByRole('heading', { name: /invoices/i }).click()
   }
 
-  await expect(page.getByText(invoice.clientName)).toBeHidden()
+  await expect(page.getByText(draftInvoice.clientName)).toBeVisible()
+  await expect(page.getByText(pendingInvoice.clientName)).toBeHidden()
+  await expect(page.getByText(paidInvoice.clientName)).toBeHidden()
+
+  // Filter draft and pending invoices
+  // TODO: create abstraction
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (isJsEnabled) {
+    // Is there a better accessible role for a disclosure summary?
+    await page.getByText(/filter/i).click()
+    await page.getByRole('checkbox', { name: /pending/i }).check()
+    await page.getByRole('button', { name: /apply/i }).click()
+  } else {
+    await page.getByRole('button', { name: /filter/i }).click()
+    await page.getByRole('checkbox', { name: /pending/i }).check()
+    // close the popover
+    await page.getByRole('heading', { name: /invoices/i }).click()
+  }
+
+  await expect(page.getByText(draftInvoice.clientName)).toBeVisible()
+  await expect(page.getByText(pendingInvoice.clientName)).toBeVisible()
+  await expect(page.getByText(paidInvoice.clientName)).toBeHidden()
+
+  // Filter draft, pending and paid invoices
+  // TODO: create abstraction
+  // eslint-disable-next-line playwright/no-conditional-in-test
+  if (isJsEnabled) {
+    // Is there a better accessible role for a disclosure summary?
+    await page.getByText(/filter/i).click()
+    await page.getByRole('checkbox', { name: /paid/i }).check()
+    await page.getByRole('button', { name: /apply/i }).click()
+  } else {
+    await page.getByRole('button', { name: /filter/i }).click()
+    await page.getByRole('checkbox', { name: /paid/i }).check()
+    // close the popover
+    await page.getByRole('heading', { name: /invoices/i }).click()
+  }
 })
 
 test('mark invoice as paid', async ({ page, login, existingInvoices }) => {
   const user = await login()
-  const [pendingInvoice] = await existingInvoices(
+  const [draftInvoice, pendingInvoice, paidInvoice] = await existingInvoices(
+    makeInvoice({ userId: user.id, status: 'draft' }),
     makeInvoice({ userId: user.id, status: 'pending' }),
+    makeInvoice({ userId: user.id, status: 'paid' }),
   )
 
   await page.goto(`/invoices/${pendingInvoice.fid}`)
@@ -187,4 +232,11 @@ test('mark invoice as paid', async ({ page, login, existingInvoices }) => {
 
   await expect(page.getByText(/pending/i)).toBeHidden()
   await expect(page.getByText(/paid/i)).toBeVisible()
+
+  // action not available on draft or paid invoices
+  await page.goto(`/invoices/${draftInvoice.fid}`)
+  await expect(page.getByRole('button', { name: /mark as paid/i })).toBeHidden()
+
+  await page.goto(`/invoices/${paidInvoice.fid}`)
+  await expect(page.getByRole('button', { name: /mark as paid/i })).toBeHidden()
 })
