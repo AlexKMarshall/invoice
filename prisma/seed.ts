@@ -61,6 +61,10 @@ async function seed() {
   await createInvoice(user.id)
   await createInvoice(user.id)
   await createInvoice(user.id)
+  await createInvoice(user.id)
+  await createInvoice(user.id)
+  await createInvoice(user.id)
+  await createInvoice(user.id)
 
   console.log(`Database has been seeded. 🌱`)
 }
