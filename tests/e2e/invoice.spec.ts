@@ -1,6 +1,6 @@
 import { faker } from '@faker-js/faker'
 import type { Page } from '@playwright/test'
-import { add, format } from 'date-fns'
+import { format } from 'date-fns'
 import { makeInvoice } from 'tests/factories/invoice'
 
 import { expect, test } from '../playwright-utils'
