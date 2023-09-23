@@ -172,7 +172,19 @@ test('user can filter invoices', async ({
   await expect(page.getByText(invoice.clientName)).toBeHidden()
 })
 
-// test.only('mark invoice as paid', async ({ page, login }) => {
-//   const invoiceMock = generateMock(RelatedInvoiceModel)
-//   console.log(invoiceMock)
-// })
+test('mark invoice as paid', async ({ page, login, existingInvoices }) => {
+  const user = await login()
+  const [pendingInvoice] = await existingInvoices(
+    makeInvoice({ userId: user.id, status: 'pending' }),
+  )
+
+  await page.goto(`/invoices/${pendingInvoice.fid}`)
+
+  await expect(page.getByText(pendingInvoice.clientName)).toBeVisible()
+  await expect(page.getByText(/pending/i)).toBeVisible()
+
+  await page.getByRole('button', { name: /mark as paid/i }).click()
+
+  await expect(page.getByText(/pending/i)).toBeHidden()
+  await expect(page.getByText(/paid/i)).toBeVisible()
+})
