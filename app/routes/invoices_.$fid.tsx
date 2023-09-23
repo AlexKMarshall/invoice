@@ -1,5 +1,11 @@
 import { type DataFunctionArgs, json } from '@remix-run/node'
-import { Form, useLoaderData, useNavigate } from '@remix-run/react'
+import {
+  Form,
+  Link,
+  Outlet,
+  useLoaderData,
+  useNavigate,
+} from '@remix-run/react'
 import { ChevronLeft } from 'lucide-react'
 import { useHydrated } from 'remix-utils'
 
@@ -33,6 +39,7 @@ export async function loader({ params }: DataFunctionArgs) {
 
   const permittedActions = {
     markAsPaid: invoice.status === 'pending',
+    delete: ['pending', 'draft'].includes(invoice.status),
   }
 
   return json({ invoice, permittedActions })
@@ -217,7 +224,14 @@ export default function InvoiceDetail() {
         </div>
       </div>
       {hasPermittedActions && (
-        <div className="flex justify-end bg-card p-6 text-card-foreground">
+        <div className="flex justify-end gap-2 bg-card p-6 text-card-foreground">
+          {permittedActions.delete && (
+            <Button variant="destructive" asChild>
+              <Link to="delete" preventScrollReset>
+                Delete
+              </Link>
+            </Button>
+          )}
           {permittedActions.markAsPaid && (
             <Form method="post" replace>
               <Button variant="default">Mark as Paid</Button>
@@ -225,6 +239,7 @@ export default function InvoiceDetail() {
           )}
         </div>
       )}
+      <Outlet />
     </main>
   )
 }
