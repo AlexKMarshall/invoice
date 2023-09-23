@@ -12,12 +12,7 @@ function getLatestInvoiceItem(page: Page) {
     .last()
 }
 
-test('user can create invoice', async ({
-  page,
-  isJsEnabled,
-  login,
-  browserName,
-}) => {
+test('create invoice', async ({ page, isJsEnabled, login, browserName }) => {
   test.skip(browserName === 'firefox', "Don't know why this is failing now")
   await login()
 
@@ -146,7 +141,7 @@ test('user can create invoice', async ({
   // await expect(page.getByText(projectDescription)).toBeVisible()
 })
 
-test('user can filter invoices - single selection', async ({
+test('filter invoices - single selection', async ({
   page,
   login,
   existingInvoices,
@@ -185,7 +180,7 @@ test('user can filter invoices - single selection', async ({
   await expect(page.getByText(paidInvoice.clientName)).toBeHidden()
 })
 
-test('user can filter invoices - multiple selection', async ({
+test('filter invoices - multiple selection', async ({
   page,
   login,
   existingInvoices,
@@ -250,4 +245,36 @@ test('mark invoice as paid', async ({ page, login, existingInvoices }) => {
 
   await page.goto(`/invoices/${paidInvoice.fid}`)
   await expect(page.getByRole('button', { name: /mark as paid/i })).toBeHidden()
+})
+
+test('delete', async ({ page, login, existingInvoices }) => {
+  const user = await login()
+  const [draftInvoice, pendingInvoice, paidInvoice] = await existingInvoices(
+    makeInvoice({ userId: user.id, status: 'draft' }),
+    makeInvoice({ userId: user.id, status: 'pending' }),
+    makeInvoice({ userId: user.id, status: 'paid' }),
+  )
+
+  await page.goto(`/invoices/`)
+  await page.getByRole('link', { name: draftInvoice.fid }).click()
+  // get by text because either a button or a link depending on hydration
+  await page.getByText(/delete/i).click()
+  await expect(
+    page.getByRole('heading', { name: /confirm deletion/i }),
+  ).toBeVisible()
+  await page.getByRole('button', { name: /delete/i }).click()
+
+  await expect(page.getByText(draftInvoice.clientName)).toBeHidden()
+
+  await page.getByRole('link', { name: pendingInvoice.fid }).click()
+  await page.getByText(/delete/i).click()
+  await expect(
+    page.getByRole('heading', { name: /confirm deletion/i }),
+  ).toBeVisible()
+  await page.getByRole('button', { name: /delete/i }).click()
+  await expect(page.getByText(pendingInvoice.clientName)).toBeHidden()
+
+  // Paid invoices can't be deleted
+  await page.getByRole('link', { name: paidInvoice.fid }).click()
+  await expect(page.getByText(/delete/i)).toBeHidden()
 })
