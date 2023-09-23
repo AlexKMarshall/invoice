@@ -111,6 +111,10 @@ export async function getInvoiceDetail({
     },
   })
 
+  if (!rawInvoice) {
+    throw new InvoiceNotFoundError()
+  }
+
   return InvoiceModel.pick({
     id: true,
     fid: true,
@@ -224,6 +228,43 @@ export async function createInvoice({
           id: paymentTermId,
         },
       },
+    },
+  })
+}
+
+export class InvoiceNotFoundError extends Error {
+  constructor() {
+    super('Invoice not found')
+  }
+}
+
+export class InvoiceNotPendingError extends Error {
+  constructor() {
+    super('Invoice is not pending')
+  }
+}
+
+export async function markAsPaid({
+  where,
+}: {
+  where: { id: Invoice['id'] } | { fid: Invoice['fid'] }
+}) {
+  const invoice = InvoiceModel.pick({
+    status: true,
+  }).parse(await prisma.invoice.findUnique({ where }))
+
+  if (!invoice) {
+    throw new InvoiceNotFoundError()
+  }
+
+  if (invoice.status !== 'pending') {
+    throw new InvoiceNotPendingError()
+  }
+
+  return prisma.invoice.update({
+    where,
+    data: {
+      status: 'paid',
     },
   })
 }

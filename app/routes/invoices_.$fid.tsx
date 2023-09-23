@@ -1,8 +1,9 @@
 import { type DataFunctionArgs, json } from '@remix-run/node'
-import { useLoaderData, useNavigate } from '@remix-run/react'
+import { Form, useLoaderData, useNavigate } from '@remix-run/react'
 import { ChevronLeft } from 'lucide-react'
 import { useHydrated } from 'remix-utils'
 
+import { Button } from '~/components/ui/button'
 import { CurrencyValue } from '~/components/ui/currencyValue'
 import { Heading } from '~/components/ui/heading'
 import { InvoiceFid } from '~/components/ui/invoiceFid'
@@ -10,7 +11,7 @@ import { InvoiceStatus } from '~/components/ui/invoiceStatus'
 import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
 import { cn } from '~/lib/utils'
-import { getInvoiceDetail } from '~/models/invoice.server'
+import { getInvoiceDetail, markAsPaid } from '~/models/invoice.server'
 import { InvoiceModel } from '~/schemas'
 
 const paramsSchema = InvoiceModel.pick({ fid: true })
@@ -30,13 +31,33 @@ export async function loader({ params }: DataFunctionArgs) {
     throw new Response('Not found', { status: 404 })
   }
 
-  return json({ invoice })
+  const permittedActions = {
+    markAsPaid: invoice.status === 'pending',
+  }
+
+  return json({ invoice, permittedActions })
+}
+
+export async function action({ params }: DataFunctionArgs) {
+  const parsedParams = paramsSchema.safeParse(params)
+
+  if (!parsedParams.success) {
+    throw new Response('Invalid params', { status: 400 })
+  }
+
+  const { fid } = parsedParams.data
+
+  await markAsPaid({ where: { fid } })
+
+  return null
 }
 
 export default function InvoiceDetail() {
-  const { invoice } = useLoaderData<typeof loader>()
+  const { invoice, permittedActions } = useLoaderData<typeof loader>()
   const navigate = useNavigate()
   const isHydrated = useHydrated()
+
+  const hasPermittedActions = Object.values(permittedActions).includes(true)
 
   return (
     <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
@@ -61,7 +82,7 @@ export default function InvoiceDetail() {
         </Heading>
         <InvoiceStatus status={invoice.status} />
       </div>
-      <div className="rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
+      <div className="mb-14 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
         <Stack gap={10}>
           <div className="flex flex-col justify-between gap-10 md:flex-row">
             <Stack gap={3}>
@@ -185,7 +206,7 @@ export default function InvoiceDetail() {
               </ul>
             </Stack>
           </div>
-          <div className="bg-palette-13 dark:bg-palette-8 flex items-center justify-between gap-8 px-6 py-8 text-white">
+          <div className="flex items-center justify-between gap-8 bg-palette-13 px-6 py-8 text-white dark:bg-palette-8">
             <Heading level={2} className="text-sm">
               Amount Due
             </Heading>
@@ -195,6 +216,15 @@ export default function InvoiceDetail() {
           </div>
         </div>
       </div>
+      {hasPermittedActions && (
+        <div className="flex justify-end bg-card p-6 text-card-foreground">
+          {permittedActions.markAsPaid && (
+            <Form method="post" replace>
+              <Button variant="default">Mark as Paid</Button>
+            </Form>
+          )}
+        </div>
+      )}
     </main>
   )
 }
