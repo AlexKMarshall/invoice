@@ -1,8 +1,7 @@
 import { faker } from '@faker-js/faker'
 import type { Page } from '@playwright/test'
 import { add, format } from 'date-fns'
-
-import { generateFid } from '~/utils/misc'
+import { makeInvoice } from 'tests/factories/invoice'
 
 import { expect, test } from '../playwright-utils'
 
@@ -149,7 +148,7 @@ test('user can filter invoices', async ({
   isJsEnabled,
 }) => {
   const user = await login()
-  const [invoice] = await existingInvoices(await createFakeInvoice(user.id))
+  const [invoice] = await existingInvoices(makeInvoice({ userId: user.id }))
 
   await page.goto('/invoices')
 
@@ -173,24 +172,7 @@ test('user can filter invoices', async ({
   await expect(page.getByText(invoice.clientName)).toBeHidden()
 })
 
-async function createFakeInvoice(userId: string) {
-  return {
-    userId,
-    fid: await generateFid(),
-    billFromStreet: faker.location.streetAddress(),
-    billFromCity: faker.location.city(),
-    billFromPostCode: faker.location.zipCode(),
-    billFromCountry: faker.location.country(),
-    clientName: faker.person.fullName(),
-    clientEmail: faker.internet.email(),
-    billToStreet: faker.location.streetAddress(),
-    billToCity: faker.location.city(),
-    billToPostCode: faker.location.zipCode(),
-    billToCountry: faker.location.country(),
-    invoiceDate: faker.date.past().toDateString(),
-    paymentTermId: 'net-30',
-    projectDescription: faker.lorem.sentence(),
-    status: 'pending' as const,
-    items: [{ name: faker.commerce.productName(), quantity: 1, price: 100 }],
-  }
-}
+// test.only('mark invoice as paid', async ({ page, login }) => {
+//   const invoiceMock = generateMock(RelatedInvoiceModel)
+//   console.log(invoiceMock)
+// })

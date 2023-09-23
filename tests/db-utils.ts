@@ -18,12 +18,9 @@ export function createPassword(password: string = faker.internet.password()) {
 }
 
 export async function insertNewUser({
-  username,
-  password,
+  username = createUsername(),
+  password = username,
 }: { username?: string; password?: string } = {}) {
-  username ??= createUsername()
-  password ??= username
-
   const user = await prisma.user.create({
     select: { id: true, email: true },
     data: {
