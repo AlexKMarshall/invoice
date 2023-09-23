@@ -119,8 +119,8 @@ devDependencies:
     specifier: 2.4.4
     version: 2.4.4
   '@types/eslint':
-    specifier: 8.44.2
-    version: 8.44.2
+    specifier: 8.44.3
+    version: 8.44.3
   '@types/node':
     specifier: 18.17.18
     version: 18.17.18
@@ -203,7 +203,7 @@ devDependencies:
     specifier: 4.2.0
     version: 4.2.0
   type-fest:
-    specifier: ^4.3.1
+    specifier: 4.3.1
     version: 4.3.1
   typescript:
     specifier: 5.2.2
@@ -3195,8 +3195,8 @@ packages:
       '@types/ms': 0.7.31
     dev: true
 
-  /@types/eslint@8.44.2:
-    resolution: {integrity: sha512-sdPRb9K6iL5XZOmBubg8yiFp5yS/JdUDQsq5e6h95km91MCYMuvp7mh1fjPEYUhvHepKpZOjnEaMBR4PxjWDzg==}
+  /@types/eslint@8.44.3:
+    resolution: {integrity: sha512-iM/WfkwAhwmPff3wZuPLYiHX18HI24jU8k1ZSH7P8FHwxTjZ2P6CoX2wnF43oprR+YXJM6UUxATkNvyv/JHd+g==}
     dependencies:
       '@types/estree': 1.0.1
       '@types/json-schema': 7.0.12
