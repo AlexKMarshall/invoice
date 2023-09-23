@@ -1,23 +1,31 @@
-import { type DataFunctionArgs, json } from '@remix-run/node'
-import {
-  Form,
-  Link,
-  Outlet,
-  useLoaderData,
-  useNavigate,
-} from '@remix-run/react'
+import { type DataFunctionArgs, json, redirect } from '@remix-run/node'
+import { Form, Link, useLoaderData, useNavigate } from '@remix-run/react'
 import { ChevronLeft } from 'lucide-react'
-import { useHydrated } from 'remix-utils'
+import { ClientOnly, useHydrated } from 'remix-utils'
 
 import { Button } from '~/components/ui/button'
 import { CurrencyValue } from '~/components/ui/currencyValue'
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '~/components/ui/dialog'
 import { Heading } from '~/components/ui/heading'
 import { InvoiceFid } from '~/components/ui/invoiceFid'
 import { InvoiceStatus } from '~/components/ui/invoiceStatus'
 import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
 import { cn } from '~/lib/utils'
-import { getInvoiceDetail, markAsPaid } from '~/models/invoice.server'
+import {
+  deleteInvoice,
+  getInvoiceDetail,
+  markAsPaid,
+} from '~/models/invoice.server'
 import { InvoiceModel } from '~/schemas'
 
 const paramsSchema = InvoiceModel.pick({ fid: true })
@@ -45,7 +53,7 @@ export async function loader({ params }: DataFunctionArgs) {
   return json({ invoice, permittedActions })
 }
 
-export async function action({ params }: DataFunctionArgs) {
+export async function action({ params, request }: DataFunctionArgs) {
   const parsedParams = paramsSchema.safeParse(params)
 
   if (!parsedParams.success) {
@@ -54,9 +62,18 @@ export async function action({ params }: DataFunctionArgs) {
 
   const { fid } = parsedParams.data
 
-  await markAsPaid({ where: { fid } })
+  const formData = await request.formData()
+  const intent = formData.get('intent')
 
-  return null
+  if (intent === 'markAsPaid') {
+    await markAsPaid({ where: { fid } })
+    return redirect(`/invoices/${fid}`)
+  }
+
+  if (intent === 'delete') {
+    await deleteInvoice({ where: { fid } })
+    return redirect('/invoices')
+  }
 }
 
 export default function InvoiceDetail() {
@@ -226,20 +243,57 @@ export default function InvoiceDetail() {
       {hasPermittedActions && (
         <div className="flex justify-end gap-2 bg-card p-6 text-card-foreground">
           {permittedActions.delete && (
-            <Button variant="destructive" asChild>
-              <Link to="delete" preventScrollReset>
-                Delete
-              </Link>
-            </Button>
+            <ClientOnly
+              fallback={
+                <Button variant="destructive" asChild>
+                  <Link to="delete" preventScrollReset>
+                    Delete
+                  </Link>
+                </Button>
+              }
+            >
+              {() => (
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button variant="destructive">Delete</Button>
+                  </DialogTrigger>
+                  <DialogContent className="dark:[--muted-foreground:--palette-6]">
+                    <DialogHeader>
+                      <DialogTitle>Confirm Deletion</DialogTitle>
+                      <DialogDescription>
+                        Are you sure you want to delete invoice #{invoice.fid}?
+                        This action cannot be undone.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <DialogFooter>
+                      <DialogClose asChild>
+                        <Button variant="secondary">Cancel</Button>
+                      </DialogClose>
+                      <Form method="post">
+                        <Button
+                          type="submit"
+                          variant="destructive"
+                          name="intent"
+                          value="delete"
+                        >
+                          Delete
+                        </Button>
+                      </Form>
+                    </DialogFooter>
+                  </DialogContent>
+                </Dialog>
+              )}
+            </ClientOnly>
           )}
           {permittedActions.markAsPaid && (
             <Form method="post" replace>
-              <Button variant="default">Mark as Paid</Button>
+              <Button variant="default" name="intent" value="markAsPaid">
+                Mark as Paid
+              </Button>
             </Form>
           )}
         </div>
       )}
-      <Outlet />
     </main>
   )
 }

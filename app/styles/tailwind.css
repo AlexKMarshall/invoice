@@ -18,8 +18,9 @@
     --primary: 252 94% 67%;
     --primary-foreground: 252 30% 98%;  
  
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 231 67% 99%;
+    --secondary-foreground: var(--palette-7);
+    --secondary-hover: var(--palette-14);
  
     --muted: 210 40% 96.1%;
     --muted-foreground: 231 36% 63%;
@@ -44,8 +45,10 @@
     --palette-4: 233 30% 21%;
     --palette-5: 231 75% 93%;
     --palette-6: 231 20% 61%;
+    --palette-7: 231 36% 63%;
     --palette-8: 231 28% 7%;
     --palette-13: 231 20% 27%;
+    --palette-14: 231 73% 93%;
   }
  
   .dark {
@@ -58,11 +61,13 @@
     --popover: var(--palette-4);
     --popover-foreground: var(--foreground);
  
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    --secondary: var(--palette-4);
+    --secondary-foreground: var(--palette-5);
+    --secondary-hover: var(--foreground);
  
     --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 231 75% 93%;
+    --muted-foreground: var(--palette-5);
+    /* --muted-foreground: 231 75% 93%; */
  
     --accent: 217.2 32.6% 17.5%;
     --accent-foreground: 210 40% 98%;

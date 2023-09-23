@@ -44,6 +44,7 @@ export default {
         secondary: {
           DEFAULT: 'hsl(var(--secondary))',
           foreground: 'hsl(var(--secondary-foreground))',
+          hover: 'hsl(var(--secondary-hover))',
         },
         destructive: {
           DEFAULT: 'hsl(var(--destructive))',
@@ -75,8 +76,10 @@ export default {
           4: 'hsl(var(--palette-4))',
           5: 'hsl(var(--palette-5))',
           6: 'hsl(var(--palette-6))',
+          7: 'hsl(var(--palette-7))',
           8: 'hsl(var(--palette-8))',
           13: 'hsl(var(--palette-13))',
+          14: 'hsl(var(--palette-14))',
         },
       },
       borderRadius: {
