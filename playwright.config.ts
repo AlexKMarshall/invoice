@@ -28,7 +28,7 @@ export default defineConfig<TestOptions>({
     timeout: 5 * 60 * 1000,
     reuseExistingServer: !process.env.CI,
     stderr: 'pipe',
-    stdout: 'pipe',
+    // stdout: 'pipe',
   },
   /* Shared settings for all the projects below. See https://playwright.dev/docs/api/class-testoptions. */
   use: {
