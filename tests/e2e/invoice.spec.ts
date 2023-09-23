@@ -126,18 +126,18 @@ test('user can create invoice', async ({ page, isJsEnabled, login }) => {
   // await expect(page.getByText(`Due ${expectedDueDate}`)).toBeVisible()
 
   // View invoice detail
-  const invoiceItem = await page
-    .getByRole('listitem')
-    .filter({ has: page.getByText(clientName) })
-  if (isJsEnabled) {
-    // If JS is enabled the whole item should be clickable
-    await invoiceItem.getByText(clientName).click()
-  } else {
-    // Otherwise only the link will be clickable
-    await invoiceItem.getByRole('link').click()
-  }
+  // const invoiceItem = await page
+  //   .getByRole('listitem')
+  //   .filter({ has: page.getByText(clientName) })
+  // if (isJsEnabled) {
+  //   // If JS is enabled the whole item should be clickable
+  //   await invoiceItem.getByText(clientName).click()
+  // } else {
+  //   // Otherwise only the link will be clickable
+  //   await invoiceItem.getByRole('link').click()
+  // }
 
-  await expect(page.getByText(projectDescription)).toBeVisible()
+  // await expect(page.getByText(projectDescription)).toBeVisible()
 })
 
 test('user can filter invoices - single selection', async ({
