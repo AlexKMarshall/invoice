@@ -84,7 +84,7 @@ export default function InvoiceDetail() {
   const hasPermittedActions = Object.values(permittedActions).includes(true)
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-4xl flex-col px-6 py-8">
+    <main className="mx-auto grid min-h-screen max-w-4xl grid-cols-[1.5rem_1fr_1.5rem] pt-8 [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
       <button
         onClick={() => navigate(-1)}
         className={cn(
@@ -241,7 +241,7 @@ export default function InvoiceDetail() {
         </div>
       </div>
       {hasPermittedActions && (
-        <div className="flex justify-end gap-2 bg-card p-6 text-card-foreground">
+        <div className="col-span-full col-start-1 flex justify-end gap-2 bg-card p-6 text-card-foreground">
           {permittedActions.delete && (
             <ClientOnly
               fallback={
