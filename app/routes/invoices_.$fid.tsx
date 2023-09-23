@@ -1,3 +1,4 @@
+import type { Invoice } from '@prisma/client'
 import { type DataFunctionArgs, json, redirect } from '@remix-run/node'
 import { Form, Link, useLoaderData, useNavigate } from '@remix-run/react'
 import { ChevronLeft } from 'lucide-react'
@@ -30,6 +31,11 @@ import { InvoiceModel } from '~/schemas'
 
 const paramsSchema = InvoiceModel.pick({ fid: true })
 
+type PermittedActions = {
+  markAsPaid: boolean
+  delete: boolean
+}
+
 export async function loader({ params }: DataFunctionArgs) {
   const parsedParams = paramsSchema.safeParse(params)
 
@@ -48,7 +54,7 @@ export async function loader({ params }: DataFunctionArgs) {
   const permittedActions = {
     markAsPaid: invoice.status === 'pending',
     delete: ['pending', 'draft'].includes(invoice.status),
-  }
+  } satisfies PermittedActions
 
   return json({ invoice, permittedActions })
 }
@@ -100,11 +106,14 @@ export default function InvoiceDetail() {
           <span>Go back</span>
         </Text>
       </button>
-      <div className="mb-4 flex items-center justify-between gap-12 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
+      <div className="mb-4 flex items-center justify-between gap-5 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 md:px-8 md:py-5 xl:px-12 xl:py-5">
         <Heading level={2} className="text-muted-foreground text-sm">
           Status
         </Heading>
         <InvoiceStatus status={invoice.status} />
+        <div className="ml:auto hidden flex-1 justify-end gap-2 md:flex">
+          <Actions permittedActions={permittedActions} fid={invoice.fid} />
+        </div>
       </div>
       <div className="mb-14 rounded-lg bg-card p-6 text-card-foreground shadow-md shadow-[hsl(231,38%,45%)]/5 dark:shadow-black/25 md:p-8 xl:p-12">
         <Stack gap={10}>
@@ -241,59 +250,73 @@ export default function InvoiceDetail() {
         </div>
       </div>
       {hasPermittedActions && (
-        <div className="col-span-full col-start-1 flex justify-end gap-2 bg-card p-6 text-card-foreground">
-          {permittedActions.delete && (
-            <ClientOnly
-              fallback={
-                <Button variant="destructive" asChild>
-                  <Link to="delete" preventScrollReset>
-                    Delete
-                  </Link>
-                </Button>
-              }
-            >
-              {() => (
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button variant="destructive">Delete</Button>
-                  </DialogTrigger>
-                  <DialogContent className="dark:[--muted-foreground:--palette-6]">
-                    <DialogHeader>
-                      <DialogTitle>Confirm Deletion</DialogTitle>
-                      <DialogDescription>
-                        Are you sure you want to delete invoice #{invoice.fid}?
-                        This action cannot be undone.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <DialogFooter>
-                      <DialogClose asChild>
-                        <Button variant="secondary">Cancel</Button>
-                      </DialogClose>
-                      <Form method="post">
-                        <Button
-                          type="submit"
-                          variant="destructive"
-                          name="intent"
-                          value="delete"
-                        >
-                          Delete
-                        </Button>
-                      </Form>
-                    </DialogFooter>
-                  </DialogContent>
-                </Dialog>
-              )}
-            </ClientOnly>
-          )}
-          {permittedActions.markAsPaid && (
-            <Form method="post" replace>
-              <Button variant="default" name="intent" value="markAsPaid">
-                Mark as Paid
-              </Button>
-            </Form>
-          )}
+        <div className="col-span-full col-start-1 flex justify-end gap-2 bg-card p-6 text-card-foreground md:hidden">
+          <Actions permittedActions={permittedActions} fid={invoice.fid} />
         </div>
       )}
     </main>
+  )
+}
+
+function Actions({
+  permittedActions,
+  fid,
+}: {
+  permittedActions: PermittedActions
+  fid: Invoice['fid']
+}) {
+  return (
+    <>
+      {permittedActions.delete && (
+        <ClientOnly
+          fallback={
+            <Button variant="destructive" asChild>
+              <Link to="delete" preventScrollReset>
+                Delete
+              </Link>
+            </Button>
+          }
+        >
+          {() => (
+            <Dialog>
+              <DialogTrigger asChild>
+                <Button variant="destructive">Delete</Button>
+              </DialogTrigger>
+              <DialogContent className="dark:[--muted-foreground:--palette-6]">
+                <DialogHeader>
+                  <DialogTitle>Confirm Deletion</DialogTitle>
+                  <DialogDescription>
+                    Are you sure you want to delete invoice #{fid}? This action
+                    cannot be undone.
+                  </DialogDescription>
+                </DialogHeader>
+                <DialogFooter>
+                  <DialogClose asChild>
+                    <Button variant="secondary">Cancel</Button>
+                  </DialogClose>
+                  <Form method="post">
+                    <Button
+                      type="submit"
+                      variant="destructive"
+                      name="intent"
+                      value="delete"
+                    >
+                      Delete
+                    </Button>
+                  </Form>
+                </DialogFooter>
+              </DialogContent>
+            </Dialog>
+          )}
+        </ClientOnly>
+      )}
+      {permittedActions.markAsPaid && (
+        <Form method="post" replace>
+          <Button variant="default" name="intent" value="markAsPaid">
+            Mark as Paid
+          </Button>
+        </Form>
+      )}
+    </>
   )
 }
