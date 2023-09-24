@@ -9,7 +9,13 @@ import {
 import { parse, refine } from '@conform-to/zod'
 import type { ActionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
-import { Form, useActionData, useLoaderData } from '@remix-run/react'
+import {
+  Form,
+  Link,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from '@remix-run/react'
 import { TrashIcon } from 'lucide-react'
 import { useId, useRef } from 'react'
 import { ClientOnly } from 'remix-utils'
@@ -128,6 +134,7 @@ export default function InvoicesNew() {
     },
   })
   const items = useFieldList(form.ref, fields.items)
+  const navigate = useNavigate()
 
   return (
     <main className="mx-auto grid max-w-4xl grid-cols-[1.5rem_1fr_1.5rem] bg-card pt-8 text-card-foreground [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
@@ -352,7 +359,20 @@ export default function InvoicesNew() {
           + Add New Item
         </Button>
       </Form>
-      <div className="before:from-palette-3/10 sticky bottom-0 col-span-full flex justify-end gap-8 bg-card p-6 before:absolute before:inset-0 before:-translate-y-full before:bg-gradient-to-t before:to-transparent dark:before:from-black/20">
+      <div className="before:from-palette-3/10 sticky bottom-0 col-span-full flex justify-end gap-2 bg-card p-6 before:absolute before:inset-0 before:-translate-y-full before:bg-gradient-to-t before:to-transparent dark:before:from-black/20">
+        <ClientOnly
+          fallback={
+            <Button variant="secondary" asChild>
+              <Link to="..">Cancel</Link>
+            </Button>
+          }
+        >
+          {() => (
+            <Button variant="secondary" onClick={() => navigate(-1)}>
+              Cancel
+            </Button>
+          )}
+        </ClientOnly>
         <Button form={formId} type="submit">
           Save &amp; Send
         </Button>
