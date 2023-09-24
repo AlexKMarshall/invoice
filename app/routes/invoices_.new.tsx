@@ -115,9 +115,9 @@ export async function action({ request }: ActionArgs) {
 export default function InvoicesNew() {
   const { paymentTerms } = useLoaderData<typeof loader>()
   const lastSubmission = useActionData<typeof action>()
-  const id = useId()
+  const formId = useId()
   const [form, fields] = useForm({
-    id,
+    id: formId,
     lastSubmission,
     shouldValidate: 'onBlur',
     onValidate({ formData }) {
@@ -130,7 +130,7 @@ export default function InvoicesNew() {
   const items = useFieldList(form.ref, fields.items)
 
   return (
-    <main className="grid grid-cols-[1.5rem_1fr_1.5rem] bg-card pt-8 text-card-foreground [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
+    <main className="mx-auto grid max-w-4xl grid-cols-[1.5rem_1fr_1.5rem] bg-card pt-8 text-card-foreground [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
       <Form method="post" {...form.props}>
         <Heading level={1} className="mb-8 font-bold text-2xl ">
           New Invoice
@@ -353,7 +353,9 @@ export default function InvoicesNew() {
         </Button>
       </Form>
       <div className="before:from-palette-3/10 sticky bottom-0 col-span-full flex justify-end gap-8 bg-card p-6 before:absolute before:inset-0 before:-translate-y-full before:bg-gradient-to-t before:to-transparent dark:before:from-black/20">
-        <Button type="submit">Save &amp; Send</Button>
+        <Button form={formId} type="submit">
+          Save &amp; Send
+        </Button>
       </div>
     </main>
   )
