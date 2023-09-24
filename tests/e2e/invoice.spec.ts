@@ -12,12 +12,7 @@ function getLatestInvoiceItem(page: Page) {
     .last()
 }
 
-test('user can create invoice', async ({
-  page,
-  isJsEnabled,
-  login,
-  browserName,
-}) => {
+test('create invoice', async ({ page, isJsDisabled, login, browserName }) => {
   test.skip(browserName === 'firefox', "Don't know why this is failing now")
   await login()
 
@@ -80,7 +75,7 @@ test('user can create invoice', async ({
     .fill(format(invoiceDate, 'y-MM-dd'))
   // TODO: extract to an abstraction
   // eslint-disable-next-line playwright/no-conditional-in-test
-  if (isJsEnabled) {
+  if (isJsDisabled) {
     await page
       .getByLabel(/payment terms/i)
       .selectOption({ label: 'Net 30 Days' })
@@ -135,7 +130,7 @@ test('user can create invoice', async ({
   // const invoiceItem = await page
   //   .getByRole('listitem')
   //   .filter({ has: page.getByText(clientName) })
-  // if (isJsEnabled) {
+  // if (isJsDisabled) {
   //   // If JS is enabled the whole item should be clickable
   //   await invoiceItem.getByText(clientName).click()
   // } else {
@@ -146,11 +141,11 @@ test('user can create invoice', async ({
   // await expect(page.getByText(projectDescription)).toBeVisible()
 })
 
-test('user can filter invoices - single selection', async ({
+test('filter invoices - single selection', async ({
   page,
   login,
   existingInvoices,
-  isJsEnabled,
+  isJsDisabled,
 }) => {
   const user = await login()
   const [draftInvoice, pendingInvoice, paidInvoice] = await existingInvoices(
@@ -170,7 +165,7 @@ test('user can filter invoices - single selection', async ({
   // Filter only draft invoices
   // TODO: create abstraction
   // eslint-disable-next-line playwright/no-conditional-in-test
-  if (isJsEnabled) {
+  if (isJsDisabled) {
     // Is there a better accessible role for a disclosure summary?
     await page.getByText(/filter/i).click()
     await page.getByRole('checkbox', { name: /draft/i }).check()
@@ -185,11 +180,11 @@ test('user can filter invoices - single selection', async ({
   await expect(page.getByText(paidInvoice.clientName)).toBeHidden()
 })
 
-test('user can filter invoices - multiple selection', async ({
+test('filter invoices - multiple selection', async ({
   page,
   login,
   existingInvoices,
-  isJsEnabled,
+  isJsDisabled,
 }) => {
   const user = await login()
   const [draftInvoice, pendingInvoice, paidInvoice] = await existingInvoices(
@@ -209,7 +204,7 @@ test('user can filter invoices - multiple selection', async ({
   // Filter only draft invoices
   // TODO: create abstraction
   // eslint-disable-next-line playwright/no-conditional-in-test
-  if (isJsEnabled) {
+  if (isJsDisabled) {
     // Is there a better accessible role for a disclosure summary?
     await page.getByText(/filter/i).click()
     await page.getByRole('checkbox', { name: /draft/i }).check()
@@ -250,4 +245,48 @@ test('mark invoice as paid', async ({ page, login, existingInvoices }) => {
 
   await page.goto(`/invoices/${paidInvoice.fid}`)
   await expect(page.getByRole('button', { name: /mark as paid/i })).toBeHidden()
+})
+
+test('delete', async ({ page, login, existingInvoices, isJsDisabled }) => {
+  const user = await login()
+  const [draftInvoice, pendingInvoice, paidInvoice] = await existingInvoices(
+    makeInvoice({ userId: user.id, status: 'draft' }),
+    makeInvoice({ userId: user.id, status: 'pending' }),
+    makeInvoice({ userId: user.id, status: 'paid' }),
+  )
+
+  await page.goto(`/invoices/`)
+  await page.getByRole('link', { name: draftInvoice.fid }).click()
+  await page
+    .getByRole('link', { name: /delete/i })
+    .locator('visible=true')
+    .or(page.getByRole('button', { name: /delete/i }).locator('visible=true'))
+    .click()
+  await expect(
+    page.getByRole('heading', { name: /confirm deletion/i }),
+  ).toBeVisible()
+  await page.getByRole('button', { name: /delete/i }).click()
+
+  await expect(page.getByText(draftInvoice.clientName)).toBeHidden()
+
+  await page.getByRole('link', { name: pendingInvoice.fid }).click()
+  await expect(page.getByText(pendingInvoice.projectDescription)).toBeVisible()
+  await page
+    .getByRole('link', { name: /delete/i })
+    .locator('visible=true')
+    .or(page.getByRole('button', { name: /delete/i }).locator('visible=true'))
+    .click()
+  await expect(
+    page.getByRole('heading', { name: /confirm deletion/i }),
+  ).toBeVisible()
+  await page.getByRole('button', { name: /delete/i }).click()
+  await expect(page.getByText(pendingInvoice.clientName)).toBeHidden()
+
+  // Paid invoices can't be deleted
+  await page.getByRole('link', { name: paidInvoice.fid }).click()
+  await expect(
+    page
+      .getByRole('link', { name: /delete/i })
+      .and(page.getByRole('button', { name: /delete/i })),
+  ).toBeHidden()
 })

@@ -8,7 +8,7 @@ import { sessionStorage } from '~/utils/session.server'
 import { insertNewInvoice, insertNewUser } from './db-utils'
 
 export type TestOptions = {
-  isJsEnabled: boolean
+  isJsDisabled: boolean
 }
 
 const test = testBase.extend<
@@ -19,7 +19,7 @@ const test = testBase.extend<
     ) => Promise<Array<Awaited<ReturnType<typeof insertNewInvoice>>>>
   } & TestOptions
 >({
-  isJsEnabled: [false, { option: true }],
+  isJsDisabled: [false, { option: true }],
   login: async ({ page }, use) => {
     let userId: string | undefined = undefined
     await use(async (givenUser) => {

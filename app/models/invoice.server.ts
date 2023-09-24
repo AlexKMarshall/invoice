@@ -268,3 +268,29 @@ export async function markAsPaid({
     },
   })
 }
+
+export class DeleteNotAllowedError extends Error {
+  constructor() {
+    super('Invoice cannot be deleted')
+  }
+}
+
+export async function deleteInvoice({
+  where,
+}: {
+  where: { id: Invoice['id'] } | { fid: Invoice['fid'] }
+}) {
+  const invoice = InvoiceModel.pick({
+    status: true,
+  }).parse(await prisma.invoice.findUnique({ where }))
+
+  if (!invoice) {
+    throw new InvoiceNotFoundError()
+  }
+
+  if (invoice.status === 'paid') {
+    throw new DeleteNotAllowedError()
+  }
+
+  return prisma.invoice.delete({ where })
+}
