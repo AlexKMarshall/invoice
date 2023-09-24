@@ -10,6 +10,7 @@ import { parse, refine } from '@conform-to/zod'
 import type { ActionArgs } from '@remix-run/node'
 import { json, redirect } from '@remix-run/node'
 import { Form, useActionData, useLoaderData } from '@remix-run/react'
+import { TrashIcon } from 'lucide-react'
 import { useId, useRef } from 'react'
 import { ClientOnly } from 'remix-utils'
 import { z } from 'zod'
@@ -129,7 +130,7 @@ export default function InvoicesNew() {
   const items = useFieldList(form.ref, fields.items)
 
   return (
-    <main className="px-6 py-8">
+    <main className="bg-card px-6 py-8 text-card-foreground">
       <Form method="post" {...form.props}>
         <Heading level={1} className="mb-8 font-bold text-2xl ">
           New Invoice
@@ -268,7 +269,7 @@ export default function InvoicesNew() {
             </Stack>
           </div>
         </fieldset>
-        <div className="grid gap-6">
+        <div className="mb-16 grid gap-6">
           <Stack gap={3} className="col-span-full">
             <div className="flex justify-between gap-8">
               <Label htmlFor={fields.invoiceDate.id}>Invoice Date</Label>
@@ -327,18 +328,29 @@ export default function InvoicesNew() {
             <Input {...conform.input(fields.projectDescription)} />
           </Stack>
         </div>
-        <ul>
-          {items.map((item, index) => (
-            <li key={item.id}>
-              <InvoiceItemFieldset
-                config={item}
-                name={fields.items.name}
-                index={index}
-              />
-            </li>
-          ))}
-        </ul>
-        <Button {...list.insert(fields.items.name)}>Add Item</Button>
+        <Heading level={2} className="mb-8 font-bold text-lg">
+          Item List
+        </Heading>
+        <Stack gap={12} asChild className="mb-12">
+          <ul>
+            {items.map((item, index) => (
+              <li key={item.id}>
+                <InvoiceItemFieldset
+                  config={item}
+                  name={fields.items.name}
+                  index={index}
+                />
+              </li>
+            ))}
+          </ul>
+        </Stack>
+        <Button
+          variant="secondary"
+          {...list.insert(fields.items.name)}
+          className="mb-24 block w-full"
+        >
+          + Add New Item
+        </Button>
         <Button type="submit">Save &amp; Send</Button>
       </Form>
     </main>
@@ -358,23 +370,42 @@ function InvoiceItemFieldset({
   const { name, quantity, price } = useFieldset(ref, config)
 
   return (
-    <fieldset ref={ref}>
-      <div>
-        <Label htmlFor={name.id}>Item Name</Label>
+    <fieldset
+      ref={ref}
+      className="grid grid-cols-[2fr_3fr_3fr_1fr] gap-x-4 gap-y-6"
+    >
+      <Stack gap={3} className="col-span-full">
+        <div className="flex justify-between gap-8">
+          <Label htmlFor={name.id}>Item Name</Label>
+          <ErrorMessage id={name.errorId}>{name.errors}</ErrorMessage>
+        </div>
         <Input {...conform.input(name)} />
-        <p id={name.errorId}>{name.errors}</p>
-      </div>
-      <div>
-        <Label htmlFor={quantity.id}>Qty</Label>
+      </Stack>
+      <Stack gap={3}>
+        <div className="flex flex-wrap justify-between gap-8">
+          <Label htmlFor={quantity.id}>Qty</Label>
+          <ErrorMessage id={quantity.errorId}>{quantity.errors}</ErrorMessage>
+        </div>
         <Input {...conform.input(quantity)} />
-        <p id={quantity.errorId}>{quantity.errors}</p>
-      </div>
-      <div>
-        <Label htmlFor={price.id}>Price</Label>
+      </Stack>
+      <Stack gap={3}>
+        <div className="flex flex-wrap justify-between gap-8">
+          <Label htmlFor={price.id}>Price</Label>
+          <ErrorMessage id={price.errorId}>{price.errors}</ErrorMessage>
+        </div>
         <Input {...conform.input(price)} />
-        <p id={price.errorId}>{price.errors}</p>
-      </div>
-      <Button {...list.remove(fieldsetName, { index })}>remove</Button>
+      </Stack>
+      <Stack gap={3} className="col-start-4 justify-self-end">
+        {/* Spacer so button alignment works.  */}
+        <Text className="invisible text-sm">X</Text>
+        <button
+          {...list.remove(fieldsetName, { index })}
+          aria-label="remove"
+          className="my-3"
+        >
+          <TrashIcon className="h-4 w-4 fill-muted-foreground text-muted-foreground" />
+        </button>
+      </Stack>
     </fieldset>
   )
 }
