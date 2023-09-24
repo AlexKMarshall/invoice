@@ -16,6 +16,7 @@ import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
 import { DatePicker } from '~/components/ui/datePicker'
+import { ErrorMessage } from '~/components/ui/errorMessage'
 import { Heading } from '~/components/ui/heading'
 import { Input } from '~/components/ui/input'
 import { Label } from '~/components/ui/label'
@@ -26,6 +27,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from '~/components/ui/select'
+import { Stack } from '~/components/ui/stack'
+import { Text } from '~/components/ui/text'
 import { prisma } from '~/db.server'
 import { createInvoice, getPaymentTerms } from '~/models/invoice.server'
 import { requireUserId } from '~/utils/auth.server'
@@ -128,146 +131,201 @@ export default function InvoicesNew() {
   return (
     <main className="px-6 py-8">
       <Form method="post" {...form.props}>
-        <Heading level={1}>New Invoice</Heading>
-        <fieldset>
-          <legend>Bill From</legend>
-          <div>
-            <Label htmlFor={fields.billFromStreet.id}>Street Address</Label>
-            <Input
-              {...conform.input(fields.billFromStreet)}
-              autoComplete="street-address"
-            />
-            <p id={fields.billFromStreet.errorId}>
-              {fields.billFromStreet.errors}
-            </p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billFromCity.id}>City</Label>
-            <Input
-              {...conform.input(fields.billFromCity)}
-              autoComplete="address-level1"
-            />
-            <p id={fields.billFromCity.errorId}>{fields.billFromCity.errors}</p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billFromPostCode.id}>Post Code</Label>
-            <Input
-              {...conform.input(fields.billFromPostCode)}
-              autoComplete="postal-code"
-            />
-            <p id={fields.billFromPostCode.errorId}>
-              {fields.billFromPostCode.errors}
-            </p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billFromCountry.id}>Country</Label>
-            <Input
-              {...conform.input(fields.billFromCountry)}
-              autoComplete="country-name"
-            />
-            <p id={fields.billFromCountry.errorId}>
-              {fields.billFromCountry.errors}
-            </p>
-          </div>
-        </fieldset>
-        <fieldset>
-          <legend>Bill To</legend>
-          <div>
-            <Label htmlFor={fields.clientName.id}>Client's Name</Label>
-            <Input {...conform.input(fields.clientName)} autoComplete="name" />
-            <p id={fields.clientName.errorId}>{fields.clientName.errors}</p>
-          </div>
-          <div>
-            <Label htmlFor={fields.clientEmail.id}>Client's Email</Label>
-            <Input
-              {...conform.input(fields.clientEmail)}
-              autoComplete="email"
-            />
-            <p id={fields.clientEmail.errorId}>{fields.clientEmail.errors}</p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billToStreet.id}>Street Address</Label>
-            <Input
-              {...conform.input(fields.billToStreet)}
-              autoComplete="street-address"
-            />
-            <p id={fields.billToStreet.errorId}>{fields.billToStreet.errors}</p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billToCity.id}>City</Label>
-            <Input
-              {...conform.input(fields.billToCity)}
-              autoComplete="address-level1"
-            />
-            <p id={fields.billToCity.errorId}>{fields.billToCity.errors}</p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billToPostCode.id}>Post Code</Label>
-            <Input
-              {...conform.input(fields.billToPostCode)}
-              autoComplete="postal-code"
-            />
-            <p id={fields.billToPostCode.errorId}>
-              {fields.billToPostCode.errors}
-            </p>
-          </div>
-          <div>
-            <Label htmlFor={fields.billToCountry.id}>Country</Label>
-            <Input
-              {...conform.input(fields.billToCountry)}
-              autoComplete="country-name"
-            />
-            <p id={fields.billToCountry.errorId}>
-              {fields.billToCountry.errors}
-            </p>
+        <Heading level={1} className="mb-8 font-bold text-2xl ">
+          New Invoice
+        </Heading>
+        <fieldset className="mb-10">
+          <Text asChild className="mb-6 font-bold text-primary">
+            <legend>Bill From</legend>
+          </Text>
+          <div className="grid grid-cols-2 gap-6">
+            <Stack gap={3} className="col-span-full">
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billFromStreet.id}>Street Address</Label>
+                <ErrorMessage id={fields.billFromStreet.errorId}>
+                  {fields.billFromStreet.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billFromStreet)}
+                autoComplete="street-address"
+              />
+            </Stack>
+            <Stack gap={3}>
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billFromCity.id}>City</Label>
+                <ErrorMessage id={fields.billFromCity.errorId}>
+                  {fields.billFromCity.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billFromCity)}
+                autoComplete="address-level1"
+              />
+            </Stack>
+            <Stack gap={3}>
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billFromPostCode.id}>Post Code</Label>
+                <ErrorMessage id={fields.billFromPostCode.errorId}>
+                  {fields.billFromPostCode.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billFromPostCode)}
+                autoComplete="postal-code"
+              />
+            </Stack>
+            <Stack gap={3} className="col-span-full">
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billFromCountry.id}>Country</Label>
+                <ErrorMessage id={fields.billFromCountry.errorId}>
+                  {fields.billFromCountry.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billFromCountry)}
+                autoComplete="country-name"
+              />
+            </Stack>
           </div>
         </fieldset>
-        <div>
-          <Label htmlFor={fields.invoiceDate.id}>Invoice Date</Label>
-          <DatePicker {...conform.input(fields.invoiceDate)} />
-          <p id={fields.invoiceDate.errorId}>{fields.invoiceDate.errors}</p>
-        </div>
-        <div>
-          <Label htmlFor={fields.paymentTermId.id}>Payment Terms</Label>
-          <ClientOnly
-            fallback={
-              <select {...conform.select(fields.paymentTermId)}>
-                {paymentTerms.map((term) => (
-                  <option key={term.id} value={term.id}>
-                    {term.name}
-                  </option>
-                ))}
-              </select>
-            }
-          >
-            {() => (
-              <Select
-                {...conform.select(fields.paymentTermId)}
-                defaultValue={String(fields.paymentTermId.defaultValue)}
-              >
-                <SelectTrigger id={fields.paymentTermId.id}>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
+        <fieldset className="mb-10">
+          <Text asChild className="mb-6 font-bold text-primary">
+            <legend>Bill To</legend>
+          </Text>
+          <div className="grid grid-cols-2 gap-6">
+            <Stack gap={3} className="col-span-full">
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.clientName.id}>Client's Name</Label>
+                <ErrorMessage id={fields.clientName.errorId}>
+                  {fields.clientName.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.clientName)}
+                autoComplete="name"
+              />
+            </Stack>
+            <Stack gap={3} className="col-span-full">
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.clientEmail.id}>Client's Email</Label>
+                <ErrorMessage id={fields.clientEmail.errorId}>
+                  {fields.clientEmail.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.clientEmail)}
+                autoComplete="email"
+              />
+            </Stack>
+            <Stack gap={3} className="col-span-full">
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billToStreet.id}>Street Address</Label>
+                <ErrorMessage id={fields.billToStreet.errorId}>
+                  {fields.billToStreet.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billToStreet)}
+                autoComplete="street-address"
+              />
+            </Stack>
+            <Stack gap={3}>
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billToCity.id}>City</Label>
+                <ErrorMessage id={fields.billToCity.errorId}>
+                  {fields.billToCity.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billToCity)}
+                autoComplete="address-level1"
+              />
+            </Stack>
+            <Stack gap={3}>
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billToPostCode.id}>Post Code</Label>
+                <ErrorMessage id={fields.billToPostCode.errorId}>
+                  {fields.billToPostCode.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billToPostCode)}
+                autoComplete="postal-code"
+              />
+            </Stack>
+            <Stack gap={3} className="col-span-full">
+              <div className="flex justify-between gap-8">
+                <Label htmlFor={fields.billToCountry.id}>Country</Label>
+                <ErrorMessage id={fields.billToCountry.errorId}>
+                  {fields.billToCountry.errors}
+                </ErrorMessage>
+              </div>
+              <Input
+                {...conform.input(fields.billToCountry)}
+                autoComplete="country-name"
+              />
+            </Stack>
+          </div>
+        </fieldset>
+        <div className="grid gap-6">
+          <Stack gap={3} className="col-span-full">
+            <div className="flex justify-between gap-8">
+              <Label htmlFor={fields.invoiceDate.id}>Invoice Date</Label>
+              <ErrorMessage id={fields.invoiceDate.errorId}>
+                {fields.invoiceDate.errors}
+              </ErrorMessage>
+            </div>
+            <DatePicker {...conform.input(fields.invoiceDate)} />
+          </Stack>
+          <Stack gap={3} className="col-span-full">
+            <div className="flex justify-between gap-8">
+              <Label htmlFor={fields.paymentTermId.id}>Payment Terms</Label>
+              <ErrorMessage id={fields.paymentTermId.errorId}>
+                {fields.paymentTermId.errors}
+              </ErrorMessage>
+            </div>
+            <ClientOnly
+              fallback={
+                <select {...conform.select(fields.paymentTermId)}>
                   {paymentTerms.map((term) => (
-                    <SelectItem key={term.id} value={term.id}>
+                    <option key={term.id} value={term.id}>
                       {term.name}
-                    </SelectItem>
+                    </option>
                   ))}
-                </SelectContent>
-              </Select>
-            )}
-          </ClientOnly>
-          <p id={fields.paymentTermId.errorId}>{fields.paymentTermId.errors}</p>
-        </div>
-        <div>
-          <Label htmlFor={fields.projectDescription.id}>
-            Project Description
-          </Label>
-          <Input {...conform.input(fields.projectDescription)} />
-          <p id={fields.projectDescription.errorId}>
-            {fields.projectDescription.errors}
-          </p>
+                </select>
+              }
+            >
+              {() => (
+                <Select
+                  {...conform.select(fields.paymentTermId)}
+                  defaultValue={String(fields.paymentTermId.defaultValue)}
+                >
+                  <SelectTrigger id={fields.paymentTermId.id}>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {paymentTerms.map((term) => (
+                      <SelectItem key={term.id} value={term.id}>
+                        {term.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            </ClientOnly>
+          </Stack>
+          <Stack gap={3} className="col-span-full">
+            <div className="flex justify-between gap-8">
+              <Label htmlFor={fields.projectDescription.id}>
+                Project Description
+              </Label>
+              <ErrorMessage id={fields.projectDescription.errorId}>
+                {fields.projectDescription.errors}
+              </ErrorMessage>
+            </div>
+            <Input {...conform.input(fields.projectDescription)} />
+          </Stack>
         </div>
         <ul>
           {items.map((item, index) => (
