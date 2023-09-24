@@ -16,9 +16,9 @@ import {
   useLoaderData,
   useNavigate,
 } from '@remix-run/react'
-import { TrashIcon } from 'lucide-react'
+import { ChevronLeft, TrashIcon } from 'lucide-react'
 import { useId, useRef } from 'react'
-import { ClientOnly } from 'remix-utils'
+import { ClientOnly, useHydrated } from 'remix-utils'
 import { z } from 'zod'
 
 import { Button } from '~/components/ui/button'
@@ -37,6 +37,7 @@ import {
 import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
 import { prisma } from '~/db.server'
+import { cn } from '~/lib/utils'
 import { createInvoice, getPaymentTerms } from '~/models/invoice.server'
 import { requireUserId } from '~/utils/auth.server'
 
@@ -135,9 +136,25 @@ export default function InvoicesNew() {
   })
   const items = useFieldList(form.ref, fields.items)
   const navigate = useNavigate()
+  const isHydrated = useHydrated()
 
   return (
     <main className="mx-auto grid max-w-4xl grid-cols-[1.5rem_1fr_1.5rem] bg-card pt-8 text-card-foreground [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
+      <button
+        onClick={() => navigate(-1)}
+        className={cn(
+          'mb-8 flex max-w-fit items-center gap-6 transition-opacity',
+          {
+            'invisible opacity-0': !isHydrated,
+            'visible opacity-100': isHydrated,
+          },
+        )}
+      >
+        <ChevronLeft className="h-5 w-5 text-primary" />
+        <Text asChild className="font-bold">
+          <span>Go back</span>
+        </Text>
+      </button>
       <Form method="post" {...form.props}>
         <Heading level={1} className="mb-8 font-bold text-2xl md:mb-12">
           New Invoice
