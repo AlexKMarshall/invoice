@@ -139,14 +139,14 @@ export default function InvoicesNew() {
   return (
     <main className="mx-auto grid max-w-4xl grid-cols-[1.5rem_1fr_1.5rem] bg-card pt-8 text-card-foreground [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
       <Form method="post" {...form.props}>
-        <Heading level={1} className="mb-8 font-bold text-2xl ">
+        <Heading level={1} className="mb-8 font-bold text-2xl md:mb-12">
           New Invoice
         </Heading>
         <fieldset className="mb-10">
           <Text asChild className="mb-6 font-bold text-primary">
             <legend>Bill From</legend>
           </Text>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
             <Stack gap={3} className="col-span-full">
               <div className="flex justify-between gap-8">
                 <Label htmlFor={fields.billFromStreet.id}>Street Address</Label>
@@ -183,7 +183,7 @@ export default function InvoicesNew() {
                 autoComplete="postal-code"
               />
             </Stack>
-            <Stack gap={3} className="col-span-full">
+            <Stack gap={3} className="col-span-full md:col-span-1">
               <div className="flex justify-between gap-8">
                 <Label htmlFor={fields.billFromCountry.id}>Country</Label>
                 <ErrorMessage id={fields.billFromCountry.errorId}>
@@ -201,7 +201,7 @@ export default function InvoicesNew() {
           <Text asChild className="mb-6 font-bold text-primary">
             <legend>Bill To</legend>
           </Text>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-2 gap-6 md:grid-cols-3">
             <Stack gap={3} className="col-span-full">
               <div className="flex justify-between gap-8">
                 <Label htmlFor={fields.clientName.id}>Client's Name</Label>
@@ -262,7 +262,7 @@ export default function InvoicesNew() {
                 autoComplete="postal-code"
               />
             </Stack>
-            <Stack gap={3} className="col-span-full">
+            <Stack gap={3} className="col-span-1">
               <div className="flex justify-between gap-8">
                 <Label htmlFor={fields.billToCountry.id}>Country</Label>
                 <ErrorMessage id={fields.billToCountry.errorId}>
@@ -276,8 +276,8 @@ export default function InvoicesNew() {
             </Stack>
           </div>
         </fieldset>
-        <div className="mb-16 grid gap-6">
-          <Stack gap={3} className="col-span-full">
+        <div className="mb-16 grid gap-6 md:grid-cols-2">
+          <Stack gap={3}>
             <div className="flex justify-between gap-8">
               <Label htmlFor={fields.invoiceDate.id}>Invoice Date</Label>
               <ErrorMessage id={fields.invoiceDate.errorId}>
@@ -286,7 +286,7 @@ export default function InvoicesNew() {
             </div>
             <DatePicker {...conform.input(fields.invoiceDate)} />
           </Stack>
-          <Stack gap={3} className="col-span-full">
+          <Stack gap={3}>
             <div className="flex justify-between gap-8">
               <Label htmlFor={fields.paymentTermId.id}>Payment Terms</Label>
               <ErrorMessage id={fields.paymentTermId.errorId}>
@@ -369,7 +369,7 @@ export default function InvoicesNew() {
         >
           {() => (
             <Button variant="secondary" onClick={() => navigate(-1)}>
-              Cancel
+              Discard
             </Button>
           )}
         </ClientOnly>
