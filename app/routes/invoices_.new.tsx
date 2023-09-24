@@ -130,7 +130,7 @@ export default function InvoicesNew() {
   const items = useFieldList(form.ref, fields.items)
 
   return (
-    <main className="bg-card px-6 py-8 text-card-foreground">
+    <main className="grid grid-cols-[1.5rem_1fr_1.5rem] bg-card pt-8 text-card-foreground [:where(&>*)]:col-span-1 [:where(&>*)]:col-start-2">
       <Form method="post" {...form.props}>
         <Heading level={1} className="mb-8 font-bold text-2xl ">
           New Invoice
@@ -351,8 +351,10 @@ export default function InvoicesNew() {
         >
           + Add New Item
         </Button>
-        <Button type="submit">Save &amp; Send</Button>
       </Form>
+      <div className="before:from-palette-3/10 sticky bottom-0 col-span-full flex justify-end gap-8 bg-card p-6 before:absolute before:inset-0 before:-translate-y-full before:bg-gradient-to-t before:to-transparent dark:before:from-black/20">
+        <Button type="submit">Save &amp; Send</Button>
+      </div>
     </main>
   )
 }
