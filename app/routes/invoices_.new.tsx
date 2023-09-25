@@ -128,7 +128,9 @@ export default function InvoicesNew() {
     lastSubmission,
     shouldValidate: 'onBlur',
     onValidate({ formData }) {
-      return parse(formData, { schema: createInvoiceFormSchema() })
+      const parsed = parse(formData, { schema: createInvoiceFormSchema() })
+      console.log(parsed)
+      return parsed
     },
     defaultValue: {
       items: [{ name: '', quantity: '', price: '' }],
@@ -355,7 +357,17 @@ export default function InvoicesNew() {
         <Heading level={2} className="mb-8 font-bold text-lg">
           Item List
         </Heading>
-        <Stack gap={12} asChild className="mb-12">
+        <div
+          className="mb-5 hidden grid-cols-[4fr_2fr_3fr_3fr_1fr] gap-4 md:grid"
+          aria-hidden
+        >
+          <Text className="text-muted-foreground text-sm">Item Name</Text>
+          <Text className="text-muted-foreground text-sm">Qty.</Text>
+          <Text className="text-muted-foreground text-sm">Price</Text>
+          <Text className="text-muted-foreground text-sm">Total</Text>
+          <Text />
+        </div>
+        <Stack gap={12} asChild className="mb-12 md:gap-5">
           <ul>
             {items.map((item, index) => (
               <li key={item.id}>
@@ -376,7 +388,7 @@ export default function InvoicesNew() {
           + Add New Item
         </Button>
       </Form>
-      <div className="before:from-palette-3/10 sticky bottom-0 col-span-full flex justify-end gap-2 bg-card p-6 before:absolute before:inset-0 before:-translate-y-full before:bg-gradient-to-t before:to-transparent dark:before:from-black/20">
+      <div className="shadow-palette-3 sticky bottom-0 col-span-full flex justify-end gap-2 bg-card p-6 shadow-2xl">
         <ClientOnly
           fallback={
             <Button variant="secondary" asChild>
@@ -408,37 +420,46 @@ function InvoiceItemFieldset({
   index: number
 }) {
   const ref = useRef<HTMLFieldSetElement>(null)
-  const { name, quantity, price } = useFieldset(ref, config)
+  const { name, quantity, price } = useFieldset<InvoiceItemFieldset>(
+    ref,
+    config,
+  )
 
   return (
     <fieldset
       ref={ref}
-      className="grid grid-cols-[2fr_3fr_3fr_1fr] gap-x-4 gap-y-6"
+      className="grid grid-cols-[2fr_3fr_3fr_1fr] gap-x-4 gap-y-6 md:grid-cols-[4fr_2fr_3fr_3fr_1fr]"
     >
-      <Stack gap={3} className="col-span-full">
+      <Stack gap={3} className="col-span-full md:col-span-1">
         <div className="flex justify-between gap-8">
-          <Label htmlFor={name.id}>Item Name</Label>
+          <Label htmlFor={name.id} className="md:sr-only">
+            Item Name
+          </Label>
           <ErrorMessage id={name.errorId}>{name.errors}</ErrorMessage>
         </div>
         <Input {...conform.input(name)} />
       </Stack>
       <Stack gap={3}>
         <div className="flex flex-wrap justify-between gap-8">
-          <Label htmlFor={quantity.id}>Qty</Label>
+          <Label htmlFor={quantity.id} className="md:sr-only">
+            Qty
+          </Label>
           <ErrorMessage id={quantity.errorId}>{quantity.errors}</ErrorMessage>
         </div>
         <Input {...conform.input(quantity)} />
       </Stack>
       <Stack gap={3}>
         <div className="flex flex-wrap justify-between gap-8">
-          <Label htmlFor={price.id}>Price</Label>
+          <Label htmlFor={price.id} className="md:sr-only">
+            Price
+          </Label>
           <ErrorMessage id={price.errorId}>{price.errors}</ErrorMessage>
         </div>
         <Input {...conform.input(price)} />
       </Stack>
       <Stack gap={3} className="col-start-4 justify-self-end">
         {/* Spacer so button alignment works.  */}
-        <Text className="invisible text-sm">X</Text>
+        <Text className="invisible text-sm md:h-0">X</Text>
         <button
           {...list.remove(fieldsetName, { index })}
           aria-label="remove"
