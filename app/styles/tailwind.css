@@ -42,6 +42,7 @@
  
     --radius: 0.5rem;
 
+    --palette-3: 233 31% 17%;
     --palette-4: 233 30% 21%;
     --palette-5: 231 75% 93%;
     --palette-6: 231 20% 61%;
@@ -55,7 +56,7 @@
     --background: 233 30% 11%;
     --foreground: 233 35% 98%;
  
-    --card: 233 31% 17%;
+    --card: var(--palette-3);
     --card-foreground: 210 40% 98%;
  
     --popover: var(--palette-4);

@@ -22,11 +22,7 @@ import { InvoiceStatus } from '~/components/ui/invoiceStatus'
 import { Stack } from '~/components/ui/stack'
 import { Text } from '~/components/ui/text'
 import { cn } from '~/lib/utils'
-import {
-  deleteInvoice,
-  getInvoiceDetail,
-  markAsPaid,
-} from '~/models/invoice.server'
+import { getInvoiceDetail, markAsPaid } from '~/models/invoice.server'
 import { InvoiceModel } from '~/schemas'
 
 const paramsSchema = InvoiceModel.pick({ fid: true })
@@ -68,18 +64,8 @@ export async function action({ params, request }: DataFunctionArgs) {
 
   const { fid } = parsedParams.data
 
-  const formData = await request.formData()
-  const intent = formData.get('intent')
-
-  if (intent === 'markAsPaid') {
-    await markAsPaid({ where: { fid } })
-    return redirect(`/invoices/${fid}`)
-  }
-
-  if (intent === 'delete') {
-    await deleteInvoice({ where: { fid } })
-    return redirect('/invoices')
-  }
+  await markAsPaid({ where: { fid } })
+  return redirect(`/invoices/${fid}`)
 }
 
 export default function InvoiceDetail() {
@@ -294,7 +280,7 @@ function Actions({
                   <DialogClose asChild>
                     <Button variant="secondary">Cancel</Button>
                   </DialogClose>
-                  <Form method="post">
+                  <Form method="post" action="delete">
                     <Button
                       type="submit"
                       variant="destructive"
@@ -312,9 +298,7 @@ function Actions({
       )}
       {permittedActions.markAsPaid && (
         <Form method="post" replace>
-          <Button variant="default" name="intent" value="markAsPaid">
-            Mark as Paid
-          </Button>
+          <Button variant="default">Mark as Paid</Button>
         </Form>
       )}
     </>

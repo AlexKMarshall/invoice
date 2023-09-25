@@ -99,7 +99,7 @@ test('create invoice', async ({ page, isJsDisabled, login, browserName }) => {
     .getByRole('textbox', { name: /price/i })
     .fill(String(price1))
 
-  await page.getByRole('button', { name: /add item/i }).click()
+  await page.getByRole('button', { name: /add new item/i }).click()
 
   // wait for there to be two invoice items
   await expect(

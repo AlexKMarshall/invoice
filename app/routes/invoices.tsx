@@ -2,7 +2,7 @@ import { conform, useForm } from '@conform-to/react'
 import { parse } from '@conform-to/zod'
 import type { LoaderArgs } from '@remix-run/node'
 import { json } from '@remix-run/node'
-import { Form, Link, Outlet, useLoaderData, useSubmit } from '@remix-run/react'
+import { Form, Link, useLoaderData, useSubmit } from '@remix-run/react'
 import { ChevronDownIcon, ChevronRightIcon, PlusIcon } from 'lucide-react'
 import type { FormEvent, PointerEvent } from 'react'
 import { useId, useRef } from 'react'
@@ -232,8 +232,6 @@ export default function Invoices() {
           </Button>
         </div>
       </div>
-
-      <Outlet />
 
       {invoiceListItems.length ? (
         <Stack gap={4} className="@container" asChild>
