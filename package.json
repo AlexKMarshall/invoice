@@ -64,7 +64,7 @@
     "@types/eslint": "8.44.3",
     "@types/node": "18.18.3",
     "@types/react": "18.2.24",
-    "@types/react-dom": "18.2.8",
+    "@types/react-dom": "18.2.9",
     "@types/set-cookie-parser": "2.4.4",
     "@vitejs/plugin-react": "4.1.0",
     "@vitest/coverage-v8": "0.34.6",
