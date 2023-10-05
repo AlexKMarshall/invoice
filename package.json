@@ -71,7 +71,7 @@
     "autoprefixer": "10.4.16",
     "binode": "1.0.5",
     "cookie": "0.5.0",
-    "enforce-unique": "1.1.1",
+    "enforce-unique": "1.2.0",
     "eslint": "8.50.0",
     "eslint-config-prettier": "9.0.0",
     "eslint-plugin-playwright": "0.16.0",
