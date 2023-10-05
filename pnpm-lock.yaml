@@ -149,8 +149,8 @@ devDependencies:
     specifier: 0.5.0
     version: 0.5.0
   enforce-unique:
-    specifier: 1.1.1
-    version: 1.1.1
+    specifier: 1.2.0
+    version: 1.2.0
   eslint:
     specifier: 8.50.0
     version: 8.50.0
@@ -4674,8 +4674,8 @@ packages:
       once: 1.4.0
     dev: true
 
-  /enforce-unique@1.1.1:
-    resolution: {integrity: sha512-j6mNmJ5nueoHY2gqGoPHS3QznhQHPyxRLmGrKTwFd8RdLBm6nLudSTauasLxST9rEsOpJMxUPQh3ltogDPCRHA==}
+  /enforce-unique@1.2.0:
+    resolution: {integrity: sha512-ZBusLJB8QQhKMGNOlwARgov+s38rwPbhcifGlhEHqnGHcA8CCSEgbLujdABtpWwZyYnude4t5fviuEmSuV8Hig==}
     dev: true
 
   /enhanced-resolve@5.15.0:
