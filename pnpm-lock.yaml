@@ -191,8 +191,8 @@ devDependencies:
     specifier: 3.3.3
     version: 3.3.3(ts-node@10.9.1)
   tailwindcss-capsize:
-    specifier: 3.0.4
-    version: 3.0.4(tailwindcss@3.3.3)
+    specifier: 3.0.5
+    version: 3.0.5(tailwindcss@3.3.3)
   tailwindcss-radix:
     specifier: 2.8.0
     version: 2.8.0
@@ -8927,8 +8927,8 @@ packages:
       tailwindcss: 3.3.3(ts-node@10.9.1)
     dev: false
 
-  /tailwindcss-capsize@3.0.4(tailwindcss@3.3.3):
-    resolution: {integrity: sha512-JuJN36DH8f1M0seRD4R+W2+vBI2G/hmmaoFLPvnvGtTI8n3e1YSDI9Ey2WRJiOkod2UcK0R/ut5qOGMy+ScjaA==}
+  /tailwindcss-capsize@3.0.5(tailwindcss@3.3.3):
+    resolution: {integrity: sha512-dgLZorWYjsZBNNzRAXpQEduWUnq9IY9xvpaRGFuCZBIiMbPUgMyxFvNhv3ecm7BmEFj4lNZA43RYev9KKINZCQ==}
     engines: {node: '>=10'}
     peerDependencies:
       tailwindcss: '>= 1.5'
