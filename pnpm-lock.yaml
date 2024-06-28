@@ -105,7 +105,7 @@ devDependencies:
     version: 1.38.1
   '@remix-run/dev':
     specifier: 1.19.3
-    version: 1.19.3(@remix-run/serve@1.19.3)(@types/node@18.18.3)(ts-node@10.9.1)
+    version: 1.19.3(@remix-run/serve@1.19.3)(@types/node@18.18.3)(ts-node@10.9.2)
   '@remix-run/eslint-config':
     specifier: 1.19.3
     version: 1.19.3(eslint@8.50.0)(react@18.2.0)(typescript@5.2.2)
@@ -189,7 +189,7 @@ devDependencies:
     version: 2.6.0
   tailwindcss:
     specifier: 3.3.3
-    version: 3.3.3(ts-node@10.9.1)
+    version: 3.3.3(ts-node@10.9.2)
   tailwindcss-capsize:
     specifier: 3.0.5
     version: 3.0.5(tailwindcss@3.3.3)
@@ -197,8 +197,8 @@ devDependencies:
     specifier: 2.8.0
     version: 2.8.0
   ts-node:
-    specifier: 10.9.1
-    version: 10.9.1(@types/node@18.18.3)(typescript@5.2.2)
+    specifier: 10.9.2
+    version: 10.9.2(@types/node@18.18.3)(typescript@5.2.2)
   tsconfig-paths:
     specifier: 4.2.0
     version: 4.2.0
@@ -2822,7 +2822,7 @@ packages:
     engines: {node: '>=14.0.0'}
     dev: false
 
-  /@remix-run/dev@1.19.3(@remix-run/serve@1.19.3)(@types/node@18.18.3)(ts-node@10.9.1):
+  /@remix-run/dev@1.19.3(@remix-run/serve@1.19.3)(@types/node@18.18.3)(ts-node@10.9.2):
     resolution: {integrity: sha512-Yh733OI0AxR7QbPaJbocujxSF1S5CToDmfZnmv5SlTTIXEw5KfnbCceHy9qhUp0nrkz2YT7pd1zbTEVYIi/Vug==}
     engines: {node: '>=14.0.0'}
     hasBin: true
@@ -2872,7 +2872,7 @@ packages:
       pidtree: 0.6.0
       postcss: 8.4.38
       postcss-discard-duplicates: 5.1.0(postcss@8.4.38)
-      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.1)
+      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.2)
       postcss-modules: 6.0.0(postcss@8.4.38)
       prettier: 2.8.8
       pretty-ms: 7.0.1
@@ -3071,7 +3071,7 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.2.0'
     dependencies:
-      tailwindcss: 3.3.3(ts-node@10.9.1)
+      tailwindcss: 3.3.3(ts-node@10.9.2)
     dev: true
 
   /@testing-library/dom@8.20.1:
@@ -7768,7 +7768,7 @@ packages:
       camelcase-css: 2.0.1
       postcss: 8.4.38
 
-  /postcss-load-config@4.0.1(postcss@8.4.38)(ts-node@10.9.1):
+  /postcss-load-config@4.0.1(postcss@8.4.38)(ts-node@10.9.2):
     resolution: {integrity: sha512-vEJIc8RdiBRu3oRAI0ymerOn+7rPuMvRXslTvZUKZonDHFIczxztIyJ1urxM1x9JXEikvpWWTUUqal5j/8QgvA==}
     engines: {node: '>= 14'}
     peerDependencies:
@@ -7782,7 +7782,7 @@ packages:
     dependencies:
       lilconfig: 2.1.0
       postcss: 8.4.38
-      ts-node: 10.9.1(@types/node@18.18.3)(typescript@5.2.2)
+      ts-node: 10.9.2(@types/node@18.18.3)(typescript@5.2.2)
       yaml: 2.3.2
 
   /postcss-modules-extract-imports@3.0.0(postcss@8.4.38):
@@ -8923,7 +8923,7 @@ packages:
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders'
     dependencies:
-      tailwindcss: 3.3.3(ts-node@10.9.1)
+      tailwindcss: 3.3.3(ts-node@10.9.2)
     dev: false
 
   /tailwindcss-capsize@3.0.5(tailwindcss@3.3.3):
@@ -8933,14 +8933,14 @@ packages:
       tailwindcss: '>= 1.5'
     dependencies:
       '@capsizecss/core': 3.1.1
-      tailwindcss: 3.3.3(ts-node@10.9.1)
+      tailwindcss: 3.3.3(ts-node@10.9.2)
     dev: true
 
   /tailwindcss-radix@2.8.0:
     resolution: {integrity: sha512-1k1UfoIYgVyBl13FKwwoKavjnJ5VEaUClCTAsgz3VLquN4ay/lyaMPzkbqD71sACDs2fRGImytAUlMb4TzOt1A==}
     dev: true
 
-  /tailwindcss@3.3.3(ts-node@10.9.1):
+  /tailwindcss@3.3.3(ts-node@10.9.2):
     resolution: {integrity: sha512-A0KgSkef7eE4Mf+nKJ83i75TMyq8HqY3qmFIJSWy8bNt0v1lG7jUcpGpoTFxAwYcWOphcTBLPPJg+bDfhDf52w==}
     engines: {node: '>=14.0.0'}
     hasBin: true
@@ -8962,7 +8962,7 @@ packages:
       postcss: 8.4.38
       postcss-import: 15.1.0(postcss@8.4.38)
       postcss-js: 4.0.1(postcss@8.4.38)
-      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.1)
+      postcss-load-config: 4.0.1(postcss@8.4.38)(ts-node@10.9.2)
       postcss-nested: 6.0.1(postcss@8.4.38)
       postcss-selector-parser: 6.0.13
       resolve: 1.22.6
@@ -9104,8 +9104,8 @@ packages:
       code-block-writer: 11.0.3
     dev: true
 
-  /ts-node@10.9.1(@types/node@18.18.3)(typescript@5.2.2):
-    resolution: {integrity: sha512-NtVysVPkxxrwFGUUxGYhfux8k78pQB3JqYBXlLRZgdGUqTO5wU/UyHop5p70iEbGhB7q5KmiZiU0Y3KlJrScEw==}
+  /ts-node@10.9.2(@types/node@18.18.3)(typescript@5.2.2):
+    resolution: {integrity: sha512-f0FFpIdcHgn8zcPSbf1dRevwt047YMnaiJM3u2w2RewrB+fob/zePZcrOyQoLMMO7aBIddLcQIEK5dYjkLnGrQ==}
     hasBin: true
     peerDependencies:
       '@swc/core': '>=1.2.50'
