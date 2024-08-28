@@ -68,7 +68,7 @@
     "@types/set-cookie-parser": "2.4.9",
     "@vitejs/plugin-react": "4.1.0",
     "@vitest/coverage-v8": "0.34.6",
-    "autoprefixer": "10.4.19",
+    "autoprefixer": "10.4.20",
     "binode": "1.0.5",
     "cookie": "0.5.0",
     "enforce-unique": "1.2.0",
