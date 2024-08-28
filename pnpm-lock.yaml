@@ -95,8 +95,8 @@ dependencies:
 
 devDependencies:
   '@capsizecss/metrics':
-    specifier: 1.2.0
-    version: 1.2.0
+    specifier: 1.3.0
+    version: 1.3.0
   '@faker-js/faker':
     specifier: 8.1.0
     version: 8.1.0
@@ -1548,8 +1548,8 @@ packages:
       csstype: 3.1.2
     dev: true
 
-  /@capsizecss/metrics@1.2.0:
-    resolution: {integrity: sha512-zUYcqaR0rv4TYXyY97G1vRMMOyz+3EteXqLsM1XO/N8LnThwR1wYSE5cU15CUx3KPAiAEIbUZ13B7+plxYjHUA==}
+  /@capsizecss/metrics@1.3.0:
+    resolution: {integrity: sha512-dcAXsrrNs2zF3MC4T5iMGsiPm1NqTSdGgYI4YG17tAXL7jxKq0eWRsOWsY/gaYMTLXllgmZ+yaiKEVQ9UmEZrA==}
     dev: true
 
   /@conform-to/dom@0.9.0:
