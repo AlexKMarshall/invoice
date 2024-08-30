@@ -131,8 +131,8 @@ devDependencies:
     specifier: 18.2.10
     version: 18.2.10
   '@types/set-cookie-parser':
-    specifier: 2.4.9
-    version: 2.4.9
+    specifier: 2.4.10
+    version: 2.4.10
   '@vitejs/plugin-react':
     specifier: 4.3.1
     version: 4.3.1(vite@4.4.11)
@@ -185,8 +185,8 @@ devDependencies:
     specifier: 5.3.1
     version: 5.3.1
   set-cookie-parser:
-    specifier: 2.6.0
-    version: 2.6.0
+    specifier: 2.7.0
+    version: 2.7.0
   tailwindcss:
     specifier: 3.3.3
     version: 3.3.3(ts-node@10.9.2)
@@ -2320,8 +2320,8 @@ packages:
     resolution: {integrity: sha512-mlN83YSrcFgk7Dm1Mys40DLssI1KdJji2CMKN8eOlBqsTADYzj2+jWzsANsUTFbxDMWPD5e9bfA1RGqBpS3O1g==}
     engines: {node: '>=14'}
     dependencies:
-      '@types/set-cookie-parser': 2.4.9
-      set-cookie-parser: 2.6.0
+      '@types/set-cookie-parser': 2.4.10
+      set-cookie-parser: 2.7.0
     dev: true
 
   /@mswjs/interceptors@0.17.10:
@@ -3195,7 +3195,7 @@ packages:
       '@types/cookie': 0.4.1
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.4.2
-      set-cookie-parser: 2.6.0
+      set-cookie-parser: 2.7.0
       source-map: 0.7.4
 
   /@remix-run/web-blob@3.1.0:
@@ -3520,8 +3520,8 @@ packages:
     resolution: {integrity: sha512-7aqorHYgdNO4DM36stTiGO3DvKoex9TQRwsJU6vMaFGyqpBA1MNZkz+PG3gaNUPpTAOYhT1WR7M1JyA3fbS9Cw==}
     dev: true
 
-  /@types/set-cookie-parser@2.4.9:
-    resolution: {integrity: sha512-bCorlULvl0xTdjj4BPUHX4cqs9I+go2TfW/7Do1nnFYWS0CPP429Qr1AY42kiFhCwLpvAkWFr1XIBHd8j6/MCQ==}
+  /@types/set-cookie-parser@2.4.10:
+    resolution: {integrity: sha512-GGmQVGpQWUe5qglJozEjZV/5dyxbOOZ0LHe/lqyWssB88Y4svNfst0uqBVscdDeIKl5Jy5+aPSvy7mI9tYRguw==}
     dependencies:
       '@types/node': 18.19.47
     dev: true
@@ -8807,8 +8807,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /set-cookie-parser@2.6.0:
-    resolution: {integrity: sha512-RVnVQxTXuerk653XfuliOxBP81Sf0+qfQE73LIYKcyMYHG94AuH0kgrQpRDuTZnSmjpysHmzxJXKNfa6PjFhyQ==}
+  /set-cookie-parser@2.7.0:
+    resolution: {integrity: sha512-lXLOiqpkUumhRdFF3k1osNXCy9akgx/dyPZ5p8qAg9seJzXr5ZrlqZuWIMuY6ejOsVLE6flJ5/h3lsn57fQ/PQ==}
 
   /set-function-name@2.0.1:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
