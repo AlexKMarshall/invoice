@@ -45,7 +45,7 @@
     "react-day-picker": "8.8.2",
     "react-dom": "18.2.0",
     "react-merge-refs": "2.0.2",
-    "remix-auth": "3.5.1",
+    "remix-auth": "3.7.0",
     "remix-utils": "6.6.0",
     "tailwind-merge": "1.14.0",
     "tailwindcss-animate": "1.0.7",
