@@ -97,7 +97,7 @@
     "zod-prisma": "0.5.4"
   },
   "engines": {
-    "node": "20.7.0"
+    "node": "20.18.1"
   },
   "prisma": {
     "seed": "ts-node --require tsconfig-paths/register prisma/seed.ts"
