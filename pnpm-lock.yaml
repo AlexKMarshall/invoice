@@ -9,8 +9,8 @@ dependencies:
     specifier: 0.9.0
     version: 0.9.0(react@18.2.0)
   '@conform-to/zod':
-    specifier: 0.9.0
-    version: 0.9.0(@conform-to/dom@0.9.0)(zod@3.22.2)
+    specifier: 0.9.2
+    version: 0.9.2(@conform-to/dom@0.9.2)(zod@3.22.2)
   '@prisma/client':
     specifier: 5.3.1
     version: 5.3.1(prisma@5.3.1)
@@ -1852,6 +1852,10 @@ packages:
     resolution: {integrity: sha512-kaYP7jKeWWnBY+M0+Rttj5atWm9Tt9Uyts49lU4hoz9p/X8v5GuGas6YOilovyE5/vJUsnuYzN97upxIvlYg4g==}
     dev: false
 
+  /@conform-to/dom@0.9.2:
+    resolution: {integrity: sha512-vYJvXMRxa9Ieslv5eVcak5+0QbcTv+HwdLqRPZ8lhSFZx5qQWJwdou+Iz+ERzsSQHh7QS3DDYG5HmzaN4evf9g==}
+    dev: false
+
   /@conform-to/react@0.9.0(react@18.2.0):
     resolution: {integrity: sha512-ZxfzK+L4b3Z9SPGCyo8GqLjfSFDp4upiwpjJHxDLPwMDVsF8EvkifSHyzUkjaiIny407qN9zbdtoItQCTaaZeg==}
     peerDependencies:
@@ -1861,13 +1865,13 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@conform-to/zod@0.9.0(@conform-to/dom@0.9.0)(zod@3.22.2):
-    resolution: {integrity: sha512-Eq19/U6inDlCB1GNrvfTJBxyRVFesHVgkB5piWqLmhRYFHL8ooQGvmhVaOqeqqm+e+zNCjsIe3jip5ZW7uiBIw==}
+  /@conform-to/zod@0.9.2(@conform-to/dom@0.9.2)(zod@3.22.2):
+    resolution: {integrity: sha512-treG9ZcuNuRERQ1uYvJSWT0zZuqHnYTzRwucg20+/WdjgKNSb60Br+Cy6BAHvVQ8dN6wJsGkHenkX2mSVw3xOA==}
     peerDependencies:
-      '@conform-to/dom': 0.9.0
+      '@conform-to/dom': 0.9.2
       zod: ^3.21.0
     dependencies:
-      '@conform-to/dom': 0.9.0
+      '@conform-to/dom': 0.9.2
       zod: 3.22.2
     dev: false
 
