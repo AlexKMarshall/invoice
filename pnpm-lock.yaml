@@ -10,7 +10,7 @@ dependencies:
     version: 0.9.0(react@18.2.0)
   '@conform-to/zod':
     specifier: 0.9.0
-    version: 0.9.0(@conform-to/dom@0.9.0)(zod@3.22.2)
+    version: 0.9.0(@conform-to/dom@0.9.0)(zod@3.24.1)
   '@prisma/client':
     specifier: 5.3.1
     version: 5.3.1(prisma@5.3.1)
@@ -79,7 +79,7 @@ dependencies:
     version: 3.5.1(@remix-run/react@1.19.3)(@remix-run/server-runtime@1.19.3)
   remix-utils:
     specifier: 6.6.0
-    version: 6.6.0(@remix-run/react@1.19.3)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.5.4)(zod@3.22.2)
+    version: 6.6.0(@remix-run/react@1.19.3)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.5.4)(zod@3.24.1)
   tailwind-merge:
     specifier: 1.14.0
     version: 1.14.0
@@ -90,8 +90,8 @@ dependencies:
     specifier: 1.3.1
     version: 1.3.1
   zod:
-    specifier: 3.22.2
-    version: 3.22.2
+    specifier: 3.24.1
+    version: 3.24.1
 
 devDependencies:
   '@capsizecss/metrics':
@@ -219,7 +219,7 @@ devDependencies:
     version: 0.34.6(happy-dom@12.10.3)
   zod-prisma:
     specifier: 0.5.4
-    version: 0.5.4(prisma@5.3.1)(zod@3.22.2)
+    version: 0.5.4(prisma@5.3.1)(zod@3.24.1)
 
 packages:
 
@@ -1861,14 +1861,14 @@ packages:
       react: 18.2.0
     dev: false
 
-  /@conform-to/zod@0.9.0(@conform-to/dom@0.9.0)(zod@3.22.2):
+  /@conform-to/zod@0.9.0(@conform-to/dom@0.9.0)(zod@3.24.1):
     resolution: {integrity: sha512-Eq19/U6inDlCB1GNrvfTJBxyRVFesHVgkB5piWqLmhRYFHL8ooQGvmhVaOqeqqm+e+zNCjsIe3jip5ZW7uiBIw==}
     peerDependencies:
       '@conform-to/dom': 0.9.0
       zod: ^3.21.0
     dependencies:
       '@conform-to/dom': 0.9.0
-      zod: 3.22.2
+      zod: 3.24.1
     dev: false
 
   /@cspotcode/source-map-support@0.8.1:
@@ -8866,7 +8866,7 @@ packages:
       uuid: 8.3.2
     dev: false
 
-  /remix-utils@6.6.0(@remix-run/react@1.19.3)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.5.4)(zod@3.22.2):
+  /remix-utils@6.6.0(@remix-run/react@1.19.3)(@remix-run/server-runtime@1.19.3)(react@18.2.0)(typescript@5.5.4)(zod@3.24.1):
     resolution: {integrity: sha512-4r4ifahU61Aa54m6Yu8B8GTzXyo+9RUzkFZdBNZOErpZ1LUMQ/ng4LeCJX2M6m4obdMjq0ot0pPlnAzeZOSttg==}
     engines: {node: '>=14'}
     peerDependencies:
@@ -8883,7 +8883,7 @@ packages:
       schema-dts: 1.1.2(typescript@5.5.4)
       type-fest: 2.19.0
       uuid: 8.3.2
-      zod: 3.22.2
+      zod: 3.24.1
     transitivePeerDependencies:
       - typescript
     dev: false
@@ -10449,7 +10449,7 @@ packages:
     engines: {node: '>=12.20'}
     dev: true
 
-  /zod-prisma@0.5.4(prisma@5.3.1)(zod@3.22.2):
+  /zod-prisma@0.5.4(prisma@5.3.1)(zod@3.24.1):
     resolution: {integrity: sha512-5Ca4Qd1a1jy1T/NqCEpbr0c+EsbjJfJ/7euEHob3zDvtUK2rTuD1Rc/vfzH8q8PtaR2TZbysD88NHmrLwpv3Xg==}
     engines: {node: '>=14'}
     hasBin: true
@@ -10465,11 +10465,11 @@ packages:
       parenthesis: 3.1.8
       prisma: 5.3.1
       ts-morph: 13.0.3
-      zod: 3.22.2
+      zod: 3.24.1
     dev: true
 
-  /zod@3.22.2:
-    resolution: {integrity: sha512-wvWkphh5WQsJbVk1tbx1l1Ly4yg+XecD+Mq280uBGt9wa5BKSWf4Mhp6GmrkPixhMxmabYY7RbzlwVP32pbGCg==}
+  /zod@3.24.1:
+    resolution: {integrity: sha512-muH7gBL9sI1nciMZV67X5fTKKBLtwpZ5VBp1vsOQzj1MhrBZ4wlVCm3gedKZWLp0Oyel8sIGfeiz54Su+OVT+A==}
 
   /zwitch@2.0.4:
     resolution: {integrity: sha512-bXE4cR/kVZhKZX/RjPEflHaKVhUVl85noU3v6b8apfQEc1x4A+zBxjZ4lN8LqGd6WZ3dl98pY4o717VFmoPp+A==}
