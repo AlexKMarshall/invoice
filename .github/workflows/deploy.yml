@@ -21,20 +21,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.9.1
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 18
+          node-version: 18.20.8
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v2.4.1
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8
+          version: 8.15.9
           run_install: false
 
       - name: Get pnpm store directory
@@ -43,7 +43,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v3.5.0
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -62,20 +62,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.9.1
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 18
+          node-version: 18.20.8
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v2.4.1
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8
+          version: 8.15.9
           run_install: false
 
       - name: Get pnpm store directory
@@ -84,7 +84,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v3.5.0
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -106,20 +106,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.9.1
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 18
+          node-version: 18.20.8
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v2.4.1
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8
+          version: 8.15.9
           run_install: false
 
       - name: Get pnpm store directory
@@ -128,7 +128,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v3.5.0
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -147,23 +147,23 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
       - name: 🏄 Copy test env vars
         run: cp .env.example .env
 
       - name: ⎔ Setup node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v3.9.1
         with:
           cache: npm
           cache-dependency-path: ./package.json
-          node-version: 18
+          node-version: 18.20.8
 
-      - uses: pnpm/action-setup@v2
+      - uses: pnpm/action-setup@v2.4.1
         name: Install pnpm
         id: pnpm-install
         with:
-          version: 8
+          version: 8.15.9
           run_install: false
 
       - name: Get pnpm store directory
@@ -172,7 +172,7 @@ jobs:
         run: |
           echo "STORE_PATH=$(pnpm store path)" >> $GITHUB_OUTPUT
 
-      - uses: actions/cache@v3
+      - uses: actions/cache@v3.5.0
         name: Setup pnpm cache
         with:
           path: ${{ steps.pnpm-cache.outputs.STORE_PATH }}
@@ -195,7 +195,7 @@ jobs:
       - name: 🎭 Run Playwright tests
         run: pnpm test:e2e --project=chromium --project="chromium reduced data" --project="Mobile Chrome"
 
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v3.2.2
         if: always()
         with:
           name: test-results
@@ -211,7 +211,7 @@ jobs:
 
     steps:
       - name: ⬇️ Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v4.4.0
 
       - name: 👀 Read app name
         uses: SebRollen/toml-action@v1.0.2
