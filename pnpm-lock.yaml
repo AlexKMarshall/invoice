@@ -185,8 +185,8 @@ devDependencies:
     specifier: 5.3.1
     version: 5.3.1
   set-cookie-parser:
-    specifier: 2.7.1
-    version: 2.7.1
+    specifier: 2.7.3
+    version: 2.7.3
   tailwindcss:
     specifier: 3.4.16
     version: 3.4.16(ts-node@10.9.2)
@@ -2457,7 +2457,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       '@types/set-cookie-parser': 2.4.10
-      set-cookie-parser: 2.7.1
+      set-cookie-parser: 2.7.3
     dev: true
 
   /@mswjs/interceptors@0.17.10:
@@ -3337,7 +3337,7 @@ packages:
       '@types/cookie': 0.4.1
       '@web3-storage/multipart-parser': 1.0.0
       cookie: 0.4.2
-      set-cookie-parser: 2.7.1
+      set-cookie-parser: 2.7.3
       source-map: 0.7.4
 
   /@remix-run/web-blob@3.1.0:
@@ -9092,8 +9092,8 @@ packages:
     transitivePeerDependencies:
       - supports-color
 
-  /set-cookie-parser@2.7.1:
-    resolution: {integrity: sha512-IOc8uWeOZgnb3ptbCURJWNjWUPcO3ZnTTdzsurqERrP6nPyv+paC55vJM0LpOlT2ne+Ix+9+CRG1MNLlyZ4GjQ==}
+  /set-cookie-parser@2.7.3:
+    resolution: {integrity: sha512-irZHtTqurLna57KQG/s+fzOwv/J6XSH4cs8M/vsrY3uCaQ3S6+QJguAH0WdN47SXlk82voMZ4naWMQf8fdEoIg==}
 
   /set-function-name@2.0.1:
     resolution: {integrity: sha512-tMNCiqYVkXIZgc2Hnoy2IvC/f8ezc5koaRFkCjrpWzGpCd3qbZXPzVy9MAZzK1ch/X0jvSkojys3oqJN0qCmdA==}
